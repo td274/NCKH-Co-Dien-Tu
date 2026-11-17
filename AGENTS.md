@@ -18,6 +18,16 @@ sinh viên năm 2 (Trường Đại học Điện lực) và mọi đề tài sa
 | `nghien-cuu/bao-cao/` | Báo cáo, slide, hình vẽ xuất bản | `writer` |
 | `nghien-cuu/nhat-ky/` | Nhật ký theo ngày `YYYY-MM-DD.md` | `nckh` |
 
+## Môi trường máy (quan trọng — đừng đoán đường dẫn)
+
+| Công cụ | Đường dẫn | Ghi chú |
+| --- | --- | --- |
+| Python 3.12.10 | `D:\Python312\python.exe` | `python` trần trên PATH là **stub Microsoft Store**, gọi vào sẽ báo lỗi. Luôn dùng đường dẫn đầy đủ. Đã cài: numpy, scipy, sympy, matplotlib, opencv-python (cv2), pyserial, pandas |
+| MATLAB | `D:\matlb\bin\matlab.exe` | Gọi `& "D:\matlb\bin\matlab.exe" -batch "lệnh"` |
+| Arduino IDE | `%LOCALAPPDATA%\Programs\Arduino IDE` | Nạp firmware; chưa có PlatformIO |
+| Git | `%LOCALAPPDATA%\GitHubDesktop\app-3.6.4\resources\app\git\cmd\git.exe` | Git nhúng của GitHub Desktop |
+| Repo | `D:\NCKH-Co-Dien-Tu` | Ổ C gần đầy, mọi dữ liệu lớn để ở D |
+
 ## Quy tắc bắt buộc
 
 1. **Không bịa tài liệu.** Mọi trích dẫn phải có DOI hoặc URL kiểm chứng được; tra

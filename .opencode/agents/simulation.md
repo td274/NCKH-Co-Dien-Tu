@@ -23,6 +23,9 @@ permissions:
     resource: "python *"
     effect: allow
   - action: shell
+    resource: "*python.exe*"
+    effect: allow
+  - action: shell
     resource: "py *"
     effect: allow
   - action: shell
@@ -30,6 +33,9 @@ permissions:
     effect: allow
   - action: shell
     resource: "matlab *"
+    effect: allow
+  - action: shell
+    resource: "*matlab*"
     effect: allow
   - action: shell
     resource: "octave *"
