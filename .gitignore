@@ -1,0 +1,15 @@
+# Python
+.venv/
+__pycache__/
+*.pyc
+
+# PlatformIO
+.pio/
+
+# MATLAB / Octave
+*.asv
+*.m~
+
+# OS / editor
+.DS_Store
+Thumbs.db

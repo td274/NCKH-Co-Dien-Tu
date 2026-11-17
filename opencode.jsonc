@@ -1,0 +1,11 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+
+  // Phiên mới mở thẳng vào agent điều phối NCKH.
+  "default_agent": "nckh",
+
+  // Cho agent công cụ todowrite để bám kế hoạch nhiều bước.
+  "experimental": {
+    "todo": true,
+  },
+}
