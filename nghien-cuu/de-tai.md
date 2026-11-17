@@ -10,6 +10,7 @@
 | Lớp / Khoa | ... (Khoa Cơ điện tử — ĐH Điện lực) |
 | Giảng viên hướng dẫn | ... |
 | Thời gian thực hiện | 12 tuần |
+| Phương án triển khai | **Phương án 3 — mô phỏng + thí nghiệm phần cứng một phần (hardware-in-the-loop thu nhỏ)** |
 
 ## 2. Đặt vấn đề
 
@@ -17,80 +18,98 @@
   điện tử, bao bì), robot Delta là lựa chọn phổ biến nhờ tốc độ cao và độ chính xác
   vị trí tốt. Việc phân loại thủ công chậm và dễ sai; kết hợp robot Delta với camera
   cho phép tự động hoá khâu gắp–phân loại.
-- **Vì sao chọn đề tài:** chi phí chế tạo robot Delta thật cao, nên trước khi đầu tư
-  phần cứng cần một **mô hình mô phỏng** kiểm chứng động học, quỹ đạo và chiến lược
-  phân loại. Đây là bài toán trọn vẹn cho sinh viên năm 2: động học song song, điều
-  khiển quỹ đạo và xử lý ảnh ở mức vừa sức.
+- **Vì sao chọn đề tài:** chế tạo robot Delta hoàn chỉnh tốn kém, nên bước đi hợp lý là
+  **mô phỏng động học + đo trễ thực tế của chuỗi thị giác → vi điều khiển** trước khi
+  đầu tư cơ khí. Đây là điểm yếu phổ biến của các đồ án sinh viên: mô phỏng đẹp nhưng
+  không biết trễ thực bao nhiêu, nên khi lắp thật thì chu kỳ vượt xa thiết kế.
 - **Câu hỏi nghiên cứu:** (1) mô hình động học thuận/nghịch của robot Delta 3 bậc tự do
-  có thể kiểm chứng được trong không gian làm việc đến mức sai số nào? (2) kết hợp
-  nhận dạng màu/hình bằng camera với quỹ đạo gắp–thả có đạt chỉ tiêu chu kỳ và độ
-  chính xác đặt ra trong mô phỏng không?
+  đạt sai số nào khi kiểm chứng chéo trên toàn vùng làm việc? (2) trễ thực tế của chuỗi
+  camera → OpenCV → Arduino chiếm bao nhiêu trong chu kỳ phân loại, và chu kỳ tổng có
+  đạt mốc 1,8 s/vật đã công bố không?
 
 ## 3. Mục tiêu
 
-**Tổng quát:** xây dựng mô hình toán và mô phỏng robot Delta 3 bậc tự do dùng cho
-phân loại sản phẩm theo tín hiệu camera, làm cơ sở thiết kế phần cứng sau này.
+**Tổng quát:** xây dựng mô hình toán, mô phỏng và một nguyên mẫu thí nghiệm một phần
+(webcam + Arduino, chưa có khung cơ khí Delta) cho bài toán phân loại sản phẩm bằng
+camera, làm cơ sở thiết kế phần cứng hoàn chỉnh.
 
 **Cụ thể (đo được):**
-1. Dẫn giải và kiểm chứng động học nghịch/thuận Delta; sai số vị trí điểm cuối trong
-   mô phỏng ≤ 1 mm trên không gian làm việc tham chiếu Ø300 × 150 mm.
-2. Thiết kế quỹ đạo gắp–thả (đa thức bậc 5) và bộ điều khiển vị trí; mô phỏng đạt
-   **chu kỳ chuyển động thuần ≤ 1,5 s** và **chu kỳ toàn hệ thống (gồm xử lý ảnh +
-   đóng/nhả đầu gắp) ≤ 1,8 s**, lấy mốc **1,8 s/vật của Vo & Le 2023** làm chuẩn đối
-   sánh; overshoot ≤ 5 %.
-3. Xây dựng module phân loại bằng camera (màu sắc/hình dạng đơn giản) đạt độ chính
-   xác ≥ 90 % trên tập mẫu ≥ 100 vật trong mô phỏng/thí nghiệm ảo.
+1. Dẫn giải và kiểm chứng chéo động học nghịch (IK) ↔ thuận (FK) của Delta 3 bậc tự do;
+   sai số vòng kín cực đại ≤ 1 mm trên không gian làm việc tham chiếu Ø300 × 150 mm,
+   báo cáo max error và RMSE trên ≥ 1000 điểm lưới.
+2. Thiết kế quỹ đạo gắp–thả (đa thức bậc 5) + PID; mô phỏng đạt **chu kỳ chuyển động
+   thuần ≤ 1,5 s**, overshoot ≤ 5 %; **chu kỳ toàn hệ thống ≤ 1,8 s** khi cộng trễ thực
+   đo được của camera + truyền thông (mốc đối chiếu: 1,8 s/vật của Vo & Le 2023).
+3. Xây dựng module phân loại trên **vật thật** (webcam, 3 màu × 3 hình dạng) đạt độ
+   chính xác ≥ 90 % trên ≥ 120 vật mẫu, có ma trận nhầm lẫn; đo và báo cáo trễ xử lý
+   ảnh thực tế.
 
 ## 4. Phạm vi và giới hạn
 
-- **Đối tượng:** robot Delta 3 bậc tự do (chuyển động tịnh tiến x–y–z), không quay đầu
-  gắp (bỏ bậc tự do quay Rz).
-- **Trọng tâm động học (kinematics); động lực học chỉ ở mức cơ bản** (bỏ qua nếu vượt
-  thời gian). Robot không chịu tải lớn, giả thiết khâu nhẹ.
-- **Camera:** nhận dạng màu/hình đơn giản (ngưỡng màu, contour), **không dùng học sâu**.
-- **Phần cứng ở mức thiết kế** (mô hình CAD, sơ đồ, danh mục linh kiện) + nguyên mẫu
-  thu nhỏ chỉ nếu còn thời gian và kinh phí. Ưu tiên mô phỏng.
+- **Đối tượng:** robot Delta 3 bậc tự do tịnh tiến (x–y–z), không có bậc quay đầu gắp.
+- **Động học là trọng tâm**; động lực học chỉ ở mức cơ bản, điều khiển dừng ở **PID**
+  (không ADRC/LADRC), có nêu rõ giả thiết tách khớp khi báo cáo.
+- **Phần cứng làm tới mức hardware-in-the-loop:** webcam USB + Arduino Uno nhận góc khớp
+  qua Serial và xuất PWM; **không dựng khung cơ khí Delta hoàn chỉnh** — phần cơ khí
+  dừng ở bản vẽ CAD + BOM.
+- **Camera:** nhận dạng màu/hình bằng ngưỡng HSV + contour (OpenCV), **không học sâu**.
+- **Không thực hiện:** gia công cơ khí chính xác, hiệu chuẩn động học trên robot thật,
+  điều khiển bám quỹ đạo tốc độ cao.
+
+### Phần cứng tối thiểu (dự kiến < 500.000 VNĐ)
+
+| Thiết bị | Thông số tối thiểu | Dùng để |
+| --- | --- | --- |
+| Webcam USB | ≥ 720p, 30 fps, đặt cố định trên cao | Chụp vật trên mặt bàn |
+| Arduino Uno (hoặc tương đương) | Có UART/USB Serial | Nhận góc khớp, xuất PWM, đo trễ |
+| Hộp chụp / đèn | Giấy trắng mờ + 1 đèn LED | Giảm nhiễu ánh sáng cho HSV |
+| Vật mẫu | ≥ 120 vật: 3 màu × 3 hình (tròn/vuông/tam giác) | Tập kiểm thử phân loại |
 
 ## 5. Phương pháp
 
 | Bước | Việc làm | Công cụ | Đầu ra kiểm chứng được |
 | --- | --- | --- | --- |
-| 1 | Mô hình hoá động học nghịch/thuận | giấy + Python (sympy) | Hệ phương trình + kiểm tra đơn vị, vùng làm việc |
-| 2 | Mô phỏng quỹ đạo + điều khiển | MATLAB/Simulink | Đồ thị sai số, thời gian chu kỳ, overshoot |
-| 3 | Mô phỏng phân loại bằng camera | Python/OpenCV (ảnh mẫu) | Ma trận nhầm lẫn, độ chính xác % |
-| 4 | Tích hợp nhận dạng → quỹ đạo gắp–thả | MATLAB + Python | Kịch bản mô phỏng phân loại hoàn chỉnh |
-| 5 | Thiết kế cơ khí | SolidWorks/Fusion (tuỳ có) | CAD + bản vẽ + BOM |
+| 1 | Động học nghịch giải tích (vector loop) | giấy + Python (sympy) | Công thức θᵢ(x,y,z) + kiểm tra đơn vị |
+| 2 | Động học thuận + kiểm chứng chéo Newton–Raphson, quét Monte Carlo | Python/MATLAB | Bảng sai số vòng kín IK↔FK (max, RMSE) |
+| 3 | Quỹ đạo gắp–thả bậc 5 + PID, mô phỏng | MATLAB/Simulink | Đồ thị sai số bám, overshoot, chu kỳ |
+| 4 | Thị giác trên vật thật: HSV + contour | Python/OpenCV + webcam | Ma trận nhầm lẫn, độ chính xác %, trễ xử lý |
+| 5 | Truyền góc khớp qua Serial, đo trễ vòng | Python ↔ Arduino | Số đo trễ (ms) theo từng công đoạn |
+| 6 | Ghép chu kỳ tổng + thiết kế CAD/BOM | Python (pandas) + CAD | Bảng phân rã chu kỳ, bản vẽ, BOM |
 
 ## 6. Sản phẩm dự kiến
 
-- Mô hình toán động học Delta + bộ điều khiển quỹ đạo (có script kiểm chứng).
-- Bộ mô phỏng (MATLAB/Simulink + Python/OpenCV) chạy lại được.
-- Bản thiết kế cơ khí + danh mục linh kiện (BOM).
+- Mô hình toán IK/FK + script kiểm chứng chéo (kèm bảng sai số).
+- Bộ mô phỏng quỹ đạo + PID chạy lại được (MATLAB/Simulink hoặc Python).
+- Module thị giác chạy thật với webcam + tập dữ liệu ≥ 120 vật và ma trận nhầm lẫn.
+- Firmware Arduino nhận góc khớp + số đo trễ thực tế của chuỗi thị giác → vi điều khiển.
+- Bản vẽ CAD + BOM cho khung Delta hoàn chỉnh (để phát triển tiếp).
 - Báo cáo + slide bảo vệ.
 
 ## 7. Kế hoạch theo tuần
 
 | Tuần | Nội dung | Đầu ra | Trạng thái |
 | --- | --- | --- | --- |
-| 1–2 | Khảo sát tài liệu (delta, động học song song, phân loại ảnh) | `tai-lieu/` notes + bảng so sánh + `tong-quan.md` | |
-| 3–4 | Động học nghịch/thuận + kiểm chứng sympy | `mo-hinh/` + script | |
-| 5–6 | Mô phỏng quỹ đạo + điều khiển trên MATLAB | `mo-phong/runs/` + KETQUA | |
-| 7–8 | Module phân loại camera (OpenCV) | `mo-phong/` (ảnh) + độ chính xác | |
-| 9 | Tích hợp nhận dạng → gắp–thả | kịch bản mô phỏng hoàn chỉnh | |
-| 10 | Thiết kế CAD + BOM | bản vẽ + danh mục | |
-| 11 | Phản biện + chỉnh sửa | `/phan-bien` đạt | |
-| 12 | Viết báo cáo + slide | `bao-cao/` | |
+| 1–2 | Khảo sát tài liệu + chốt thông số hình học tham chiếu | `tong-quan.md`, bảng tham số | ✅ xong |
+| 3–4 | Động học nghịch/thuận + kiểm chứng chéo | `mo-hinh/` + script + bảng sai số | |
+| 5–6 | Quỹ đạo bậc 5 + PID trên MATLAB | `mo-phong/runs/` + KETQUA | |
+| 7 | Dựng bàn thí nghiệm: webcam, hộp chụp, vật mẫu | ảnh mẫu + quy trình chụp | |
+| 8 | Thị giác HSV + contour trên vật thật | ma trận nhầm lẫn + trễ xử lý | |
+| 9 | Arduino: nhận góc khớp qua Serial, xuất PWM, đo trễ | `firmware/` + số đo trễ | |
+| 10 | Ghép chu kỳ tổng, so với mốc 1,8 s | bảng phân rã chu kỳ | |
+| 11 | CAD + BOM + phản biện | bản vẽ + `/phan-bien` đạt | |
+| 12 | Báo cáo + slide | `bao-cao/` | |
 
 ## 8. Rủi ro và phương án dự phòng
 
 | Rủi ro | Khả năng | Ảnh hưởng | Dự phòng |
 | --- | --- | --- | --- |
-| Động học thuận Delta không có nghiệm tường minh | Cao | Khó kiểm chứng vòng kín | Dùng nghiệm số (Newton–Raphson) + so với nghịch |
-| Tích hợp camera → quỹ đạo phức tạp hơn dự kiến | Trung bình | Trễ tiến độ tuần 7–9 | Thu hẹp: phân loại theo màu 2–3 lớp trước, thêm hình sau |
-| MATLAB mất nhiều thời gian học Simulink | Trung bình | Trễ tiến độ | Làm trước bằng Python, chuyển Simulink khi đủ |
-| Phần cứng nguyên mẫu không kịp kinh phí | Trung bình | Giảm phạm vi thực nghiệm | Đề tài vẫn hoàn chỉnh ở mức mô phỏng + thiết kế |
+| Ánh sáng thay đổi làm HSV sai, độ chính xác tụt | Cao | Mục tiêu 3 không đạt | Hộp chụp + đèn cố định; hiệu chỉnh ngưỡng theo từng buổi; ghi điều kiện chiếu sáng |
+| Động học thuận Delta đa nghiệm, chọn sai nhánh | Cao | Sai số vòng kín lớn giả tạo | Ràng buộc nhánh (z < 0, khớp quay đúng chiều) + so với Newton–Raphson |
+| Không mua được Arduino/webcam đúng hạn | Trung bình | Trễ tuần 7–9 | Dùng webcam laptop + mô phỏng Serial ảo; xin mượn phòng lab |
+| Trễ Serial/PWM lớn hơn dự kiến | Trung bình | Chu kỳ vượt 1,8 s | Đo tách từng công đoạn, tối ưu gói tin; báo cáo trung thực thay vì che |
+| Thời gian viết báo cáo bị ép | Trung bình | Chất lượng báo cáo | Ghi nhật ký hàng tuần, viết kết quả ngay sau mỗi mốc |
 
 ## 9. Tài liệu tham khảo
 
-*(Trống — sẽ bổ sung qua `/khao-sat`. Mọi mục phải có DOI/URL kiểm chứng được, tra
-Crossref trước khi ghi vào `references.bib`. Không bịa.)*
+Xem `nghien-cuu/tai-lieu/references.bib` (8 mục, 7 DOI đã kiểm chứng Crossref;
+`Clavel1988Delta` không có DOI — `[CẦN KIỂM CHỨNG]` từ kỷ yếu gốc).
