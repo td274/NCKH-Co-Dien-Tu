@@ -40,6 +40,7 @@ Agent chính là `nckh`. Nó **không tự làm hết** mà giao việc cho suba
 rồi tổng hợp:
 
 - `literature` — tìm & tóm tắt paper, lập bảng so sánh, quản lý `references.bib`
+- `tong-hop` — tổng hợp notes thành tổng quan, xu hướng, khoảng trống (model mạnh)
 - `modeling` — dẫn giải toán, thiết kế bộ điều khiển
 - `simulation` — viết/chạy mô phỏng, xử lý số liệu, vẽ đồ thị
 - `firmware` — code nhúng và build
@@ -56,6 +57,7 @@ trả về một bản tóm tắt ngắn. Agent sau đọc file, không cần đ
 | --- | --- |
 | `/de-cuong <chủ đề>` | Lập đề cương NCKH |
 | `/khao-sat <chủ đề>` | Khảo sát tài liệu, lập bảng so sánh |
+| `/tong-hop` | Tổng hợp notes thành tổng quan + khoảng trống (Argon) |
 | `/mo-hinh <hệ/ký hiệu>` | Dẫn giải mô hình toán |
 | `/mo-phong <kịch bản>` | Viết và chạy mô phỏng |
 | `/phan-bien <file/mục>` | Phản biện trước khi nộp |
@@ -63,18 +65,25 @@ trả về một bản tóm tắt ngắn. Agent sau đọc file, không cần đ
 | `/nhat-ky <việc đã làm>` | Ghi nhật ký hôm nay |
 | `/nap-tai-lieu` | Nạp tài liệu từ `tai-lieu/inbox/` (Gemini web) + kiểm chứng DOI |
 
-## Phối hợp với Gemini web (Google AI Pro)
+## Dùng model mạnh (Argon/Gemini) để tổng hợp tài liệu
 
-Tài khoản Google AI Pro dùng Argon/Hydrogen **trên web Gemini**, không tự động nối vào
-repo. Quy trình phối hợp:
+Có 2 đường, chọn theo nhu cầu:
 
+**A. Khép kín trong OpenCode (mặc định, khuyến nghị).** Argon đã có trong gói
+`opencode-go` nên không cần API key:
+1. `/khao-sat <chủ đề>` — agent `literature` (model rẻ) tìm bài qua OpenAlex/Crossref,
+   kiểm chứng DOI, ghi note từng bài.
+2. `/tong-hop` — agent `tong-hop` (**Argon**) đọc notes, viết `tai-lieu/tong-quan.md`:
+   bản đồ phương pháp, xu hướng, mâu thuẫn, khoảng trống, hướng khả thi.
+
+**B. Dùng Gemini web (AI Pro) khi cần model mạnh hơn hoặc hết hạn mức Go.**
 1. Dán prompt trong `nghien-cuu/tai-lieu/inbox/PROMPT-GEMINI.md` vào Gemini web.
 2. Lưu câu trả lời thành `nghien-cuu/tai-lieu/inbox/<ngày>-<chủ-đề>.md`.
 3. Chạy `/nap-tai-lieu` — agent kiểm chứng từng DOI bằng Crossref rồi mới ghi vào repo.
 
-Không bao giờ dán kết quả AI thẳng vào báo cáo: mọi trích dẫn phải qua bước kiểm chứng.
-Lưu ý: gói AI Pro **không kèm API key**; muốn OpenCode gọi Gemini trực tiếp thì phải tạo
-API key riêng ở Google AI Studio (có hạn mức miễn phí, tính tiền riêng).
+**Không bao giờ** dán kết quả AI thẳng vào báo cáo: mọi trích dẫn phải qua Crossref.
+Lưu ý: gói AI Pro **không kèm API key**; muốn gọi Gemini bằng API riêng phải tạo key ở
+Google AI Studio (hạn mức miễn phí riêng, tính tiền riêng), rồi `/connect` provider Google.
 
 ## Ngân sách token (quan trọng với sinh viên)
 

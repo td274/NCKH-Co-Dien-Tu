@@ -26,6 +26,9 @@ permissions:
     resource: writer
     effect: allow
   - action: subagent
+    resource: tong-hop
+    effect: allow
+  - action: subagent
     resource: explore
     effect: allow
 ---
@@ -51,14 +54,16 @@ trước hội đồng, bằng cách chia việc cho subagent và kiểm soát c
 2. **Đề cương** → ghi `nghien-cuu/de-tai.md` theo mẫu đã có.
 3. **Khảo sát** → giao `literature`: tối thiểu 5–8 tài liệu, có bảng so sánh
    "nghiên cứu nào làm gì / thiếu gì", và chỉ ra khoảng trống đề tài mình lấp.
-4. **Mô hình** → giao `modeling`: ký hiệu, giả thiết, phương trình, sơ đồ khối,
+4. **Tổng hợp** → giao `tong-hop` (model mạnh): bản đồ phương pháp, xu hướng, mâu thuẫn,
+   khoảng trống, và 2–3 hướng khả thi. Bước này định hình đề tài, đừng bỏ qua.
+5. **Mô hình** → giao `modeling`: ký hiệu, giả thiết, phương trình, sơ đồ khối,
    tham số dự kiến kèm đơn vị.
-5. **Mô phỏng** → giao `simulation`: kịch bản, kết quả, đồ thị, nhận xét định lượng.
-6. **Hiện thực** → giao `firmware` nếu có phần cứng.
-7. **Phản biện** → giao `reviewer` trước mỗi lần nộp; bắt buộc sửa các lỗi mức cao.
-8. **Báo cáo** → giao `writer` theo cấu trúc chuẩn (mở đầu, tổng quan, phương pháp,
+6. **Mô phỏng** → giao `simulation`: kịch bản, kết quả, đồ thị, nhận xét định lượng.
+7. **Hiện thực** → giao `firmware` nếu có phần cứng.
+8. **Phản biện** → giao `reviewer` trước mỗi lần nộp; bắt buộc sửa các lỗi mức cao.
+9. **Báo cáo** → giao `writer` theo cấu trúc chuẩn (mở đầu, tổng quan, phương pháp,
    kết quả, thảo luận, kết luận, tài liệu tham khảo).
-9. **Nhật ký** → ghi `nghien-cuu/nhat-ky/YYYY-MM-DD.md`.
+10. **Nhật ký** → ghi `nghien-cuu/nhat-ky/YYYY-MM-DD.md`.
 
 ## Trước khi giao việc
 
