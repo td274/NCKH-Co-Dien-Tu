@@ -1,0 +1,123 @@
+{
+  "description": "Khảo sát độ nhạy sai số hình học Monte Carlo (N_mc = 300 × 567 điểm = 170,100 mẫu/kịch bản)",
+  "mc_02mm_links_only": {
+    "tol_mm": 0.2,
+    "include_base_mount_error": false,
+    "n_mc": 300,
+    "n_pts": 567,
+    "total_evaluations": 170100,
+    "mean_mm": 0.24297068599013832,
+    "rmse_mm": 0.259407401535253,
+    "median_p50_mm": 0.23605686184069255,
+    "p90_mm": 0.36316711714243916,
+    "p95_mm": 0.40231624282364276,
+    "p99_mm": 0.47613979742950147,
+    "max_mm": 0.6886582135708695,
+    "pct_samples_le_1mm": 100.0,
+    "pct_workspace_p95_le_1mm": 100.0,
+    "pct_workspace_mean_le_1mm": 100.0
+  },
+  "mc_02mm_with_base_error": {
+    "tol_mm": 0.2,
+    "include_base_mount_error": true,
+    "n_mc": 300,
+    "n_pts": 567,
+    "total_evaluations": 170100,
+    "mean_mm": 0.30411862354010083,
+    "rmse_mm": 0.3273944204674879,
+    "median_p50_mm": 0.2974402292854996,
+    "p90_mm": 0.4666207945572969,
+    "p95_mm": 0.5144831056760437,
+    "p99_mm": 0.6039822573753229,
+    "max_mm": 0.7946264886507155,
+    "pct_samples_le_1mm": 100.0,
+    "pct_workspace_p95_le_1mm": 100.0,
+    "pct_workspace_mean_le_1mm": 100.0
+  },
+  "mc_05mm_links_only": {
+    "tol_mm": 0.5,
+    "include_base_mount_error": false,
+    "n_mc": 300,
+    "n_pts": 567,
+    "total_evaluations": 170100,
+    "mean_mm": 0.6140506687530551,
+    "rmse_mm": 0.6572351327487856,
+    "median_p50_mm": 0.5964881365651549,
+    "p90_mm": 0.9152032367220472,
+    "p95_mm": 1.0299391185466615,
+    "p99_mm": 1.2439954898554362,
+    "max_mm": 1.6807906864259483,
+    "pct_samples_le_1mm": 93.99118165784832,
+    "pct_workspace_p95_le_1mm": 31.569664902998234,
+    "pct_workspace_mean_le_1mm": 100.0
+  },
+  "mc_05mm_with_base_error": {
+    "tol_mm": 0.5,
+    "include_base_mount_error": true,
+    "n_mc": 300,
+    "n_pts": 567,
+    "total_evaluations": 170100,
+    "mean_mm": 0.7603839173889069,
+    "rmse_mm": 0.8234705146368463,
+    "median_p50_mm": 0.7330570807284118,
+    "p90_mm": 1.181212861804279,
+    "p95_mm": 1.321313643774646,
+    "p99_mm": 1.5063347840190913,
+    "max_mm": 2.409640683974828,
+    "pct_samples_le_1mm": 76.45091122868901,
+    "pct_workspace_p95_le_1mm": 0.0,
+    "pct_workspace_mean_le_1mm": 100.0
+  },
+  "oat_sensitivity_02mm": {
+    "rf": {
+      "mean_mm": 0.06565059494466555,
+      "rmse_mm": 0.07811921168597412,
+      "median_p50_mm": 0.05797706856044667,
+      "p95_mm": 0.14544047112716404,
+      "p99_mm": 0.17452179956573752,
+      "max_mc_mm": 0.2121804824250539,
+      "worst_case_gain_mm_per_mm": 1.1623836167761585,
+      "mean_gain_mm_per_mm": 0.6183608124727213
+    },
+    "re": {
+      "mean_mm": 0.19956415894203355,
+      "rmse_mm": 0.20770855926259568,
+      "median_p50_mm": 0.20139138060976253,
+      "p95_mm": 0.29107566600156437,
+      "p99_mm": 0.3301799383798854,
+      "max_mc_mm": 0.4339921186080853,
+      "worst_case_gain_mm_per_mm": 2.5168021564639362,
+      "mean_gain_mm_per_mm": 1.879983967491345
+    },
+    "f": {
+      "mean_mm": 0.08545554060021002,
+      "rmse_mm": 0.0897939492836934,
+      "median_p50_mm": 0.08542506714525769,
+      "p95_mm": 0.13110753998040875,
+      "p99_mm": 0.14740445093002716,
+      "max_mc_mm": 0.18098973612402688,
+      "worst_case_gain_mm_per_mm": 0.9683117714500796,
+      "mean_gain_mm_per_mm": 0.809546976161199
+    },
+    "e": {
+      "mean_mm": 0.08293445095337261,
+      "rmse_mm": 0.08747478070415722,
+      "median_p50_mm": 0.08332316083179532,
+      "p95_mm": 0.12768423251591468,
+      "p99_mm": 0.1449284747681107,
+      "max_mc_mm": 0.17960865192757924,
+      "worst_case_gain_mm_per_mm": 0.967926385375102,
+      "mean_gain_mm_per_mm": 0.8092966387268119
+    },
+    "base_pos": {
+      "mean_mm": 0.19764749074625318,
+      "rmse_mm": 0.21052672274916778,
+      "median_p50_mm": 0.20162594341014056,
+      "p95_mm": 0.31189939560849195,
+      "p99_mm": 0.3696255407630624,
+      "max_mc_mm": 0.5151304392903405,
+      "worst_case_gain_mm_per_mm": 3.397600694811414,
+      "mean_gain_mm_per_mm": 2.5676196821662187
+    }
+  }
+}

@@ -2,7 +2,7 @@
 
 **Đề tài:** Nghiên cứu và mô phỏng robot Delta cho ứng dụng phân loại sản phẩm bằng camera  
 **Đóng góp học thuật:** Giải quyết *Khoảng trống nghiên cứu số 1* (xem `nghien-cuu/tai-lieu/tong-quan.md`) — Thiết lập mô hình giải tích tường minh kết hợp giải số Newton–Raphson và kiểm chứng chéo định lượng vòng kín $\text{IK} \leftrightarrow \text{FK}$ trên $1\,859$ điểm lưới thuộc không gian làm việc hình trụ tham chiếu $\varnothing 300 \times 150\text{ mm}$.  
-**Script kiểm chứng đi kèm:** `nghien-cuu/mo-hinh/kiem-chung-ik-fk.py`  
+**Script kiểm chứng đi kèm:** `nghien-cuu/mo-hinh/kiem-chung-ik-fk.py`, `nghien-cuu/mo-hinh/do-nhay-hinh-hoc.py`  
 **Thư mục dữ liệu & hình vẽ xuất bản:** `nghien-cuu/mo-hinh/ket-qua/`
 
 ---
@@ -363,9 +363,52 @@ Script `nghien-cuu/mo-hinh/kiem-chung-ik-fk.py` đã được thực thi bằng 
 - `nghien-cuu/mo-hinh/ket-qua/ban-do-sai-so-xy.png`: Bản đồ nhiệt sai số vòng kín IK↔FK ($\sim 10^{-13}\text{ mm}$) và đường đồng mức số điều kiện Jacobian $\kappa(\hat{J})$ trên mặt phẳng ngang $z = -350\text{ mm}$.
 - `nghien-cuu/mo-hinh/ket-qua/mat-cat-vung-lam-viec.png`: Mặt cắt đứng vùng làm việc trong mặt phẳng $Oxz$ ($y = 0$) và đồ thị bán kính hình trụ nội tiếp tối đa $R_{\max}(z)$ chứng minh hình trụ $\varnothing 300 \times 150\text{ mm}$ nằm lọt hoàn toàn trong vùng làm việc an toàn.
 
-### 6.5. Các điểm cần lưu ý / chưa chắc chắn cần kiểm chứng tiếp
+### 6.5. Khảo sát Độ nhạy Sai số Hình học bằng Mô phỏng Monte Carlo
 
-1. **`[CẦN KIỂM CHỨNG]` Độ nhạy sai số chế tạo cơ khí:** Sai số vòng kín $1,58 \times 10^{-13}\text{ mm}$ là sai số thuần túy của thuật toán toán học (chứng minh không có lỗi dẫn giải hay chọn nhầm nhánh). Trên phần cứng thật, sai số chiều dài khâu $\Delta r_f, \Delta r_e \approx \pm 0,2\text{ mm}$ và độ phân giải góc của servo/stepper ($\Delta \theta \approx 0,05^\circ \div 0,2^\circ$) sẽ tạo ra sai số vị trí điểm cuối cỡ $\Delta p \approx \|J\| \Delta\theta \approx 0,15 \text{–} 0,60\text{ mm}$.
+*(Lưu ý minh bạch phương pháp: Toàn bộ số liệu trong mục này là kết quả **mô phỏng Monte Carlo trên máy tính** bằng script `nghien-cuu/mo-hinh/do-nhay-hinh-hoc.py` theo tinh thần mô hình sai số hình học của Vischer & Clavel (1998) [2], **không phải số đo thực nghiệm trên khung robot thật**).*
+
+#### (a) Lý do thực hiện và mô hình toán học của sai số chế tạo
+Sai số vòng kín $\max \|\mathcal{FK}(\mathcal{IK}(\mathbf{p})) - \mathbf{p}\|_2 = 1,5826 \times 10^{-13}\text{ mm}$ ở mục 6.4 chỉ chứng minh $\mathcal{FK}$ và $\mathcal{IK}$ là cặp hàm nghịch đảo chính xác trong mã nguồn. Trong thực tế, bộ điều khiển tính góc khớp đặt $\boldsymbol{\theta}_{\text{nom}} = \mathcal{IK}(\mathbf{p}_{\text{nom}}, \boldsymbol{\lambda}_0)$ dựa trên bộ tham số danh nghĩa $\boldsymbol{\lambda}_0 = (f_0, e_0, r_{f0}, r_{e0})$, nhưng cơ khí thực tế của từng nhánh $i \in \{1, 2, 3\}$ lại mang sai số chế tạo và lắp ráp $\Delta \boldsymbol{\lambda}_i$:
+- Chiều dài thực của tay quay chủ động và cẳng tay nhánh $i$: $r_{f,i} = r_{f0} + \Delta r_{f,i}$, $r_{e,i} = r_{e0} + \Delta r_{e,i}$.
+- Kích thước cạnh đế cố định và bàn di động tại nhánh $i$: $f_i = f_0 + \Delta f_i$, $e_i = e_0 + \Delta e_i$.
+- Sai lệch vị trí lắp đặt ổ trục khớp đế $A_i$ theo phương hướng kính $\Delta R_{b,i}$ và phương thẳng đứng $\Delta z_{A,i}$.
+
+Khi đó, tâm mặt cầu ảo thực tế của nhánh $i$ dịch chuyển tới:
+$$\tilde{\mathbf{c}}_i(\theta_{\text{nom},i}) = \begin{bmatrix} (\tilde{R}_i + r_{f,i} \cos\theta_{\text{nom},i})\cos\phi_i \\ (\tilde{R}_i + r_{f,i} \cos\theta_{\text{nom},i})\sin\phi_i \\ \Delta z_{A,i} - r_{f,i} \sin\theta_{\text{nom},i} \end{bmatrix}, \qquad \text{với } \tilde{R}_i = \frac{f_0 + \Delta f_i - (e_0 + \Delta e_i)}{\sqrt{3}} + \Delta R_{b,i} \tag{46}$$
+và 3 mặt cầu giao nhau có bán kính khác nhau $r_{e,1} \ne r_{e,2} \ne r_{e,3}$:
+$$\|\mathbf{p}_{\text{thực}} - \tilde{\mathbf{c}}_i(\theta_{\text{nom},i})\|_2^2 = r_{e,i}^2 \implies \tilde{w}_i = \|\tilde{\mathbf{c}}_i\|_2^2 - r_{e,i}^2, \quad d_{j1} = \frac{\tilde{w}_j - \tilde{w}_1}{2} \quad (j \in \{2, 3\}) \tag{47}$$
+Sai số vị trí điểm cuối do dung sai hình học gây ra là:
+$$e_{\text{pos}}(\mathbf{p}_{\text{nom}}, \Delta\boldsymbol{\lambda}) = \|\mathbf{p}_{\text{thực}} - \mathbf{p}_{\text{nom}}\|_2 = \big\|\mathcal{FK}(\mathcal{IK}(\mathbf{p}_{\text{nom}}, \boldsymbol{\lambda}_0), \boldsymbol{\lambda}_0 + \Delta\boldsymbol{\lambda}) - \mathbf{p}_{\text{nom}}\big\|_2 \tag{48}$$
+
+#### (b) Thống kê phân vị Monte Carlo ở hai mức dung sai $\pm 0,2\text{ mm}$ và $\pm 0,5\text{ mm}$
+Script `do-nhay-hinh-hoc.py` thực hiện $N_{\text{MC}} = 300$ lần rút mẫu bộ tham số robot ngẫu nhiên độc lập theo phân bố đều $\mathcal{U}(-\delta, +\delta)$ kết hợp quét trên $567$ điểm lưới phân bố đều trong hình trụ $\varnothing 300 \times 150\text{ mm}$ ($z \in [-425, -275]\text{ mm}$), tạo ra **$170\,100$ phép đánh giá** cho mỗi kịch bản. Kết quả trích xuất từ `ket-qua/tom-tat-do-nhay.json`:
+
+| Kịch bản dung sai chế tạo (Mô phỏng Monte Carlo, $170\,100$ mẫu/kịch bản) | Trung bình Mean ($\text{mm}$) | RMSE ($\text{mm}$) | Trung vị P50 ($\text{mm}$) | Phân vị 95 % P95 ($\text{mm}$) | Phân vị 99 % P99 ($\text{mm}$) | Cực đại Max ($\text{mm}$) | Tỷ lệ mẫu đạt $\le 1,0\text{ mm}$ | Tỷ lệ vùng làm việc có $\text{P95} \le 1,0\text{ mm}$ |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Mức 1a: $\pm 0,2\text{ mm}$** (4 tham số khâu $f, e, r_f, r_e$) | $0,243$ | $0,261$ | $0,236$ | $0,402$ | $0,476$ | $0,689$ | **$100,00\,\%$** | **$100,00\,\%$** |
+| **Mức 1b: $\pm 0,2\text{ mm}$ toàn phần** ($f, e, r_f, r_e$ + lệch khớp đế $\Delta R_b, \Delta z_A \in \pm 0,2\text{ mm}$) | $0,304$ | $0,328$ | $0,297$ | $0,514$ | $0,604$ | $0,795$ | **$100,00\,\%$** | **$100,00\,\%$** |
+| **Mức 2a: $\pm 0,5\text{ mm}$** (4 tham số khâu $f, e, r_f, r_e$) | $0,614$ | $0,659$ | $0,596$ | $1,030$ | $1,244$ | $1,681$ | $93,99\,\%$ | $31,57\,\%$ |
+| **Mức 2b: $\pm 0,5\text{ mm}$ toàn phần** ($f, e, r_f, r_e$ + lệch khớp đế $\Delta R_b, \Delta z_A \in \pm 0,5\text{ mm}$) | $0,760$ | $0,822$ | $0,733$ | $1,321$ | $1,506$ | $2,410$ | $76,45\,\%$ | $0,00\,\%$ |
+
+#### (c) Phân tích độ nhạy riêng từng tham số (One-at-a-Time / OAT Sensitivity Analysis)
+Để xác định khâu nào cần kiểm soát dung sai nghiêm ngặt nhất khi lập bản vẽ CAD và BOM (Tuần 11), từng nhóm tham số được cho biến thiên độc lập trong khoảng $\pm 0,2\text{ mm}$ (các tham số còn lại giữ đúng danh nghĩa):
+
+| Xếp hạng mức độ nhạy | Tham số khảo sát (biến thiên độc lập $\mathcal{U}(-0,2; +0,2)\text{ mm}$) | Trung vị P50 ($\text{mm}$) | Phân vị 95 % P95 ($\text{mm}$) | Phân vị 99 % P99 ($\text{mm}$) | Cực đại Max ($\text{mm}$) | Hệ số khuếch đại xấu nhất ($\text{mm/mm}$) | Giải thích cơ học |
+| :---: | --- | :---: | :---: | :---: | :---: | :---: | --- |
+| **1 (Nhạy nhất — nhóm lắp ráp)** | Vị trí ổ trục khớp đế ($\Delta R_{b,i}, \Delta z_{A,i}$) | $0,202$ | $0,312$ | $0,378$ | $0,515$ | $3,40$ | Gồm đồng thời 2 phương sai lệch (hướng kính $\Delta R_{b,i}$ và cao độ $\Delta z_{A,i}$) tác động trực tiếp lên tọa độ tâm cầu $\tilde{\mathbf{c}}_i$. |
+| **2 (Nhạy nhất — nhóm kích thước khâu)** | Chiều dài cẳng tay song song ($r_e$) | $0,201$ | $0,291$ | $0,347$ | $0,434$ | $2,52$ | Thay đổi trực tiếp bán kính mặt cầu $r_{e,i}$; sai số truyền dọc theo phương thanh truyền với hệ số $\sim 1/\cos\alpha_i > 1$. |
+| **3 (Trung bình)** | Chiều dài tay quay chủ động ($r_f$) | $0,058$ | $0,145$ | $0,174$ | $0,212$ | $1,16$ | Tác động qua $\cos\theta_i$ và $\sin\theta_i$, chỉ ảnh hưởng mạnh khi tay quay chúc xuống sâu ở biên vùng làm việc. |
+| **4 (Ít nhạy hơn)** | Cạnh tam giác đế cố định ($f$) | $0,085$ | $0,131$ | $0,152$ | $0,181$ | $0,97$ | Khi quy đổi từ cạnh tam giác đều sang bán kính ngoại tiếp ($R_b = f/\sqrt{3}$), sai số $\Delta f$ được chia giảm đi $\sqrt{3} \approx 1,732$ lần. |
+| **5 (Ít nhạy hơn)** | Cạnh tam giác bàn di động ($e$) | $0,083$ | $0,128$ | $0,151$ | $0,180$ | $0,97$ | Tương tự $f$, sai số $\Delta e$ được chia giảm đi $\sqrt{3}$ lần trong hiệu bán kính $R = (f - e)/\sqrt{3}$. |
+
+**Kết luận kỹ thuật rút ra từ khảo sát độ nhạy (Hình `ket-qua/do-nhay-sai-so-hinh-hoc.png`):**
+1. **Với dung sai $\pm 0,2\text{ mm}$:** **100 % vùng làm việc** ($\varnothing 300 \times 150\text{ mm}$) đạt sai số vị trí $\le 1,0\text{ mm}$ ngay cả trong trường hợp xấu nhất ($\text{Max} = 0,689\text{ mm}$ khi xét 4 khâu; $\text{Max} = 0,795\text{ mm}$ và $\text{P95} = 0,514\text{ mm}$ khi cộng thêm sai lệch lắp đặt khớp đế $\pm 0,2\text{ mm}$). Khoảng dự trữ sai số còn lại ($1,0 - 0,514 \approx 0,486\text{ mm}$) đủ để bù cho sai số xác lập của bộ điều khiển PID và độ phân giải xung của động cơ.
+2. **Với dung sai $\pm 0,5\text{ mm}$:** Sai số phân vị 95 % vượt ngưỡng $1,0\text{ mm}$ ($\text{P95} = 1,030\text{ mm}$ với 4 khâu và $\text{P95} = 1,321\text{ mm}$, $\text{Max} = 2,410\text{ mm}$ khi có lệch khớp đế), khiến tỷ lệ vùng làm việc đảm bảo độ tin cậy 95 % ($\text{P95} \le 1,0\text{ mm}$) sụt xuống chỉ còn **$31,57\,\%$** (và **$0\,\%$** nếu tính cả lệch khớp đế $\pm 0,5\text{ mm}$).
+3. **Khuyến nghị thiết kế cơ khí (CAD/BOM):** Tham số khâu nhạy nhất là **chiều dài cẳng tay $r_e$** ($\text{P95} = 0,291\text{ mm}$) và **vị trí lắp đặt ổ trục khớp đế** ($\text{P95} = 0,312\text{ mm}$). Do đó, khi chế tạo thực tế phải dùng **đồ gá (jig) cố định khoảng cách tâm 2 đầu khớp cầu rod-end của 6 thanh cẳng tay $r_e$ đồng đều trong phạm vi $\pm 0,15\text{ mm}$** và cắt CNC/laser tấm đế cố định liền khối để định vị chính xác 3 cụm ổ trục $A_1, A_2, A_3$.
+
+### 6.6. Các điểm cần lưu ý / chưa chắc chắn cần kiểm chứng tiếp
+
+1. **`[CẦN KIỂM CHỨNG]` Sai số động học do độ phân giải góc khớp và khe hở khớp cầu (Backlash):** Mô phỏng Monte Carlo ở mục 6.5 đã giải quyết định lượng bài toán dung sai kích thước tĩnh, nhưng chưa cộng độ rơ dọc trục của khớp cầu (ball-joint clearance) và bước lượng tử hóa PWM của servo/stepper. Cần cộng thêm thành phần này trong mô phỏng điều khiển ở bước tiếp theo.
 2. **Giới hạn trần vùng làm việc ($z > -265\text{ mm}$):** Như thể hiện trên Hình 2b (`mat-cat-vung-lam-viec.png`), nếu đẩy cao độ bàn di động lên quá cao ($z > -250\text{ mm}$), góc khớp $\theta_i$ sẽ vượt quá $-40^\circ$ (tay quay hướng lên trên quá cao, dễ va chạm khung đế) làm bán kính khả dụng $R_{\max,\text{safe}}(z)$ thu hẹp nhanh chóng từ $245\text{ mm}$ xuống dưới $150\text{ mm}$. Do đó, khi lắp đặt băng tải và bàn gắp, mặt phẳng gắp–thả bắt buộc phải đặt trong dải $z \in [-425, -275]\text{ mm}$.
 
 ---
