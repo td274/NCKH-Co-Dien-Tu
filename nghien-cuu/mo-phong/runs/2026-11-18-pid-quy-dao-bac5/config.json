@@ -1,0 +1,84 @@
+{
+  "run_name": "2026-11-18-pid-quy-dao-bac5",
+  "muc_tieu": "Mo phong quy dao gap-tha bac 5 va so sanh PID thuan voi PID + feed-forward cho robot Delta 3-DOF",
+  "ngay_chay": "2026-11-18",
+  "seed": 42,
+  "python": "D:\\Python312\\python.exe",
+  "requirements": {
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2",
+    "sympy": "1.14.0"
+  },
+  "robot_geometry_mm": {
+    "f": 346.0,
+    "e": 115.0,
+    "rf": 200.0,
+    "re": 400.0,
+    "R_b": 199.763202571,
+    "r_p": 66.395277856,
+    "R": 133.367924715
+  },
+  "workspace_constraints_mm": {
+    "z_min": -425.0,
+    "z_max": -275.0,
+    "r_max": 150.0
+  },
+  "waypoints_mm": {
+    "home": [0.0, 0.0, -350.0],
+    "pick": [100.0, -100.0, -400.0],
+    "place": [-100.0, 100.0, -350.0]
+  },
+  "trajectory": {
+    "polynomial_order": 5,
+    "boundary_conditions": "dung han tai moi diem: v=0, a=0",
+    "segments": ["home->pick", "pick->place", "place->home"],
+    "T_default_s": 0.5,
+    "T_min_s": 0.12,
+    "T_max_s": 2.0
+  },
+  "joint_model": {
+    "J_kg_m2": 0.01,
+    "b_Nm_s_rad": 0.05,
+    "tau_max_Nm": 2.0,
+    "omega_max_rad_s": 10.0,
+    "encoder_counts_per_rev": 4096,
+    "quantize_feedback": true,
+    "cross_coupling": "bo qua tuong tac cheo giua 3 khop (giai thiet tach khop)"
+  },
+  "pid_gains": {
+    "Kp": 80.0,
+    "Ki": 5.0,
+    "Kd": 4.0,
+    "tau_d_filter_s": 0.005
+  },
+  "pid_gain_sets": {
+    "bao_thu": {"Kp": 40.0, "Ki": 2.0, "Kd": 2.0},
+    "can_bang": {"Kp": 80.0, "Ki": 5.0, "Kd": 4.0},
+    "nhanh": {"Kp": 160.0, "Ki": 10.0, "Kd": 8.0}
+  },
+  "simulation": {
+    "dt_s": 0.001,
+    "solver": "scipy.integrate.solve_ivp (RK45)",
+    "atol": 1e-06,
+    "rtol": 1e-04,
+    "t_max_s": 10.0
+  },
+  "criteria": {
+    "overshoot_max_percent": 5.0,
+    "settling_error_mm": 1.0,
+    "cycle_time_target_s": 1.5,
+    "total_cycle_target_s": 1.8
+  },
+  "giathieu": [
+    "Khop quay duoc mo hinh hoa nhu 3 he quan tinh-nhot doc lap, bo qua trong luc va tuong tac dong hoc cheo.",
+    "Quy dao thao tac duoc tinh trong khong gian thao tac, sau do chuyen sang khong gian khop qua IK de dieu khien.",
+    "Feed-forward = J*theta_ddot_ref + b*theta_dot_ref, bu tru quan tinh va ma sat nhot.",
+    "Sai so bam duoc quy doi ve khong gian thao tac bang FK voi goc khop thuc te.",
+    "Chu ky chuyen dong thuan = tong thoi gian 3 doan quy dao bac 5, chua tinh thoi gian dinh vi cho xi-lanh kep tha."
+  ],
+  "notes": [
+    "Day la mo phong ly thuyet; tham so J, b, tau_max, omega_max la gia dinh tham chieu, se chot theo BOM dong co / bo truyen.",
+    "Bo qua do tre truyen thong, tre xu ly hinh anh va thoi gian kep tha vat trong chu ky thuan."
+  ]
+}

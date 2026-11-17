@@ -26,6 +26,9 @@ permissions:
     resource: "arduino-cli *"
     effect: allow
   - action: shell
+    resource: "*arduino-cli*"
+    effect: allow
+  - action: shell
     resource: "git *"
     effect: allow
 ---
