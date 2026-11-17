@@ -36,7 +36,9 @@ camera, làm cơ sở thiết kế phần cứng hoàn chỉnh.
 **Cụ thể (đo được):**
 1. Dẫn giải và kiểm chứng chéo động học nghịch (IK) ↔ thuận (FK) của Delta 3 bậc tự do;
    sai số vòng kín cực đại ≤ 1 mm trên không gian làm việc tham chiếu Ø300 × 150 mm,
-   báo cáo max error và RMSE trên ≥ 1000 điểm lưới.
+   báo cáo max error và RMSE trên ≥ 1000 điểm lưới. **Bổ sung khảo sát độ nhạy:** khi
+   chiều dài khâu sai lệch ±0,2 mm (sai số chế tạo), báo cáo phân bố sai số điểm cuối
+   (max, phân vị 95 %) và đối chiếu với ngưỡng 1 mm.
 2. Thiết kế quỹ đạo gắp–thả (đa thức bậc 5) + PID; mô phỏng đạt **chu kỳ chuyển động
    thuần ≤ 1,5 s**, overshoot ≤ 5 %; **chu kỳ toàn hệ thống ≤ 1,8 s** khi cộng trễ thực
    đo được của camera + truyền thông (mốc đối chiếu: 1,8 s/vật của Vo & Le 2023).

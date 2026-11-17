@@ -1,0 +1,43 @@
+{
+  "parameters_mm": {
+    "f": 346.0,
+    "e": 115.0,
+    "rf": 200.0,
+    "re": 400.0,
+    "R_b": 199.76319313961054,
+    "r_p": 66.39528095680697,
+    "R": 133.36791218280356
+  },
+  "workspace_cylinder_mm": {
+    "diameter_mm": 300.0,
+    "radius_mm": 150.0,
+    "height_mm": 150.0,
+    "z_min_mm": -425.0,
+    "z_max_mm": -275.0
+  },
+  "symbolic_verification": {
+    "trig_residual": "0",
+    "poly_residual": "0",
+    "status": "PASSED (Exact Symbolic Match = 0)"
+  },
+  "grid_evaluation": {
+    "total_points": 1859,
+    "valid_ik_points": 1859,
+    "coverage_percent": 100.0,
+    "nr_unconverged_points": 0,
+    "nr_max_iters": 6,
+    "nr_mean_iters": 5.7348036578805806,
+    "err_ik_fk_analytical_max_mm": 1.5826458321783854e-13,
+    "err_ik_fk_analytical_rmse_mm": 6.906586523685104e-14,
+    "err_ik_fk_nr_max_mm": 1.8358546976923408e-13,
+    "err_ik_fk_nr_rmse_mm": 6.435629809908001e-14,
+    "diff_analytical_vs_nr_max_mm": 1.7288250917028504e-13,
+    "diff_analytical_vs_nr_rmse_mm": 6.089561320999056e-14,
+    "theta_min_deg": -27.04942628615746,
+    "theta_max_deg": 77.30017239559379,
+    "cond_J_norm_min": 1.012992348305501,
+    "cond_J_norm_max": 1.9810018964854856,
+    "cond_J_norm_mean": 1.4034260792668276,
+    "min_transmission_angle_deg": 38.99508341933293
+  }
+}
