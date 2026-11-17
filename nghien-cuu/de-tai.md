@@ -34,8 +34,10 @@ phân loại sản phẩm theo tín hiệu camera, làm cơ sở thiết kế ph
 **Cụ thể (đo được):**
 1. Dẫn giải và kiểm chứng động học nghịch/thuận Delta; sai số vị trí điểm cuối trong
    mô phỏng ≤ 1 mm trên không gian làm việc tham chiếu Ø300 × 150 mm.
-2. Thiết kế quỹ đạo gắp–thả và bộ điều khiển vị trí; mô phỏng đạt thời gian chu kỳ
-   pick-place ≤ 1,5 s và overshoot ≤ 5 %.
+2. Thiết kế quỹ đạo gắp–thả (đa thức bậc 5) và bộ điều khiển vị trí; mô phỏng đạt
+   **chu kỳ chuyển động thuần ≤ 1,5 s** và **chu kỳ toàn hệ thống (gồm xử lý ảnh +
+   đóng/nhả đầu gắp) ≤ 1,8 s**, lấy mốc **1,8 s/vật của Vo & Le 2023** làm chuẩn đối
+   sánh; overshoot ≤ 5 %.
 3. Xây dựng module phân loại bằng camera (màu sắc/hình dạng đơn giản) đạt độ chính
    xác ≥ 90 % trên tập mẫu ≥ 100 vật trong mô phỏng/thí nghiệm ảo.
 
