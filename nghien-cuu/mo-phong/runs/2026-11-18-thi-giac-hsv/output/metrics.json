@@ -1,0 +1,1204 @@
+{
+  "cm_color": [
+    [
+      90,
+      0,
+      0
+    ],
+    [
+      0,
+      93,
+      0
+    ],
+    [
+      0,
+      0,
+      0
+    ]
+  ],
+  "cm_shape": [
+    [
+      60,
+      0,
+      0
+    ],
+    [
+      60,
+      0,
+      0
+    ],
+    [
+      0,
+      0,
+      63
+    ]
+  ],
+  "accuracy_color": 1.0,
+  "accuracy_shape": 0.6721,
+  "accuracy_overall": 0.4316,
+  "total_gt_objects": 285,
+  "total_valid_matches": 183,
+  "correct_both": 123,
+  "all_errors": [
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tron",
+      "distance_px": 0.0,
+      "reason": "Du doan vang-tron thay vi vang-vuong"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tam_giac",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tron",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tron thay vi do-vuong"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "tron",
+      "reason": "Khong phat hien duoc vat"
+    },
+    {
+      "type": "FN",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "reason": "Khong phat hien duoc vat"
+    }
+  ],
+  "timing_ms": {
+    "mean": 2.83,
+    "std": 1.66,
+    "p50": 2.61,
+    "p95": 3.71,
+    "p99": 4.28,
+    "n_samples": 273
+  }
+}
