@@ -1,0 +1,203 @@
+{
+  "cm_color": [
+    [
+      26,
+      0,
+      0
+    ],
+    [
+      0,
+      26,
+      0
+    ],
+    [
+      0,
+      0,
+      23
+    ]
+  ],
+  "cm_shape": [
+    [
+      25,
+      0,
+      0
+    ],
+    [
+      0,
+      13,
+      12
+    ],
+    [
+      0,
+      0,
+      25
+    ]
+  ],
+  "accuracy_color": 1.0,
+  "accuracy_shape": 0.84,
+  "accuracy_overall": 0.84,
+  "recall_overall": 1.0,
+  "precision_overall": 1.0,
+  "total_gt_objects": 75,
+  "total_valid_matches": 75,
+  "total_predictions": 75,
+  "correct_both": 63,
+  "all_errors": [
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tam_giac",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tam_giac thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tam_giac",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tam_giac thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tam_giac",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tam_giac thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tam_giac",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tam_giac thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tam_giac",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tam_giac thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "vang",
+      "gt_shape": "vuong",
+      "pred_color": "vang",
+      "pred_shape": "tam_giac",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan vang-tam_giac thay vi vang-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "pred_color": "xanh",
+      "pred_shape": "tam_giac",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan xanh-tam_giac thay vi xanh-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "pred_color": "xanh",
+      "pred_shape": "tam_giac",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan xanh-tam_giac thay vi xanh-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tam_giac",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tam_giac thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tam_giac",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tam_giac thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "do",
+      "gt_shape": "vuong",
+      "pred_color": "do",
+      "pred_shape": "tam_giac",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan do-tam_giac thay vi do-vuong"
+    },
+    {
+      "type": "MISMATCH",
+      "gt_color": "xanh",
+      "gt_shape": "vuong",
+      "pred_color": "xanh",
+      "pred_shape": "tam_giac",
+      "distance_px": 1.4142135623730951,
+      "reason": "Du doan xanh-tam_giac thay vi xanh-vuong"
+    }
+  ],
+  "per_class": {
+    "color": {
+      "do": {
+        "TP": 26,
+        "FP": 0,
+        "FN": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "vang": {
+        "TP": 26,
+        "FP": 0,
+        "FN": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "xanh": {
+        "TP": 23,
+        "FP": 0,
+        "FN": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      }
+    },
+    "shape": {
+      "tron": {
+        "TP": 25,
+        "FP": 0,
+        "FN": 0,
+        "precision": 1.0,
+        "recall": 1.0
+      },
+      "vuong": {
+        "TP": 13,
+        "FP": 0,
+        "FN": 12,
+        "precision": 1.0,
+        "recall": 0.52
+      },
+      "tam_giac": {
+        "TP": 25,
+        "FP": 12,
+        "FN": 0,
+        "precision": 0.6757,
+        "recall": 1.0
+      }
+    }
+  }
+}

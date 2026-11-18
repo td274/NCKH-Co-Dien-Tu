@@ -1,11 +1,10 @@
 """
 evaluate.py
-So sanh du doan voi ground truth, tinh ma tran nham lan va do chinh xac.
+So sanh du doan voi ground truth, tinh ma tran nham lan,
+do chinh xac, precision/recall tung lop.
 """
 
-import json
 import csv
-import os
 import numpy as np
 from collections import defaultdict
 
@@ -21,7 +20,7 @@ def distance(p1, p2):
 def match_detections_to_gt(detections, ground_truths, max_dist_px=40):
     """
     Greedy matching dua tren khoang cach tam pixel.
-    Tra ve: list cac tuple (det, gt) va cac FP/FN.
+    Tra ve: list cac tuple (det, gt, dist).
     """
     used_gt = set()
     matches = []
@@ -78,6 +77,9 @@ def evaluate_image(detections, ground_truths, max_dist_px=40):
                 'type': 'FN',
                 'gt_color': gt['color'],
                 'gt_shape': gt['shape'],
+                'pred_color': '',
+                'pred_shape': '',
+                'distance_px': '',
                 'reason': 'Khong phat hien duoc vat'
             })
             continue
@@ -85,8 +87,11 @@ def evaluate_image(detections, ground_truths, max_dist_px=40):
             # FP
             errors.append({
                 'type': 'FP',
+                'gt_color': '',
+                'gt_shape': '',
                 'pred_color': det['color'],
                 'pred_shape': det['shape'],
+                'distance_px': '',
                 'reason': 'Phat hien du vat'
             })
             continue
@@ -113,9 +118,9 @@ def evaluate_image(detections, ground_truths, max_dist_px=40):
     cm_color = build_confusion_matrix(pred_colors, true_colors, COLORS)
     cm_shape = build_confusion_matrix(pred_shapes, true_shapes, SHAPES)
 
-    # So cap matched hop le
     n_valid = len([m for m in matches if m[0] is not None and m[1] is not None])
     n_total_gt = len(ground_truths)
+    n_total_pred = len(detections)
 
     return {
         'cm_color': cm_color,
@@ -123,17 +128,40 @@ def evaluate_image(detections, ground_truths, max_dist_px=40):
         'errors': errors,
         'n_valid_matches': n_valid,
         'n_total_gt': n_total_gt,
+        'n_total_pred': n_total_pred,
         'correct_both': correct_both,
     }
 
 
+def _per_class_metrics(cm, labels, fn_counts, fp_counts):
+    """Tinh precision va recall cho tung lop tu ma tran nham lan + FN/FP roi."""
+    cm = np.asarray(cm)
+    out = {}
+    for i, label in enumerate(labels):
+        tp = int(cm[i, i])
+        fp = int(cm[:, i].sum() - tp) + int(fp_counts.get(label, 0))
+        fn = int(cm[i, :].sum() - tp) + int(fn_counts.get(label, 0))
+        precision = tp / (tp + fp) if (tp + fp) > 0 else 0.0
+        recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+        out[label] = {
+            'TP': tp,
+            'FP': fp,
+            'FN': fn,
+            'precision': round(precision, 4),
+            'recall': round(recall, 4),
+        }
+    return out
+
+
 def aggregate_metrics(per_image_results):
-    """Tong hop ma tran nham lan va accuracy tu nhieu anh."""
+    """Tong hop ma tran nham lan, accuracy va precision/recall tu nhieu anh."""
     cm_color = np.zeros((3, 3), dtype=int)
     cm_shape = np.zeros((3, 3), dtype=int)
     all_errors = []
     total_gt = 0
     total_valid = 0
+    total_pred = 0
+    total_correct_both = 0
 
     for r in per_image_results:
         cm_color += r['cm_color']
@@ -141,12 +169,27 @@ def aggregate_metrics(per_image_results):
         all_errors.extend(r['errors'])
         total_gt += r['n_total_gt']
         total_valid += r['n_valid_matches']
+        total_pred += r['n_total_pred']
+        total_correct_both += r['correct_both']
 
     accuracy_color = float(np.trace(cm_color) / max(cm_color.sum(), 1))
     accuracy_shape = float(np.trace(cm_shape) / max(cm_shape.sum(), 1))
-    # Accuracy tong: ty le vat dung ca mau va hinh tren tong so vat GT
-    correct_both = sum(r.get('correct_both', 0) for r in per_image_results)
-    accuracy_overall = float(correct_both / max(total_gt, 1))
+    accuracy_overall = float(total_correct_both / max(total_gt, 1))
+    recall_overall = float(total_valid / max(total_gt, 1))
+    precision_overall = float(total_valid / max(total_pred, 1))
+
+    # Dem FP/FN roi cho tung lop
+    fn_color = defaultdict(int)
+    fn_shape = defaultdict(int)
+    fp_color = defaultdict(int)
+    fp_shape = defaultdict(int)
+    for e in all_errors:
+        if e['type'] == 'FN':
+            fn_color[e['gt_color']] += 1
+            fn_shape[e['gt_shape']] += 1
+        elif e['type'] == 'FP':
+            fp_color[e['pred_color']] += 1
+            fp_shape[e['pred_shape']] += 1
 
     return {
         'cm_color': cm_color.tolist(),
@@ -154,10 +197,17 @@ def aggregate_metrics(per_image_results):
         'accuracy_color': round(accuracy_color, 4),
         'accuracy_shape': round(accuracy_shape, 4),
         'accuracy_overall': round(accuracy_overall, 4),
+        'recall_overall': round(recall_overall, 4),
+        'precision_overall': round(precision_overall, 4),
         'total_gt_objects': total_gt,
         'total_valid_matches': total_valid,
-        'correct_both': correct_both,
+        'total_predictions': total_pred,
+        'correct_both': total_correct_both,
         'all_errors': all_errors,
+        'per_class': {
+            'color': _per_class_metrics(cm_color, COLORS, fn_color, fp_color),
+            'shape': _per_class_metrics(cm_shape, SHAPES, fn_shape, fp_shape),
+        }
     }
 
 

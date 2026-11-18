@@ -11,6 +11,14 @@ Dau ra: list cac dict, moi dict chua:
     - confidence: float [0,1]
     - bbox: (x,y,w,h)
     - area: float (pixel^2)
+    - touches_border: bool
+
+Cai tien so voi phien ban truoc:
+    - Loc dien tich contour theo ti le so voi dien tich anh (khong con
+      ngac nhien ngang tuyet doi), giu lai vat chua hoan toan nam trong khung.
+    - Dac trung hinh hoc: circularity, extent, solidity, so canh xap xi
+      voi epsilon = k * chu vi, giup phan biet tron/vuong/tam giac ben hon
+      khi xoay, mo va nhieu nhe.
 """
 
 import cv2
@@ -43,75 +51,100 @@ def build_color_mask(hsv, ranges):
 
 def preprocess_mask(mask, kernel_size=5, open_iter=1, close_iter=1):
     """Morphology mo/dong de loai nhieu va no lo."""
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kernel_size, kernel_size))
-    opened = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel, iterations=open_iter)
-    closed = cv2.morphologyEx(opened, cv2.MORPH_CLOSE, kernel, iterations=close_iter)
+    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE,
+                                      (kernel_size, kernel_size))
+    opened = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel,
+                              iterations=open_iter)
+    closed = cv2.morphologyEx(opened, cv2.MORPH_CLOSE, kernel,
+                              iterations=close_iter)
     return closed
 
 
-def classify_shape(contour, aspect_ratio_tol=0.25):
+def _shape_confidence(score, floor=0.5):
+    return float(min(1.0, max(floor, score)))
+
+
+def classify_shape(contour,
+                   eps_ratio=0.025,
+                   circ_tol=0.82,
+                   solid_tol=0.80,
+                   ar_lo=0.55,
+                   ar_hi=1.80,
+                   extent_sq=0.65,
+                   extent_tr=0.60):
     """
-    Phan loai hinh dang dua tren approxPolyDP + dac trung hinh hoc.
+    Phan loai hinh dang dua tren bo dac trung hinh hoc.
+
+    Cac dac trung:
+        - circularity = 4*pi*A / P^2  (tron ~1.0, vuong ~0.785, tam giac ~0.604)
+        - extent      = A / bbox_area (vuong ~1.0, tron ~0.785, tam giac ~0.5)
+        - solidity    = A / convex_hull_area (tat ca ~1.0 khi khong bi che)
+        - n_sides     = so dinh cua approxPolyDP(epsilon = eps_ratio * chu vi)
+
     Tra ve (shape, confidence).
     """
     area = cv2.contourArea(contour)
-    if area < 50:
+    if area < 1:
         return 'unknown', 0.0
 
     peri = cv2.arcLength(contour, True)
     if peri < 1e-3:
         return 'unknown', 0.0
 
-    # So canh xap xi
-    approx = cv2.approxPolyDP(contour, 0.04 * peri, True)
+    approx = cv2.approxPolyDP(contour, eps_ratio * peri, True)
     n_sides = len(approx)
 
-    # Bao hinh chu nhat
     x, y, w, h = cv2.boundingRect(contour)
     aspect_ratio = float(w) / max(h, 1)
+    bbox_area = max(w * h, 1)
+    extent = area / bbox_area
 
-    # Dac trung tron
     hull = cv2.convexHull(contour)
     hull_area = cv2.contourArea(hull)
-    solidity = area / hull_area if hull_area > 0 else 0
-    circularity = 4 * np.pi * area / (peri ** 2)
+    solidity = area / hull_area if hull_area > 0 else 0.0
 
-    # Uu tien so canh xap xi de phan biet vuong/tam giac, tranh vuong xoay
-    # bi nham thanh tron do approxPolyDP tao ra nhieu canh.
-    if n_sides == 4:
-        ar_ok = abs(aspect_ratio - 1.0) <= aspect_ratio_tol
-        if ar_ok:
-            conf = 0.7 + 0.3 * solidity
-            return 'vuong', float(min(1.0, conf))
-        else:
-            return 'vuong', float(0.5)
+    circularity = 4.0 * np.pi * area / (peri ** 2)
 
-    if n_sides == 3:
-        conf = 0.7 + 0.3 * solidity
-        return 'tam_giac', float(min(1.0, conf))
+    # 1. Hinh tron: gan nhu hoan hao, khong phu thuoc vao so canh xap xi.
+    if circularity >= circ_tol and solidity >= solid_tol:
+        conf = 0.80 + 0.20 * min(1.0, circularity * solidity)
+        return 'tron', _shape_confidence(conf, 0.85)
 
-    if n_sides >= 8 or (solidity > 0.85 and circularity > 0.65):
-        # Tron
-        conf = min(1.0, circularity * solidity)
-        return 'tron', float(conf)
+    # 2. Hinh vuong: canh gan deu, dien tich bbox lon, so canh 3-6.
+    square_aspect_ok = ar_lo <= aspect_ratio <= ar_hi
+    square_extent_ok = extent >= extent_sq
+    square_sides_ok = 3 <= n_sides <= 6
+    if square_aspect_ok and square_extent_ok and square_sides_ok:
+        conf = 0.50 + 0.30 * extent + 0.20 * solidity
+        return 'vuong', _shape_confidence(conf, 0.60)
 
-    # Truong hop khac: chon gan nhat dua tren circularity / so canh
-    if circularity > 0.6:
-        return 'tron', float(circularity)
-    if n_sides == 5 or n_sides == 6:
-        return 'vuong', 0.3
-    return 'tam_giac', 0.2
+    # 3. Tam giac: 3 canh ro rang, hoac dien tich bbox nho va lien khoi.
+    triangle_sides_ok = n_sides == 3
+    triangle_compact = (extent < extent_tr) and (solidity >= solid_tol - 0.05)
+    if triangle_sides_ok or triangle_compact:
+        conf = 0.50 + 0.25 * solidity + 0.25 * max(0.0, 1.0 - extent)
+        return 'tam_giac', _shape_confidence(conf, 0.55)
+
+    # 4. Fallback: chon gan nhat dua tren circularity/extent.
+    if circularity >= 0.72:
+        return 'tron', _shape_confidence(circularity, 0.40)
+    if extent >= 0.55:
+        return 'vuong', _shape_confidence(extent, 0.35)
+    return 'tam_giac', _shape_confidence(solidity, 0.30)
 
 
-def detect_objects(image_bgr, min_area=200, max_area=None,
-                   transformer=None, debug=False):
+def detect_objects(image_bgr,
+                   min_area_ratio=0.0002,
+                   max_area_ratio=0.70,
+                   transformer=None,
+                   debug=False):
     """
     Phat hien cac vat the trong anh BGR.
 
     Args:
         image_bgr: numpy array HxWx3
-        min_area: dien tich toi thieu (px^2)
-        max_area: dien tich toi da (px^2), None = khong gioi han
+        min_area_ratio: ti le dien tich toi thieu so voi dien tich anh
+        max_area_ratio: ti le dien tich toi da so voi dien tich anh
         transformer: doi tuong co ham transform(points_px) -> points_mm
         debug: neu True, tra ve them mask dict
 
@@ -122,13 +155,22 @@ def detect_objects(image_bgr, min_area=200, max_area=None,
     if image_bgr is None or image_bgr.size == 0:
         return [], {}
 
+    h_img, w_img = image_bgr.shape[:2]
+    img_area = h_img * w_img
+    min_area = max(1, int(min_area_ratio * img_area))
+    max_area = int(max_area_ratio * img_area) if max_area_ratio is not None else None
+
     hsv = cv2.cvtColor(image_bgr, cv2.COLOR_BGR2HSV)
     detections = []
     all_masks = {}
 
+    # Kich thuoc kernel morphology ty le nho voi kich thuoc anh.
+    kernel_size = max(3, int(min(h_img, w_img) / 80) | 1)
+
     for color_name, ranges in COLOR_RANGES.items():
         mask = build_color_mask(hsv, ranges)
-        mask = preprocess_mask(mask, kernel_size=5, open_iter=1, close_iter=1)
+        mask = preprocess_mask(mask, kernel_size=kernel_size,
+                               open_iter=1, close_iter=1)
         all_masks[color_name] = mask
 
         contours, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL,
@@ -150,12 +192,13 @@ def detect_objects(image_bgr, min_area=200, max_area=None,
             if shape == 'unknown':
                 continue
 
-            # Confidence tong hop: do tin cay hinh dang + ty le dien tich contour
-            # so voi bounding box (phan tach tot)
             x, y, w, h = cv2.boundingRect(cnt)
             bbox_area = max(w * h, 1)
             extent = area / bbox_area
             confidence = float(conf_shape * 0.7 + extent * 0.3)
+
+            touches_border = (x <= 0 or y <= 0 or
+                              x + w >= w_img - 1 or y + h >= h_img - 1)
 
             det = {
                 'center_px': (cx, cy),
@@ -165,6 +208,7 @@ def detect_objects(image_bgr, min_area=200, max_area=None,
                 'bbox': (x, y, w, h),
                 'area': float(area),
                 'contour': cnt,
+                'touches_border': bool(touches_border),
             }
             if transformer is not None:
                 pts = np.array([[cx, cy]], dtype=np.float32)
@@ -190,6 +234,8 @@ def draw_detections(image_bgr, detections, thickness=2):
         c = color_map_bgr.get(det['color'], (128, 128, 128))
         cv2.rectangle(out, (x, y), (x + w, y + h), c, thickness)
         label = f"{det['color']}-{det['shape']} {det['confidence']:.2f}"
+        if det.get('touches_border'):
+            label += " *"
         cv2.putText(out, label, (x, y - 10),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.5, c, 2)
         cx, cy = det['center_px']

@@ -1,7 +1,7 @@
 """
 run.py
 Script chay doc lap cho pipeline thi giac.
-Chay: D:\Python312\python.exe run.py
+Chay: D:\\Python312\\python.exe run.py
 """
 
 import os

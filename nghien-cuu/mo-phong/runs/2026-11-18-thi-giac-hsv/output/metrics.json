@@ -42,19 +42,19 @@
   "all_errors": [],
   "timing_ms": {
     "mean": 2.62,
-    "std": 0.45,
-    "p50": 2.46,
-    "p95": 3.4,
-    "p99": 4.53,
+    "std": 0.36,
+    "p50": 2.54,
+    "p95": 3.24,
+    "p99": 3.84,
     "n_samples": 273
   },
   "webcam": {
     "opened": true,
-    "fps": 24.6,
+    "fps": 24.4,
     "frame_time_ms": {
-      "mean": 40.67,
-      "std": 64.03,
-      "p95": 77.25
+      "mean": 41.02,
+      "std": 73.11,
+      "p95": 145.21
     },
     "image_path": "D:\\NCKH-Co-Dien-Tu\\nghien-cuu\\mo-phong\\runs\\2026-11-18-thi-giac-hsv\\figures\\webcam_sample.png",
     "camera_index": 0

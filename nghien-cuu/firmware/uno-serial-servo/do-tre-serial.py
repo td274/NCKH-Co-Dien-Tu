@@ -8,11 +8,15 @@ Cách dùng:
   # Đo thật (cần cắm board):
   D:\\Python312\\python.exe do-tre-serial.py --port COM5 --n 200
 
-  # Tự dò cổng:
+  # Tự dò cổng (ưu tiên CH340, bỏ qua cổng Bluetooth SPP):
   D:\\Python312\\python.exe do-tre-serial.py --n 200
 
   # Dry-run (KHÔNG cần board — chỉ kiểm tra script, số liệu là GIẢ LẬP):
   D:\\Python312\\python.exe do-tre-serial.py --dry-run --n 200
+
+Lưu ý cổng: board clone thường là CH340. Trên Windows, COM6–COM15 thường là
+Bluetooth Serial — script tự dò sẽ BỎ QUA chúng, và CẢNH BÁO nếu bạn chỉ định
+nhầm bằng --port (giao tiếp sẽ timeout).
 
 Nguyên lý đo: ghi lệnh "J,<t1>,<t2>,<t3>\\n" rồi đợi dòng "A,<micros>\\n".
 Đo thời gian từ ngay-trước-khi-ghi tới khi đọc đủ dòng trả lời (perf_counter_ns).
@@ -203,14 +207,74 @@ def write_report(outdir: Path, lat_ms, micros, missed, n, dry_run):
     return csv_path
 
 
+# --------------------------------------------------------------------------- #
+#  Nhận diện cổng serial
+# --------------------------------------------------------------------------- #
+# Board clone Arduino UNO phổ biến dùng chip CH340. Trên Windows, cổng Bluetooth
+# SPP (VD: COM6–COM15 do driver Bluetooth tạo) hiển thị description kiểu
+# "Standard Serial over Bluetooth link" — mở nhầm cổng này sẽ không giao tiếp
+# được với board (không có Arduino ở đầu kia).
+_BT_HINTS = ("bluetooth", "serial over bluetooth")
+
+
+def _port_description(p) -> str:
+    parts = [p.device or ""]
+    parts.append(getattr(p, "description", "") or "")
+    parts.append(getattr(p, "hwid", "") or "")
+    return " ".join(parts)
+
+
+def looks_like_bluetooth(text: str) -> bool:
+    """Trả True nếu mô tả cổng có dấu hiệu Bluetooth SPP (không phải board)."""
+    t = text.lower()
+    return any(h in t for h in _BT_HINTS)
+
+
+def _list_ports_summary():
+    """Chuỗi liệt kê cổng hiện có + đánh dấu cổng Bluetooth, để in khi lỗi."""
+    import serial.tools.list_ports
+    ports = list(serial.tools.list_ports.comports())
+    if not ports:
+        return "  (không có cổng nào)"
+    lines = []
+    for p in ports:
+        desc = _port_description(p)
+        mark = " [Bluetooth — KHÔNG phải board!]" if looks_like_bluetooth(desc) else ""
+        lines.append(f"  {p.device}: {desc}{mark}")
+    return "\n".join(lines)
+
+
+def warn_if_bluetooth(port: str) -> None:
+    """Cảnh báo ra stderr nếu người dùng chọn cổng có dấu hiệu Bluetooth."""
+    import serial.tools.list_ports
+    for p in serial.tools.list_ports.comports():
+        if p.device.upper() == port.upper():
+            if looks_like_bluetooth(_port_description(p)):
+                print(
+                    f"[WARN] Cổng {port} có vẻ là Bluetooth Serial "
+                    f"({getattr(p, 'description', '')}). Đây KHÔNG phải board "
+                    "Arduino — giao tiếp sẽ timeout. Kiểm tra lại cổng thật.",
+                    file=sys.stderr,
+                )
+            return
+
+
 def detect_port():
     import serial.tools.list_ports
     ports = list(serial.tools.list_ports.comports())
+    if not ports:
+        return None
+    # 1) Ưu tiên CH340 (board clone phổ biến).
     for p in ports:
-        desc = (p.description or "") + " " + (getattr(p, "hwid", "") or "")
-        if "CH340" in desc.upper():
+        if "CH340" in _port_description(p).upper():
             return p.device
-    return ports[0].device if ports else None
+    # 2) Cổng không phải Bluetooth (loại COM Bluetooth SPP).
+    candidates = [p.device for p in ports
+                  if not looks_like_bluetooth(_port_description(p))]
+    if candidates:
+        return candidates[0]
+    # 3) Chỉ còn cổng Bluetooth -> không tự chọn, để người dùng dùng --port.
+    return None
 
 
 def main():
@@ -231,9 +295,14 @@ def main():
     else:
         port = args.port or detect_port()
         if not port:
-            print("[ERROR] Không tìm thấy cổng serial. Cắm board rồi thử lại, "
-                  "hoặc dùng --port COM5.", file=sys.stderr)
+            print("[ERROR] Không tìm thấy cổng serial hợp lệ. Các cổng hiện có:",
+                  file=sys.stderr)
+            print(_list_ports_summary(), file=sys.stderr)
+            print("[ERROR] Nếu chỉ thấy cổng Bluetooth thì board chưa cắm / chưa "
+                  "cài driver CH340. Cắm board rồi thử lại, hoặc dùng "
+                  "--port COM5.", file=sys.stderr)
             sys.exit(1)
+        warn_if_bluetooth(port)
         print(f"[REAL] Kết nối {port} @ {args.baud} ...")
         transport = RealSerial(port, args.baud)
 

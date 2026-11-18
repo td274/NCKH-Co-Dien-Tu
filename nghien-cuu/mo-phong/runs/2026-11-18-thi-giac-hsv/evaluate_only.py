@@ -47,7 +47,8 @@ def run_evaluation(labels, transformer):
             continue
 
         t0 = time.perf_counter()
-        dets, _ = detect_objects(img, min_area=200, transformer=transformer)
+        dets, _ = detect_objects(img, min_area_ratio=0.0002,
+                                  max_area_ratio=0.70, transformer=transformer)
         t1 = time.perf_counter()
         timings_ms.append((t1 - t0) * 1000)
 
@@ -97,14 +98,17 @@ def plot_confusion(cm, labels, title, path):
     plt.close(fig)
 
 
-def plot_samples(samples, n=4):
-    fig, axes = plt.subplots(2, n, figsize=(12, 6), dpi=300)
+def plot_samples(samples, n=6):
+    n = min(n, len(samples))
+    fig, axes = plt.subplots(2, n, figsize=(3 * n, 6), dpi=300)
+    if n == 1:
+        axes = np.array([[axes[0]], [axes[1]]])
     axes = axes.flatten()
     for k, sample in enumerate(samples[:n]):
         annotated = draw_detections(sample['image'], sample['detections'])
         annotated_rgb = cv2.cvtColor(annotated, cv2.COLOR_BGR2RGB)
         axes[k].imshow(annotated_rgb)
-        axes[k].set_title(sample['filename'][:30], fontsize=9)
+        axes[k].set_title(sample['filename'][:40], fontsize=9)
         axes[k].axis('off')
 
         gt_img = sample['image'].copy()
@@ -166,16 +170,25 @@ def main():
     plot_confusion(np.array(metrics['cm_shape']), ['tron', 'vuong', 'tam_giac'],
                    'Ma tran nham lan - Hinh dang',
                    os.path.join(FIG_DIR, 'confusion_shape.png'))
-    plot_samples(samples, n=4)
+    plot_samples(samples, n=6)
 
     print("\n===== KET QUA TOM TAT =====")
     print(f"So anh: {len(labels)}")
     print(f"Tong so vat GT: {metrics['total_gt_objects']}")
+    print(f"Tong du doan: {metrics['total_predictions']}")
+    print(f"Khop hop le: {metrics['total_valid_matches']}")
+    print(f"Recall tong: {metrics['recall_overall']*100:.2f}%")
+    print(f"Precision tong: {metrics['precision_overall']*100:.2f}%")
     print(f"Do chinh xac mau: {metrics['accuracy_color']*100:.1f}%")
     print(f"Do chinh xac hinh: {metrics['accuracy_shape']*100:.1f}%")
     print(f"Do chinh xac tong: {metrics['accuracy_overall']*100:.1f}%")
     print(f"Thoi gian xu ly trung binh: {metrics['timing_ms']['mean']:.2f} ms")
     print(f"Thoi gian xu ly P95: {metrics['timing_ms']['p95']:.2f} ms")
+    print("\nPrecision/Recall tung lop:")
+    for cls, v in metrics['per_class']['color'].items():
+        print(f"  mau {cls}: P={v['precision']*100:.1f}%, R={v['recall']*100:.1f}%")
+    for cls, v in metrics['per_class']['shape'].items():
+        print(f"  hinh {cls}: P={v['precision']*100:.1f}%, R={v['recall']*100:.1f}%")
     print("===========================")
 
 
