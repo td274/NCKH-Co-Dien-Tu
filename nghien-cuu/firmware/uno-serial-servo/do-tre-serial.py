@@ -27,6 +27,14 @@ import sys
 import time
 from pathlib import Path
 
+# Windows console mặc định dùng cp1252, in tiếng Việt sẽ lỗi UnicodeEncodeError.
+# Ép stdout/stderr sang UTF-8 (hỗ trợ từ Python 3.7+).
+for _stream in (sys.stdout, sys.stderr):
+    try:
+        _stream.reconfigure(encoding="utf-8", errors="replace")
+    except (AttributeError, ValueError):
+        pass
+
 # Giới hạn góc (khớp với config.h) để sinh lệnh J hợp lệ.
 JOINT_MIN = (-30.0, -30.0, -30.0)
 JOINT_MAX = (+80.0, +80.0, +80.0)

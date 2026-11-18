@@ -1,0 +1,11 @@
+{
+  "opened": true,
+  "fps": 24.6,
+  "frame_time_ms": {
+    "mean": 40.67,
+    "std": 64.03,
+    "p95": 77.25
+  },
+  "image_path": "D:\\NCKH-Co-Dien-Tu\\nghien-cuu\\mo-phong\\runs\\2026-11-18-thi-giac-hsv\\figures\\webcam_sample.png",
+  "camera_index": 0
+}
