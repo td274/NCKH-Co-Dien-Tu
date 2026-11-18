@@ -110,25 +110,31 @@ def classify_shape(contour,
         conf = 0.80 + 0.20 * min(1.0, circularity * solidity)
         return 'tron', _shape_confidence(conf, 0.85)
 
-    # 2. Hinh vuong: canh gan deu, dien tich bbox lon, so canh 3-6.
+    # 2. Hinh vuong: dac trung chinh la circularity ~0.785 va aspect ratio gan 1,
+    #    ke ca khi xoay 45° lam extent giam. Neu approxPolyDP van ra 4-6 canh
+    #    va bbox gan vuong cung chap nhan.
     square_aspect_ok = ar_lo <= aspect_ratio <= ar_hi
-    square_extent_ok = extent >= extent_sq
-    square_sides_ok = 3 <= n_sides <= 6
-    if square_aspect_ok and square_extent_ok and square_sides_ok:
-        conf = 0.50 + 0.30 * extent + 0.20 * solidity
+    square_solid_ok = solidity >= solid_tol - 0.05
+    square_by_circ = (0.70 <= circularity < circ_tol and
+                      square_aspect_ok and square_solid_ok)
+    square_by_shape = (3 <= n_sides <= 6 and square_aspect_ok and
+                       extent >= 0.55 and square_solid_ok)
+    if square_by_circ or square_by_shape:
+        conf = 0.50 + 0.25 * circularity + 0.25 * solidity
         return 'vuong', _shape_confidence(conf, 0.60)
 
-    # 3. Tam giac: 3 canh ro rang, hoac dien tich bbox nho va lien khoi.
+    # 3. Tam giac: 3 canh ro rang, hoac compact (extent nho) va khong tron.
     triangle_sides_ok = n_sides == 3
-    triangle_compact = (extent < extent_tr) and (solidity >= solid_tol - 0.05)
+    triangle_compact = (circularity < 0.70 and extent < extent_tr and
+                        square_solid_ok)
     if triangle_sides_ok or triangle_compact:
         conf = 0.50 + 0.25 * solidity + 0.25 * max(0.0, 1.0 - extent)
         return 'tam_giac', _shape_confidence(conf, 0.55)
 
     # 4. Fallback: chon gan nhat dua tren circularity/extent.
-    if circularity >= 0.72:
+    if circularity >= 0.68:
         return 'tron', _shape_confidence(circularity, 0.40)
-    if extent >= 0.55:
+    if extent >= 0.50:
         return 'vuong', _shape_confidence(extent, 0.35)
     return 'tam_giac', _shape_confidence(solidity, 0.30)
 

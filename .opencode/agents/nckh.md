@@ -29,6 +29,9 @@ permissions:
     resource: tong-hop
     effect: allow
   - action: subagent
+    resource: co-khi
+    effect: allow
+  - action: subagent
     resource: explore
     effect: allow
 ---

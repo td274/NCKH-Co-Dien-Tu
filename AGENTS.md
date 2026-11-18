@@ -51,6 +51,7 @@ rồi tổng hợp:
 
 - `literature` — tìm & tóm tắt paper, lập bảng so sánh, quản lý `references.bib`
 - `tong-hop` — tổng hợp notes thành tổng quan, xu hướng, khoảng trống (model mạnh)
+- `co-khi` — thiết kế cơ khí: kích thước, dung sai, BOM, bản vẽ sơ đồ
 - `modeling` — dẫn giải toán, thiết kế bộ điều khiển
 - `simulation` — viết/chạy mô phỏng, xử lý số liệu, vẽ đồ thị
 - `firmware` — code nhúng và build
@@ -68,6 +69,7 @@ trả về một bản tóm tắt ngắn. Agent sau đọc file, không cần đ
 | `/de-cuong <chủ đề>` | Lập đề cương NCKH |
 | `/khao-sat <chủ đề>` | Khảo sát tài liệu, lập bảng so sánh |
 | `/tong-hop` | Tổng hợp notes thành tổng quan + khoảng trống (Argon) |
+| `/thiet-ke` | Thiết kế cơ khí + dung sai + BOM + bản vẽ |
 | `/mo-hinh <hệ/ký hiệu>` | Dẫn giải mô hình toán |
 | `/mo-phong <kịch bản>` | Viết và chạy mô phỏng |
 | `/phan-bien <file/mục>` | Phản biện trước khi nộp |

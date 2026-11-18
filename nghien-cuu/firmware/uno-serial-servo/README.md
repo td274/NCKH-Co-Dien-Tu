@@ -4,8 +4,9 @@ Firmware Arduino UNO nhận góc 3 khớp qua Serial và trả `A,<micros>` ngay
 xong dòng lệnh, dùng để **đo trễ vòng (round-trip latency) thực tế** giữa máy tính
 và vi điều khiển.
 
-> ⚠️ **Số đo trễ chỉ có nghĩa khi cắm board thật.** Khi chưa cắm, dùng
-> `--dry-run` để kiểm tra script (số liệu là giả lập).
+> ⚠️ **Trạng thái hiện tại: board CHƯA được cắm → chưa có số đo trễ thật nào.**
+> Mọi con số trễ chỉ có nghĩa khi cắm board thật. Khi chưa cắm, dùng `--dry-run`
+> để kiểm tra script (số liệu là giả lập, KHÔNG phải phần cứng).
 
 ---
 
@@ -73,12 +74,19 @@ Nếu chưa có core (máy khác):
 # Đo thật (cần cắm board):
 D:\Python312\python.exe do-tre-serial.py --port COM5 --n 200
 
-# Tự dò cổng (ưu tiên CH340):
+# Tự dò cổng (ưu tiên CH340, BỎ QUA cổng Bluetooth SPP):
 D:\Python312\python.exe do-tre-serial.py --n 200
 
 # Dry-run — KHÔNG cần board, chỉ kiểm tra script (số liệu GIẢ LẬP):
 D:\Python312\python.exe do-tre-serial.py --dry-run --n 200
 ```
+
+> ⚠️ **Cổng Bluetooth:** board clone phổ biến dùng chip CH340. Trên Windows,
+> các cổng COM6–COM15 thường là *Bluetooth Serial* (mô tả "Standard Serial over
+> Bluetooth link") — **không phải board Arduino**. Script tự dò sẽ **bỏ qua**
+> các cổng Bluetooth; nếu bạn chỉ định nhầm bằng `--port`, script **cảnh báo**
+> rõ ràng (giao tiếp sẽ timeout). Kiểm tra đúng cổng trong Trình quản lý thiết
+> bị trước khi chạy đo thật.
 
 Kết quả ghi vào `ket-qua/`: CSV (`latency-<real|dryrun>-<ts>.csv`) và histogram
 300 dpi (`histogram-*.png`). Báo cáo: trung bình, trung vị, P95, P99, max (ms).
