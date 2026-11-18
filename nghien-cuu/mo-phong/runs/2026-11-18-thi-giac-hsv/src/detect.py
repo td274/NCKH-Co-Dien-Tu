@@ -26,7 +26,7 @@ COLOR_RANGES = {
         {'h_min': 20, 'h_max': 40, 's_min': 100, 'v_min': 50},
     ],
     'xanh': [
-        {'h_min': 70, 'h_max': 100, 's_min': 80, 'v_min': 50},
+        {'h_min': 100, 'h_max': 140, 's_min': 80, 'v_min': 50},
     ],
 }
 
@@ -76,25 +76,26 @@ def classify_shape(contour, aspect_ratio_tol=0.25):
     solidity = area / hull_area if hull_area > 0 else 0
     circularity = 4 * np.pi * area / (peri ** 2)
 
-    if n_sides >= 8 or (solidity > 0.85 and circularity > 0.65):
-        # Tron
-        conf = min(1.0, circularity * solidity)
-        return 'tron', float(conf)
-
+    # Uu tien so canh xap xi de phan biet vuong/tam giac, tranh vuong xoay
+    # bi nham thanh tron do approxPolyDP tao ra nhieu canh.
     if n_sides == 4:
-        # Vuong / chu nhat
         ar_ok = abs(aspect_ratio - 1.0) <= aspect_ratio_tol
         if ar_ok:
             conf = 0.7 + 0.3 * solidity
             return 'vuong', float(min(1.0, conf))
         else:
-            return 'vuong', float(0.4)
+            return 'vuong', float(0.5)
 
     if n_sides == 3:
         conf = 0.7 + 0.3 * solidity
         return 'tam_giac', float(min(1.0, conf))
 
-    # Truong hop khac: chon gan nhat dua tren circularity
+    if n_sides >= 8 or (solidity > 0.85 and circularity > 0.65):
+        # Tron
+        conf = min(1.0, circularity * solidity)
+        return 'tron', float(conf)
+
+    # Truong hop khac: chon gan nhat dua tren circularity / so canh
     if circularity > 0.6:
         return 'tron', float(circularity)
     if n_sides == 5 or n_sides == 6:

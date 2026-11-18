@@ -24,7 +24,7 @@
   "mau_hsv": {
     "do": {"h_min": 0, "h_max": 10, "s_min": 100, "v_min": 50},
     "vang": {"h_min": 20, "h_max": 40, "s_min": 100, "v_min": 50},
-    "xanh": {"h_min": 70, "h_max": 100, "s_min": 80, "v_min": 50}
+    "xanh": {"h_min": 100, "h_max": 140, "s_min": 80, "v_min": 50}
   },
   "calibration": {
     "method": "homography_4_points",
