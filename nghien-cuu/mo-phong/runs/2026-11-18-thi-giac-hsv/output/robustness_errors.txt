@@ -1,0 +1,12 @@
+
+=== occlusion ===
+occlusion_000.png: vang-tron du doan thanh vang-vuong
+occlusion_002.png: xanh-tam_giac du doan thanh xanh-vuong
+occlusion_003.png: do-tron du doan thanh do-tam_giac
+occlusion_005.png: xanh-tron du doan thanh xanh-vuong
+occlusion_010.png: xanh-tron du doan thanh xanh-tam_giac
+occlusion_011.png: vang-tron du doan thanh vang-tam_giac
+occlusion_012.png: xanh-tam_giac du doan thanh do-tam_giac
+occlusion_014.png: do-tron du doan thanh do-tam_giac
+occlusion_017.png: xanh-tam_giac du doan thanh xanh-vuong
+occlusion_023.png: xanh-tam_giac du doan thanh do-tron

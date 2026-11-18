@@ -1,0 +1,8 @@
+condition,label,n_gt,n_matched,correct_both,accuracy_color,accuracy_shape,accuracy_overall,recall,precision
+baseline,Khong suy giam,36,36,36,100.00,100.00,100.00,100.00,100.00
+gradient_light,Anh sang khong deu,36,36,36,100.00,100.00,100.00,100.00,100.00
+shadow,Bong do,36,36,36,100.00,100.00,100.00,100.00,100.00
+jpeg_noise,Nhieu + JPEG,36,36,36,100.00,100.00,100.00,100.00,100.00
+perspective,Phoi canh nghieng,36,36,36,100.00,100.00,100.00,100.00,100.00
+occlusion,Che khuat mot phan,72,72,54,97.22,76.39,75.00,100.00,92.31
+shape_imperfect,Hinh dang khong ly tuong,36,36,36,100.00,100.00,100.00,100.00,100.00
