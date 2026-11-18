@@ -1,12 +1,22 @@
 
+=== perspective ===
+perspective_026.png: vang-tron khong phat hien duoc
+
+=== combined ===
+combined_002.png: xanh-tam_giac du doan thanh xanh-vuong
+combined_003.png: do-tron du doan thanh do-tam_giac
+combined_009.png: vang-vuong khong phat hien duoc
+combined_010.png: xanh-tron du doan thanh xanh-vuong
+combined_015.png: xanh-tam_giac du doan thanh xanh-vuong
+
 === occlusion ===
-occlusion_000.png: vang-tron du doan thanh vang-vuong
-occlusion_002.png: xanh-tam_giac du doan thanh xanh-vuong
-occlusion_003.png: do-tron du doan thanh do-tam_giac
-occlusion_005.png: xanh-tron du doan thanh xanh-vuong
-occlusion_010.png: xanh-tron du doan thanh xanh-tam_giac
-occlusion_011.png: vang-tron du doan thanh vang-tam_giac
-occlusion_012.png: xanh-tam_giac du doan thanh do-tam_giac
-occlusion_014.png: do-tron du doan thanh do-tam_giac
-occlusion_017.png: xanh-tam_giac du doan thanh xanh-vuong
-occlusion_023.png: xanh-tam_giac du doan thanh do-tron
+occlusion_000.png: xanh-tron du doan thanh xanh-vuong
+occlusion_003.png: do-tron du doan thanh do-vuong
+occlusion_006.png: xanh-tron du doan thanh xanh-tam_giac
+occlusion_009.png: vang-tron du doan thanh vang-tam_giac
+occlusion_010.png: vang-tron du doan thanh vang-tam_giac
+occlusion_011.png: xanh-tam_giac du doan thanh xanh-vuong
+occlusion_016.png: xanh-tron du doan thanh xanh-tam_giac
+occlusion_017.png: do-tron du doan thanh do-vuong
+occlusion_021.png: xanh-tron du doan thanh xanh-vuong
+occlusion_025.png: vang-tam_giac du doan thanh vang-vuong

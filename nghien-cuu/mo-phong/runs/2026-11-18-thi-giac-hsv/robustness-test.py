@@ -67,23 +67,30 @@ def degrade_gradient(image, gt=None):
 
 
 def degrade_shadow(image, gt):
-    """Ve ellipse toi mo canh vat, do toi 30-50 %."""
-    out = image.copy()
+    """Ve bong toi mo len mot phan vat, do toi 40-60 %."""
+    out = image.astype(np.float32)
     cx, cy = gt['center_px']
-    offset = random.choice([-1, 1]) * random.randint(25, 50)
+    # Dat bong ngay tren/ke vat de bao dam che mot phan vat
+    offset = random.choice([-1, 1]) * random.randint(0, 18)
     if random.random() < 0.5:
-        ex, ey = cx + offset, cy + random.randint(-20, 20)
+        ex, ey = cx + offset, cy + random.randint(-12, 12)
     else:
-        ex, ey = cx + random.randint(-20, 20), cy + offset
-    ax = int(gt['radius'] * random.uniform(0.9, 1.3))
-    ay = int(gt['radius'] * random.uniform(0.5, 0.9))
+        ex, ey = cx + random.randint(-12, 12), cy + offset
+    ax = int(gt['radius'] * random.uniform(1.0, 1.5))
+    ay = int(gt['radius'] * random.uniform(0.8, 1.2))
     angle = random.randint(0, 180)
-    shadow = np.zeros_like(out)
-    cv2.ellipse(shadow, (ex, ey), (ax, ay), angle, 0, 360, (40, 40, 40), -1)
-    shadow = cv2.GaussianBlur(shadow, (25, 25), 0)
-    alpha = random.uniform(0.30, 0.50)
-    out = cv2.addWeighted(out, 1.0, shadow, alpha, 0)
-    return out
+
+    # Mask trang/den, lam mo de tao bong mo
+    mask = np.zeros(image.shape[:2], dtype=np.uint8)
+    cv2.ellipse(mask, (ex, ey), (ax, ay), angle, 0, 360, 255, -1)
+    mask = cv2.GaussianBlur(mask.astype(np.float32), (21, 21), 0) / 255.0
+    mask = np.clip(mask, 0, 1)
+
+    alpha = random.uniform(0.40, 0.60)
+    factor = 1.0 - alpha * mask
+    factor = factor[..., np.newaxis]
+    out = out * factor
+    return np.clip(out, 0, 255).astype(np.uint8)
 
 
 def degrade_jpeg_noise(image, gt=None):
@@ -100,13 +107,22 @@ def degrade_jpeg_noise(image, gt=None):
 
 
 def degrade_perspective(image, gt=None):
-    """Warp phoi canh, goc nghieng tuong duong 10-15 do."""
+    """Warp phoi canh, goc nghieng tuong duong 10-15 do (dich 8-15 % kich thuoc anh)."""
     h, w = image.shape[:2]
-    d = int(random.uniform(0.05, 0.12) * w) * random.choice([-1, 1])
+    d = int(random.uniform(0.08, 0.15) * w) * random.choice([-1, 1])
     src = np.float32([[0, 0], [w, 0], [w, h], [0, h]])
     dst = np.float32([[d, 0], [w - d, 0], [w, h], [0, h]])
     M = cv2.getPerspectiveTransform(src, dst)
     return cv2.warpPerspective(image, M, (w, h), borderMode=cv2.BORDER_REPLICATE)
+
+
+def degrade_combined(image, gt):
+    """Ket hop gradient + shadow + jpeg_noise + perspective — dieu kien thuc te nhat."""
+    img = degrade_gradient(image, gt)
+    img = degrade_shadow(img, gt)
+    img = degrade_jpeg_noise(img, gt)
+    img = degrade_perspective(img, gt)
+    return img
 
 
 def generate_occlusion_image(main_color, main_shape, brightness, angle,
@@ -203,6 +219,7 @@ CONDITIONS = {
     'shadow': ('Bong do', degrade_shadow, False),
     'jpeg_noise': ('Nhieu + JPEG', degrade_jpeg_noise, False),
     'perspective': ('Phoi canh nghieng', degrade_perspective, False),
+    'combined': ('Ket hop cac yeu to', degrade_combined, False),
     'occlusion': ('Che khuat mot phan', None, True),
     'shape_imperfect': ('Hinh dang khong ly tuong', None, 'shape'),
 }
@@ -211,6 +228,7 @@ CONDITIONS = {
 def run_condition(name, n_images, seed_offset):
     per_image = []
     samples = []
+    diffs = []
     random.seed(SEED_BASE + seed_offset)
     np.random.seed(SEED_BASE + seed_offset)
 
@@ -230,17 +248,29 @@ def run_condition(name, n_images, seed_offset):
         n = random.choice(NOISES)
         bl = random.choice(BLURS)
 
+        # Anh goc sach de kiem tra muc do suy giam
+        clean, _, clean_gts = G.generate_image(idx, color, shape, b, a, n, bl,
+                                               multi=False)
+
         if special == True:  # occlusion
             img, gts = generate_occlusion_image(color, shape, b, a, n, bl,
                                                 seed_offset * 10000 + idx)
+        elif special == 'shape':
+            img = degrade_shape(clean, clean_gts[0], color, shape, b, a, n)
+            gts = clean_gts
         else:
-            img, _, gts = G.generate_image(idx, color, shape, b, a, n, bl,
-                                           multi=False)
-            if special == 'shape':
-                # shape_imperfect can thong tin gt de lam muot
-                img = degrade_shape(img, gts[0], color, shape, b, a, n)
-            else:
-                img = degrador(img, gts[0])
+            img = degrador(clean, clean_gts[0])
+            gts = clean_gts
+
+        # Tu kiem tra: phai co su khac biet ro ret so voi anh goc
+        diff = float(np.mean(np.abs(img.astype(np.float32) -
+                                  clean.astype(np.float32))))
+        diffs.append(diff)
+        if name != 'baseline' and diff < 1.0:
+            raise ValueError(
+                f"Degradation '{name}' khong co tac dung cho "
+                f"{color}-{shape}: mean|diff|={diff:.2f} < 1.0"
+            )
 
         dets, _ = detect_objects(img)
         res = evaluate_image(dets, gts, max_dist_px=50)
@@ -256,6 +286,8 @@ def run_condition(name, n_images, seed_offset):
     metrics = aggregate_metrics(per_image)
     metrics['condition'] = name
     metrics['label'] = label
+    metrics['mean_abs_diff'] = round(float(np.mean(diffs)), 2)
+    metrics['max_abs_diff'] = round(float(np.max(diffs)), 2)
     return metrics, samples
 
 
@@ -288,7 +320,7 @@ def plot_bar(results):
 def plot_examples(samples_by_condition):
     conds = list(samples_by_condition.keys())
     n = len(conds)
-    fig, axes = plt.subplots(2, n, figsize=(4 * n, 7), dpi=300)
+    fig, axes = plt.subplots(2, n, figsize=(3 * n, 6), dpi=300)
     if n == 1:
         axes = np.array([[axes[0]], [axes[1]]])
     axes = axes.flatten()
@@ -323,7 +355,8 @@ def save_csv(results):
         writer = csv.writer(f)
         writer.writerow(['condition', 'label', 'n_gt', 'n_matched',
                          'correct_both', 'accuracy_color', 'accuracy_shape',
-                         'accuracy_overall', 'recall', 'precision'])
+                         'accuracy_overall', 'recall', 'precision',
+                         'mean_abs_diff', 'max_abs_diff'])
         for r in results:
             writer.writerow([
                 r['condition'], r['label'], r['total_gt_objects'],
@@ -333,6 +366,8 @@ def save_csv(results):
                 f"{r['accuracy_overall']*100:.2f}",
                 f"{r['recall_overall']*100:.2f}",
                 f"{r['precision_overall']*100:.2f}",
+                f"{r['mean_abs_diff']:.2f}",
+                f"{r['max_abs_diff']:.2f}",
             ])
 
 
@@ -395,7 +430,8 @@ def main():
               f"overall={metrics['accuracy_overall']*100:.1f}% "
               f"mau={metrics['accuracy_color']*100:.1f}% "
               f"hinh={metrics['accuracy_shape']*100:.1f}% "
-              f"recall={metrics['recall_overall']*100:.1f}%")
+              f"recall={metrics['recall_overall']*100:.1f}% "
+              f"mean|diff|={metrics['mean_abs_diff']:.1f}")
 
     save_csv(results)
     plot_bar(results)
@@ -411,13 +447,16 @@ def main():
                 f.write(line + '\n')
 
     print("\n===== BANG TOM TAT ROBUSTNESS =====")
-    print(f"{'Dieu kien':<22} {'Overall':>8} {'Mau':>8} {'Hinh':>8} {'Recall':>8}")
+    print(f"{'Dieu kien':<26} {'Overall':>8} {'Mau':>8} {'Hinh':>8} "
+          f"{'Recall':>8} {'mean|diff|':>10} {'max|diff|':>10}")
     for r in results:
-        print(f"{r['label']:<22} "
+        print(f"{r['label']:<26} "
               f"{r['accuracy_overall']*100:>7.1f}% "
               f"{r['accuracy_color']*100:>7.1f}% "
               f"{r['accuracy_shape']*100:>7.1f}% "
-              f"{r['recall_overall']*100:>7.1f}%")
+              f"{r['recall_overall']*100:>7.1f}% "
+              f"{r['mean_abs_diff']:>10.1f} "
+              f"{r['max_abs_diff']:>10.1f}")
     print("===================================")
     print("Da luu:")
     print("  - output/robustness.csv")

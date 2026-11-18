@@ -28,10 +28,11 @@ Thư mục `nghien-cuu/thiet-ke/` chứa toàn bộ hồ sơ thiết kế cơ kh
 2. Đặt tấm đế cố định CNC (nhôm 6061-T6 dày $10\text{ mm}$) lên ở cao độ $H_{\text{base}} = 550,0\text{ mm}$ tính từ mặt bàn thí nghiệm.
 3. Dùng thước thủy (spirit level) hoặc thước đo góc điện tử đặt lên mặt tấm đế, vặn 3 chân đế cao su tăng chỉnh cho tới khi độ nghiêng của tấm đế so với mặt bàn $\le 0,05^\circ$ theo cả hai phương $Ox$ và $Oy$.
 
-### Bước 3: Lắp 3 cụm gối đỡ ổ trục khớp chủ động ($A_1, A_2, A_3$) và động cơ
+### Bước 3: Lắp 3 cụm gối đỡ ổ trục khớp chủ động ($A_1, A_2, A_3$) và bộ truyền đai răng GT2 $5:1$ (hoặc hộp số $\le 5\text{ arcmin}$)
 1. Ép 6 ổ bi cầu rãnh sâu 688ZZ (hoặc 608ZZ) vào 3 cụm gối đỡ đôi trên tấm đế.
 2. Đóng chốt định vị $\varnothing 6\text{H7}$ trước khi siết bu-lông giữ gối đỡ để đảm bảo bán kính hướng kính $R_b = 199,76 \pm 0,05\text{ mm}$ và góc lệch $120^\circ$.
-3. Lắp 3 cụm động cơ + hộp giảm tốc $5:1$ (hoặc servo) đồng trục với trục khớp $\varnothing 8\text{g6}$ thông qua khớp nối trục đàn hồi không rơ (zero-backlash jaw/disc coupling).
+3. Lắp Puly bị động $80\text{ răng}$ (GT2, bản rộng $10\text{ mm}$) lên trục khớp $\varnothing 8\text{g6}$ nằm giữa hai ổ bi đỡ; lắp Puly chủ động $16\text{ răng}$ lên trục động cơ bước vòng kín ($i = 80/16 = 5:1$).
+4. Luồn dây đai răng GT2 bản $10\text{ mm}$, đẩy con lăn căng đai (idler pulley) và kéo động cơ trên rãnh trượt để tạo lực căng đai sơ bộ khoảng $25 \div 35\text{ N}$ (khi ấn ngón tay vào giữa nhánh đai với lực $\sim 5\text{ N}$, độ võng ngang của dây đai nằm trong khoảng $1,5 \div 2,0\text{ mm}$), sau đó siết chặt 4 ốc M4 giữ mặt bích động cơ. *(Nếu dùng phương án hộp số hành tinh chính xác $\le 5\text{ arcmin}$, nối trục ra hộp số với trục khớp qua khớp nối đĩa đàn hồi zero-backlash).*
 
 ### Bước 4: Căn chỉnh điểm gốc $\theta_i = 0,0^\circ$ (Homing) và lắp 3 tay quay chủ động ($r_f = 200,00\text{ mm}$)
 1. Cấp nguồn cho Arduino Uno R3 (chạy `nghien-cuu/firmware/uno-serial-servo`), nối công tắc dừng khẩn cấp thường đóng (NC) từ chân `D2` (`ESTOP_PIN`) xuống `GND`, và gửi lệnh `H\n` qua Serial ($115\,200\text{ bps}$) để 3 kênh `D9, D10, D11` xuất xung trung tính $1\,500\text{ }\mu\text{s}$ (`HOME1_DEG = HOME2_DEG = HOME3_DEG = 0.0f`).
@@ -45,6 +46,25 @@ Thư mục `nghien-cuu/thiet-ke/` chứa toàn bộ hồ sơ thiết kế cơ kh
 ### Bước 6: Kiểm tra cơ khí nguội (Dry-run) và giới hạn hành trình
 1. Trước khi bật nguồn động lực, dùng tay nâng hạ nhẹ bàn di động qua toàn bộ hình trụ $\varnothing 300 \times 150\text{ mm}$ ($z \in [-425, -275]\text{ mm}$) để kiểm tra không có hiện tượng bó kẹt khớp cầu (góc truyền lực lý thuyết $\gamma_{\min} = 39,00^\circ \ge 25^\circ$).
 2. Kiểm tra phần mềm kẹp góc trong `config.h` (`JOINT_MIN_DEG = -30.0f`, `JOINT_MAX_DEG = +80.0f`) bao phủ an toàn dải góc làm việc thực tế $[-27,05^\circ, +77,30^\circ]$.
+
+### Bước 7: Đo kiểm Độ rơ Truyền động (Backlash & Hysteresis Test) sau khi lắp
+Vì cánh tay đòn $r_f = 200\text{ mm}$ phóng đại mọi khe hở góc $\delta \theta_b$ tại khớp chủ động theo công thức $e_{\text{backlash}} = r_f \cdot \delta \theta_b$ (trong đó $5\text{ arcmin} \leftrightarrow 0,291\text{ mm}$; $10\text{ arcmin} \leftrightarrow 0,582\text{ mm}$; $15\text{ arcmin} \leftrightarrow 0,873\text{ mm}$), bắt buộc phải đo nghiệm thu độ rơ từng nhánh trước khi chạy quỹ đạo bằng **2 phương pháp đối chiếu chéo** sau:
+
+1. **Phương pháp 1 — Kẹp cứng đầu ra (tay quay $r_f$), vi động động cơ và đọc xung Encoder (`1000 PPR × 4 = 4000 cpr` tại trục động cơ):**
+   - **Cách đo:** Dùng kẹp chữ C (C-clamp) hoặc đồ gá khóa cứng đầu mút khuỷu tay $B_i$ của tay quay $r_f$ vào khung trụ nhôm định hình để trục khớp đầu ra hoàn toàn bất động ($\delta \theta_{\text{out}} = 0$). Ngắt dòng giữ (hoặc phát xung vi bước rất nhỏ chiều thuận rồi đảo sang chiều nghịch) và dùng tay xoay nhẹ trục động cơ / Puly chủ động $16\text{T}$ qua lại giữa hai biên chạm cứng của sườn răng (với mô-men thử nhẹ $\sim 0,05\text{ N}\cdot\text{m}$ để tách riêng khe hở chết khỏi biến dạng đàn hồi).
+   - **Công thức quy đổi từ số xung Encoder đọc được ($\Delta N_{\text{enc}}$):**
+     Với Encoder $4\,000\text{ xung/vòng}$ đặt ở phía động cơ và tỷ số truyền $i = 5:1$ ($20\,000\text{ xung/vòng}$ quy về trục khớp, tức $1\text{ xung} = 0,018^\circ = 1,08\text{ arcmin} \leftrightarrow 0,0628\text{ mm}$ ở đầu tay quay $r_f = 200\text{ mm}$):
+     $$\delta \theta_b\ (\text{arcmin}) = \Delta N_{\text{enc}} \times \frac{360 \times 60}{4\,000 \times 5} = 1,08 \times \Delta N_{\text{enc}}, \qquad e_{\text{backlash}}\ (\text{mm}) = 0,0628 \times \Delta N_{\text{enc}}$$
+2. **Phương pháp 2 — Khóa cứng động cơ (Energized Hold), đẩy nhẹ đầu khuỷu tay $B_i$ và đo bằng đồng hồ so:**
+   - **Cách đo:** Cấp nguồn $24\text{ VDC}$ cho Driver vòng kín ở chế độ giữ vị trí đứng yên ($\theta_i = 0^\circ$, rotor động cơ bị khóa cứng $\Delta N_{\text{enc}} = 0$). Đặt đầu đo của đồng hồ so (dial indicator độ chia $0,01\text{ mm}$) vuông góc với đầu mút khuỷu tay $B_i$ (tại đúng bán kính $r_f = 200,0\text{ mm}$).
+   - Tác dụng lực tay nhẹ $\pm 1\text{ N}$ ($\approx \pm 0,2\text{ N}\cdot\text{m}$) nâng lên rồi ấn xuống tại $B_i$ rồi buông tay, đọc độ lệch trễ (hysteresis / dead-zone) $\Delta s_{B} = |s_{\text{lên}} - s_{\text{xuống}}|$ trên đồng hồ so. Khi đó góc rơ thực tế là $\delta \theta_b = \Delta s_B / 200\text{ (rad)}$.
+3. **Tiêu chí nghiệm thu (Pass / Fail Criteria) theo Ngân sách sai số $\le 1,0\text{ mm}$:**
+   - **Với phương án Truyền đai răng GT2 $5:1$ có căng đai (Phương án chọn):**
+     - Khe hở chết khi kẹp đầu ra đọc encoder: **$\Delta N_{\text{enc}} \le 1\text{ xung}$** ($\delta \theta_b \le 1,08\text{ arcmin} \leftrightarrow e_{\text{backlash}} \le 0,063\text{ mm}$).
+     - Độ trễ đàn hồi tĩnh trên đồng hồ so tại đầu mút $r_f = 200\text{ mm}$: **$\Delta s_B \le 0,10\text{ mm}$** ($\le 1,7\text{ arcmin}$). Nếu vượt quá $0,10\text{ mm}$, cần đẩy thêm con lăn căng đai và kiểm tra lại ốc chí khóa Puly $16\text{T}/80\text{T}$.
+   - **Với phương án Hộp số hành tinh chính xác cao:**
+     - Bắt buộc đạt **$\Delta N_{\text{enc}} \le 4\text{ xung}$** ($\delta \theta_b \le 4,32\text{ arcmin} < 5\text{ arcmin}$) và số đọc đồng hồ so tại $B_i$ đạt **$\Delta s_B \le 0,29\text{ mm}$**.
+     - Nếu đo được $\Delta N_{\text{enc}} \ge 9\text{ xung}$ ($\ge 10\text{ arcmin} \leftrightarrow \Delta s_B \ge 0,58\text{ mm}$), hộp số đó **KHÔNG ĐẠT** và phải loại bỏ vì sẽ làm tổng sai số toàn hệ vượt ngưỡng $1,0\text{ mm}$.
 
 ---
 

@@ -352,7 +352,7 @@
   <text x="32" y="833" font-size="11" fill="#1e293b">• Tay quay chủ động: rf = 200,0 mm (Nhôm 6061 dày 6 mm) | Cẳng tay: re = 400,0 mm (6 ống Carbon Ø8)</text>
   <text x="32" y="851" font-size="11" fill="#1e293b">• Vùng làm việc: Trụ Ø300,0 × 150,0 mm tại z ∈ [-425,0 ; -275,0] mm (γ_min = 39,0° ≥ 25°)</text>
   <text x="32" y="869" font-size="11" fill="#1e293b">• Mô-men đỉnh mô phỏng (chu kỳ 1,5 s): τ_max = 0,457 N·m; ω_max = 4,66 rad/s (44,5 rpm)</text>
-  <text x="32" y="887" font-size="11" font-weight="bold" fill="#0369a1">• Động cơ chọn: Stepper vòng kín + Hộp số 5:1 (τ_định_mức ≥ 2,0 N·m, hệ số an toàn k_sf ≥ 4,38)</text>
+  <text x="32" y="887" font-size="11" font-weight="bold" fill="#0369a1">• Truyền động: Stepper vòng kín + Đai GT2 5:1 căng đai (τ_ra ≈ 2,53 N·m, k_sf = 5,54, backlash ≈ 0)</text>
 
   <!-- Cột 2: Bảng dung sai chế tạo dẫn từ khảo sát độ nhạy Monte Carlo -->
   <text x="534" y="777" font-size="12.5" font-weight="bold" fill="#b91c1c">2. BẢNG DUNG SAI QUAN TRỌNG NHẤT (TỪ KHẢO SÁT ĐỘ NHẠY)</text>
@@ -361,7 +361,7 @@
   <text x="534" y="833" font-size="11" fill="#1e293b">• [Ưu tiên #2] Chiều dài 6 thanh cẳng re: <tspan font-weight="bold" fill="#b91c1c">400,00 ± 0,10 mm</tspan>, lệch trong cặp ≤ 0,05 mm</text>
   <text x="534" y="851" font-size="11" fill="#1e293b">  → Hệ số khuếch đại 2,52 mm/mm (nhạy gấp đôi rf); bắt buộc lắp trên đồ gá (Jig) 2 chốt Ø5g6.</text>
   <text x="534" y="869" font-size="11" fill="#1e293b">• [Ưu tiên #3] Tay quay rf: <tspan font-weight="bold">200,00 ± 0,10 mm</tspan> (1,16 mm/mm) | Bàn di động e: <tspan font-weight="bold">115,00 ± 0,15 mm</tspan></text>
-  <text x="534" y="887" font-size="11" font-weight="bold" fill="#15803d">• Kiểm chứng Monte Carlo: Dung sai ≤ ±0,2 mm đạt P95 = 0,514 mm, 100% vùng đạt ≤ 1,0 mm.</text>
+  <text x="534" y="887" font-size="11" font-weight="bold" fill="#15803d">• Ngân sách sai số tổng (cơ khí + đai GT2 + encoder + gốc): RSS = 0,545 mm; Tuyến tính = 0,957 mm ≤ 1,0 mm.</text>
 
   <!-- Cột 3: Khung tên bản vẽ -->
   <text x="1034" y="777" font-size="12.5" font-weight="bold" fill="#0f172a">3. KHUNG TÊN KỸ THUẬT</text>

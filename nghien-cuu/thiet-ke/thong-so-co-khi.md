@@ -89,10 +89,72 @@ Bảng dưới đây quy định dung sai chế tạo cho từng chi tiết, x�
 | **5** | **Kích thước tam giác bàn di động ($e$)** (Bán kính ngoại tiếp $r_p = 66,40\text{ mm}$) | $e = 115,00\text{ mm}$ | **$\pm 0,15\text{ mm}$** | In 3D PLA+ hiệu chuẩn bước E-steps + doa lỗ chốt $\varnothing 5\text{H7}$ | **Nhạy số 5 — Ít nhạy nhất (Hệ số khuếch đại xấu nhất $= 0,97\text{ mm/mm}$, $\text{P95} = 0,128\text{ mm}$, $\text{Max} = 0,180\text{ mm}$ ở $\pm 0,2\text{ mm}$):** Sai số $\Delta e$ cũng được chia giảm $\sqrt{3}$ lần trong hiệu bán kính $R = (f - e)/\sqrt{3}$. Do đó cho phép nới dung sai lên $\pm 0,15\text{ mm}$, phù hợp với khả năng của máy in 3D FDM phổ thông sau khi bù co ngót. |
 | **6** | **Khoảng cách ngang giữa 2 khớp cầu trong 1 cặp bình hành ($w_p$)** tại khuỷu $B_i$ và bàn $P_i$ | $w_p = 50,00\text{ mm}$ | **$\pm 0,05\text{ mm}$** (đồng bộ giữa $B_i$ và $P_i$) | Cắt ống đệm (spacer) trên máy tiện hoặc dùng thước cặp điện tử | Đảm bảo 2 cạnh đáy của hình bình hành bằng nhau tuyệt đối ($w_{p,\text{khuỷu}} = w_{p,\text{bàn}}$). Nếu lệch $\Delta w_p$, hai thanh $r_e$ không còn song song, gây kẹt khớp cầu khi góc nghiêng ngang $\alpha_i$ lớn ở biên vùng làm việc ($r = 150\text{ mm}$). |
 | **7** | **Khe hở dọc trục của khớp cầu (Rod-end radial/axial clearance) & ổ bi trục chính** | $0,00\text{ mm}$ | **$\le 0,03\text{ mm}$** | Ổ bi 688ZZ/608ZZ cấp ABEC-3 trở lên; Rod-end có lò xo kéo khử rơ | Theo Mục 2 và 6.6 `dong-hoc-delta.md`, độ rơ khớp cầu cộng trực tiếp vào $\Delta r_e$ (khuếch đại $2,52\text{ lần}$). Gắn 1 lò xo kéo nhẹ song song giữa 2 thanh cẳng tay của mỗi nhánh giúp luôn ép bi cầu về một phía thành ổ, triệt tiêu khe hở đảo chiều (backlash). |
+| **8** | **Độ rơ góc (Backlash) của bộ truyền động tại trục khớp $A_i$** | $0,00\text{ arcmin}$ | **$\le 5\text{ arcmin}$** ($\le 1,45 \times 10^{-3}\text{ rad}$)<br>*(Hoặc $\approx 0$ với đai GT2 căng đai)* | Hộp số chính xác cao $\le 5\text{ arcmin}$ hoặc **Đai răng GT2 bản $10\text{ mm}$ có cơ cấu căng đai** | Cánh tay đòn $r_f = 200\text{ mm}$ phóng đại mọi độ rơ góc $\delta \theta_b$ tại trục khớp thành sai số điểm cuối $e_{\text{backlash}} \approx r_f \delta \theta_b$. Nếu dùng hộp số phổ thông $15\text{ arcmin}$ ($4,36 \times 10^{-3}\text{ rad}$), riêng backlash đã chiếm **$0,873\text{ mm}$**, làm vỡ ngân sách sai số $\le 1,0\text{ mm}$ (xem chi tiết Mục 5). |
 
 ---
 
-## 5. Phương án gia công và đồ gá chế tạo (Manufacturing & Jig Plan)
+## 5. Ngân sách Sai số Tổng hợp (Total Error Budget) và Đánh giá Độ rơ Hộp số (Backlash)
+
+Trong Mục 4, mô phỏng Monte Carlo (`tom-tat-do-nhay.json`) mới chỉ xét **sai số hình học tĩnh của các khâu cơ khí** ($f, e, r_f, r_e, R_b, z_A$). Trên robot thực tế, sai số vị trí điểm tác động cuối là tổng hợp của **4 nguồn sai số vật lý**:
+
+### 5.1. Định lượng từng thành phần sai số quy đổi về điểm cuối ($r_f = 200\text{ mm}$)
+
+1. **Sai số chế tạo & lắp ráp cơ khí ($e_{\text{mech}}$):**
+   - Từ `tom-tat-do-nhay.json` ở mức dung sai $\pm 0,2\text{ mm}$ (4 khâu $f, e, r_f, r_e$): phân vị 95 % đạt **$\text{P95} = 0,402\text{ mm}$**, cực đại trường hợp xấu nhất **$\text{Max} = 0,689\text{ mm}$** (nếu cộng cả lệch khớp đế $\pm 0,2\text{ mm}$ thì $\text{P95} = 0,514\text{ mm}, \text{Max} = 0,795\text{ mm}$; khi gia công đế CNC liền khối $\pm 0,05\text{ mm}$ và cẳng tay trên đồ gá $\pm 0,10\text{ mm}$ theo Bảng Mục 4, sai số cơ khí cực đại giới hạn ở $\text{Max}_{\text{tk}} \approx 0,520\text{ mm}$, $\text{P95}_{\text{tk}} \approx 0,340\text{ mm}$).
+2. **Độ rơ góc của bộ truyền động (Gearbox / Transmission Backlash — $e_{\text{backlash}}$):**
+   - Góc rơ $\delta \theta_b$ tại trục khớp chủ động $A_i$ làm đầu mút khuỷu tay $B_i$ dịch chuyển một cung tròn:
+     $$e_{\text{backlash}} \approx r_f \cdot \delta \theta_b, \qquad \text{với } r_f = 200\text{ mm}, \quad 1\text{ arcmin} = \frac{1}{60} \times \frac{\pi}{180} = 2,9089 \times 10^{-4}\text{ rad}$$
+   - *(Ghi chú từ ma trận Jacobian Mục 4.2 `dong-hoc-delta.md`: $\delta \mathbf{p} = J \delta \boldsymbol{\theta} = \hat{J} (r_f \delta \boldsymbol{\theta})$; tại tâm vùng làm việc $\|J\|_2 \approx 1,116 r_f$, nên công thức $r_f \delta \theta_b$ là mức cơ sở trực tiếp tại đầu khuỷu tay)*. Quy đổi cụ thể cho các mức truyền động:
+     - **Mức $15\text{ arcmin}$ (Hộp số hành tinh phổ thông 1 cấp):** $\delta \theta_b = 4,363 \times 10^{-3}\text{ rad} \implies e_{\text{backlash}} = 200 \times 4,363 \times 10^{-3} = \mathbf{0,873\text{ mm}}$.
+     - **Mức $10\text{ arcmin}$ (Hộp số hành tinh cấp trung bình):** $\delta \theta_b = 2,909 \times 10^{-3}\text{ rad} \implies e_{\text{backlash}} = 200 \times 2,909 \times 10^{-3} = \mathbf{0,582\text{ mm}}$.
+     - **Mức $5\text{ arcmin}$ (Hộp số hành tinh chính xác cao):** $\delta \theta_b = 1,454 \times 10^{-3}\text{ rad} \implies e_{\text{backlash}} = 200 \times 1,454 \times 10^{-3} = \mathbf{0,291\text{ mm}}$.
+     - **Truyền đai răng GT2 tỷ số $5:1$ (Puly $16\text{T} \to 80\text{T}$, bản rộng $10\text{ mm}$, có con lăn căng đai):** Khe hở chết hình học $\approx 0\text{ arcmin}$. Dưới mô-men tĩnh tại điểm dừng gắp–thả ($\ddot{\theta} = 0$, chỉ còn tải trọng lực tĩnh $\tau_g \approx 0,12\text{ N}\cdot\text{m}$ trên bán kính puly bị động $R_{80\text{T}} = 25,46\text{ mm}$, lực vòng $F = 4,7\text{ N}$), độ giãn đàn hồi vi sai của dây đai GT2 lõi sợi thủy tinh (`[CẦN KIỂM CHỨNG]`) gây lệch góc tương đương $\delta \theta_{\text{belt, tĩnh}} \approx 0,5 \times 10^{-3}\text{ rad} \approx 1,7\text{ arcmin} \implies \mathbf{e_{\text{belt, tĩnh}} \approx 0,100\text{ mm}}$ (và ở đỉnh gia tốc $\tau_{\max} = 0,457\text{ N}\cdot\text{m}$, độ giãn động tức thời $\approx 0,20\text{ mm}$ nhưng tự phục hồi về $0,10\text{ mm}$ khi dừng hẳn tại điểm gắp/thả).
+     - **Truyền trực tiếp (Direct-drive, tỷ số $1:1$ qua khớp nối đĩa đàn hồi zero-backlash):** $e_{\text{backlash}} \approx \mathbf{0,020\text{ mm}}$ (nhưng độ phân giải encoder giảm 5 lần và đòi hỏi động cơ nặng/đắt hơn).
+3. **Độ phân giải lượng tử hóa của Encoder ($e_{\text{enc}}$):**
+   - Với Encoder $1\,000\text{ PPR}$ giải mã Quadrature $4\times$ ($4\,000\text{ xung/vòng}$) đặt ở trục động cơ trước bộ truyền tỷ số $i = 5:1$:
+     $$N_{\text{khớp}} = 4\,000 \times 5 = 20\,000\text{ xung/vòng} \implies \delta \theta_{\text{enc}} = \frac{2\pi}{20\,000} = 3,1416 \times 10^{-4}\text{ rad}\ (0,018^\circ)$$
+   - Sai số lượng tử hóa toàn bước ($1\text{ count}$) quy đổi ra điểm cuối:
+     $$e_{\text{enc}} = r_f \cdot \delta \theta_{\text{enc}} = 200 \times 3,1416 \times 10^{-4} = \mathbf{0,063\text{ mm}} \quad (\text{hoặc } \pm 0,031\text{ mm với } \pm 0,5\text{ count})$$
+   - *(Lưu ý: Nếu dùng phương án Truyền trực tiếp $1:1$ với encoder $4\,000\text{ cpr}$, bước lượng tử vọt lên $e_{\text{enc, 1:1}} = 0,314\text{ mm}$).*
+4. **Sai số hiệu chuẩn gốc khớp Home ($e_{\text{home}}$):**
+   - Hệ số nhạy góc gốc tại tay quay: $\frac{\partial s}{\partial \theta_0} = r_f \frac{\pi}{180^\circ} = 200 \times 0,017453 = \mathbf{3,491\text{ mm/deg}}$.
+   - **Khi căn gốc cơ khí thủ công bằng ke vuông / thước đo cao ($\delta \theta_{\text{home}} = \pm 0,10^\circ$):**
+     $$e_{\text{home, cơ}} = 3,491 \times 0,10 = \mathbf{0,349\text{ mm}}$$
+   - **Khi áp dụng thêm bước hiệu chuẩn phần mềm chạm 9 điểm chuẩn (Mục 4B `README.md`, đưa sai lệch gốc dư về $\delta \theta_{\text{home}} \le \pm 0,03^\circ$):**
+     $$e_{\text{home, cal}} = 3,491 \times 0,03 = \mathbf{0,105\text{ mm}}$$
+
+---
+
+### 5.2. Phương pháp cộng dồn sai số và Bảng Ngân sách Sai số Tổng hợp
+
+Chúng ta đánh giá đồng thời theo **2 quy tắc cộng sai số chuẩn trong thiết kế máy chính xác**:
+- **Cộng tuyến tính trường hợp xấu nhất (Worst-Case Linear Sum):**
+  $$e_{\text{total, Linear}} = e_{\text{mech, Max}} + e_{\text{backlash}} + e_{\text{enc}} + e_{\text{home}}$$
+  *Ý nghĩa:* Giả định cực đoan rằng tại cùng một điểm không gian, cả 18 kích thước cơ khí đều lệch ở biên xấu nhất ($0,689\text{ mm}$), đồng thời hộp số rơ hết biên độ theo đúng hướng đó, encoder lệch tròn 1 xung và gốc khớp lệch $0,1^\circ$ cùng chiều. Đây là cận trên tuyệt đối (xác suất xảy ra đồng thời $< 10^{-5}$).
+- **Cộng căn tổng bình phương (RSS — Root Sum Square) & Cộng Hỗn hợp Bán bảo thủ (Hybrid RSS + Deterministic Backlash):**
+  - **RSS thuần (mức tin cậy 95 %):** Vì sai số chế tạo các khâu ($e_{\text{mech, P95}} = 0,402\text{ mm}$), sai số đặt gốc, bước lượng tử encoder và hướng tải trên 3 nhánh là các biến ngẫu nhiên độc lập, tổng sai số phân vị 95 % được tính bằng:
+    $$e_{\text{total, RSS}} = \sqrt{e_{\text{mech, P95}}^2 + e_{\text{backlash}}^2 + e_{\text{enc}}^2 + e_{\text{home}}^2}$$
+  - **Hỗn hợp Bán bảo thủ (Hybrid = Backlash tuyến tính + RSS ngẫu nhiên):** Vì độ rơ hộp số ($e_{\text{backlash}}$) là sai số hệ thống phi tuyến luôn xuất hiện mỗi khi đảo chiều chuyển động, cách tính an toàn và thực tế nhất trong cơ điện tử là **cộng thẳng $e_{\text{backlash}}$ với căn bậc hai tổng bình phương (RSS) của các thành phần ngẫu nhiên**:
+    $$e_{\text{total, Hybrid}} = e_{\text{backlash}} + \sqrt{e_{\text{mech, P95}}^2 + e_{\text{enc}}^2 + e_{\text{home}}^2}$$
+
+#### Bảng tổng hợp Ngân sách Sai số (Đơn vị: mm) — Chỉ tiêu mục tiêu: $\le 1,000\text{ mm}$
+
+| Kịch bản truyền động & Mức Backlash | (1) Dung sai chế tạo $\pm 0,2\text{ mm}$<br>$\text{P95} / \text{Max}$ | (2) Backlash / Đàn hồi truyền động<br>$e_{\text{backlash}}$ | (3) Độ phân giải Encoder<br>$e_{\text{enc}}$ | (4) Lệch gốc khớp $0,1^\circ$ (sau Calib $0,03^\circ$)<br>$e_{\text{home}}$ | **Tổng RSS (P95)**<br>*(Kèm giá trị sau Calib gốc)* | **Tổng Hybrid (Backlash + RSS)**<br>*(Kèm giá trị sau Calib)* | **Tổng Tuyến tính (Max xấu nhất)**<br>*(Kèm giá trị sau Calib)* | Kết luận đối chiếu ngưỡng $\le 1,00\text{ mm}$ |
+| --- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | --- |
+| **1. Hộp số hành tinh phổ thông ($15\text{ arcmin}$)** | $0,402$ / $0,689$ | **$0,873$** | $0,063$ | $0,349$<br>*(0,105)* | **$1,024\text{ mm}$**<br>*(0,969 mm)* | **$1,409\text{ mm}$**<br>*(1,293 mm)* | **$1,974\text{ mm}$**<br>*(1,730 mm)* | ❌ **LOẠI BỎ:** Vượt ngưỡng $1,0\text{ mm}$ ở cả 3 cách tính (riêng backlash đã chiếm $87,3\,\%$ ngân sách). |
+| **2. Hộp số hành tinh trung bình ($10\text{ arcmin}$)** | $0,402$ / $0,689$ | **$0,582$** | $0,063$ | $0,349$<br>*(0,105)* | **$0,791\text{ mm}$**<br>*(0,718 mm)* | **$1,118\text{ mm}$**<br>*(1,002 mm)* | **$1,683\text{ mm}$**<br>*(1,439 mm)* | ❌ **KHÔNG ĐẠT:** Vượt ngưỡng theo cả Cộng tuyến tính ($1,683\text{ mm}$) và Hybrid ($1,118\text{ mm}$). |
+| **3. Hộp số hành tinh chính xác cao ($\le 5\text{ arcmin}$)** | $0,402$ / $0,689$ | **$0,291$** | $0,063$ | $0,349$<br>*(0,105)* | **$0,610\text{ mm}$**<br>*(0,511 mm)* | **$0,827\text{ mm}$**<br>*(0,711 mm)* | **$1,392\text{ mm}$**<br>*(1,148 mm; nếu siết đế CNC: **0,979 mm**)* | ⚠️ **ĐẠT KỸ THUẬT** (RSS $= 0,610\text{ mm}$, Hybrid $= 0,827\text{ mm} \le 1,0\text{ mm}$), nhưng **chi phí hộp số rất đắt**. |
+| **4. Truyền đai răng GT2 $5:1$ bản $10\text{ mm}$ có căng đai (PHƯƠNG ÁN CHỌN)** | $0,402$ / $0,689$ | **$0,100$**<br>*(đàn hồi tĩnh; backlash $\approx 0$)* | $0,063$ | $0,349$<br>*(0,105)* | **$0,545\text{ mm}$**<br>*(0,432 mm)* | **$0,636\text{ mm}$**<br>*(0,520 mm)* | **$1,201\text{ mm}$**<br>*(Sau Calib gốc $0,03^\circ$: **0,957 mm**)* | ✅ **ĐẠT TỐI ƯU:** Đạt $\le 1,0\text{ mm}$ ở cả RSS ($0,545\text{ mm}$), Hybrid ($0,636\text{ mm}$) và Tuyến tính sau Calib ($0,957\text{ mm}$), chi phí thấp. |
+| **5. Truyền trực tiếp Direct-Drive $1:1$ (Stepper vòng kín NEMA 23)** | $0,402$ / $0,689$ | **$0,020$**<br>*(khớp nối đĩa)* | **$0,314$**<br>*(không qua $5:1$)* | $0,349$<br>*(0,105)* | **$0,618\text{ mm}$**<br>*(0,521 mm)* | **$0,641\text{ mm}$**<br>*(0,541 mm)* | **$1,372\text{ mm}$**<br>*(Sau Calib gốc: **1,128 mm**)* | ⚠️ Hết backlash nhưng mất lợi thế nhân độ phân giải encoder ($e_{\text{enc}}$ tăng 5 lần lên $0,314\text{ mm}$) và động cơ nặng/nóng. |
+
+### 5.3. Kết luận rút ra từ Ngân sách Sai số để điều chỉnh Thiết kế Truyền động
+1. **Phát hiện quan trọng:** Hộp giảm tốc hành tinh phổ thông ($10 \div 15\text{ arcmin}$) hoàn toàn **không sử dụng được** cho robot Delta có $r_f = 200\text{ mm}$ khi mục tiêu sai số là $\le 1,0\text{ mm}$, vì riêng khe hở bánh răng đã gây lệch $0,582 \div 0,873\text{ mm}$.
+2. **Chốt phương án truyền động chuẩn:** Chuyển từ hộp số hành tinh phổ thông sang **Bộ truyền Đai răng GT2 bản rộng $10\text{ mm}$ tỷ số truyền $i = 5:1$ (Puly chủ động $16\text{ răng}$ kéo Puly bị động $80\text{ răng}$ gắn liền trục khớp $\varnothing 8\text{g6}$, có rãnh trượt + con lăn căng đai khử rơ)** kết hợp **Động cơ bước vòng kín (Closed-loop Stepper) có Encoder $1\,000\text{ PPR}$**.
+   - Phương án này giúp triệt tiêu khe hở chết (dead-zone backlash $\approx 0$), giữ nguyên hệ số nhân mô-men $5\times$ ($\tau_{\text{ra}} \approx 2,48\text{ N}\cdot\text{m}$, $k_{\text{sf}} = 5,42$) và hệ số chia nhỏ bước encoder $5\times$ ($e_{\text{enc}} = 0,063\text{ mm}$), đưa tổng sai số toàn hệ thống về **$0,545\text{ mm}$ (RSS)**, **$0,636\text{ mm}$ (Hybrid)** và **$0,957\text{ mm}$ (Cộng tuyến tính xấu nhất sau khi hiệu chuẩn gốc khớp $\le 0,03^\circ$)** — đảm bảo đạt chỉ tiêu $\le 1,0\text{ mm}$.
+
+---
+
+## 6. Phương án gia công và đồ gá chế tạo (Manufacturing & Jig Plan)
 
 Để đạt được bảng dung sai ở Mục 4 trong điều kiện xưởng cơ khí sinh viên / dịch vụ gia công bên ngoài tại Việt Nam với chi phí thấp nhất, quy trình công nghệ được chốt như sau:
 
