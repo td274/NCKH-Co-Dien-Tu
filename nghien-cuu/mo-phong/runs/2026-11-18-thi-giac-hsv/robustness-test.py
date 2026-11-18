@@ -67,26 +67,26 @@ def degrade_gradient(image, gt=None):
 
 
 def degrade_shadow(image, gt):
-    """Ve bong toi mo len mot phan vat, do toi 40-60 %."""
+    """Ve bong toi mo len mot phan vat, do toi 45-65 %."""
     out = image.astype(np.float32)
     cx, cy = gt['center_px']
-    # Dat bong ngay tren/ke vat de bao dam che mot phan vat
-    offset = random.choice([-1, 1]) * random.randint(0, 18)
+    # Dat bong ngay tren vat, lech nho de bao dam che phan dang ke
+    offset = random.choice([-1, 1]) * random.randint(0, 10)
     if random.random() < 0.5:
-        ex, ey = cx + offset, cy + random.randint(-12, 12)
+        ex, ey = cx + offset, cy + random.randint(-8, 8)
     else:
-        ex, ey = cx + random.randint(-12, 12), cy + offset
-    ax = int(gt['radius'] * random.uniform(1.0, 1.5))
-    ay = int(gt['radius'] * random.uniform(0.8, 1.2))
+        ex, ey = cx + random.randint(-8, 8), cy + offset
+    ax = int(gt['radius'] * random.uniform(1.2, 1.6))
+    ay = int(gt['radius'] * random.uniform(1.1, 1.4))
     angle = random.randint(0, 180)
 
-    # Mask trang/den, lam mo de tao bong mo
+    # Mask trang/den, lam mo nhe de tao bong mo
     mask = np.zeros(image.shape[:2], dtype=np.uint8)
     cv2.ellipse(mask, (ex, ey), (ax, ay), angle, 0, 360, 255, -1)
-    mask = cv2.GaussianBlur(mask.astype(np.float32), (21, 21), 0) / 255.0
+    mask = cv2.GaussianBlur(mask.astype(np.float32), (11, 11), 0) / 255.0
     mask = np.clip(mask, 0, 1)
 
-    alpha = random.uniform(0.40, 0.60)
+    alpha = random.uniform(0.50, 0.70)
     factor = 1.0 - alpha * mask
     factor = factor[..., np.newaxis]
     out = out * factor
@@ -107,11 +107,16 @@ def degrade_jpeg_noise(image, gt=None):
 
 
 def degrade_perspective(image, gt=None):
-    """Warp phoi canh, goc nghieng tuong duong 10-15 do (dich 8-15 % kich thuoc anh)."""
+    """Warp phoi canh, dich cac goc 8-12 % kich thuoc anh theo 4 huong ngau nhien."""
     h, w = image.shape[:2]
-    d = int(random.uniform(0.08, 0.15) * w) * random.choice([-1, 1])
+    max_off = int(random.uniform(0.08, 0.12) * min(w, h))
     src = np.float32([[0, 0], [w, 0], [w, h], [0, h]])
-    dst = np.float32([[d, 0], [w - d, 0], [w, h], [0, h]])
+    dst = np.float32([
+        [random.randint(0, max_off), random.randint(0, max_off)],
+        [w - random.randint(0, max_off), random.randint(0, max_off)],
+        [w - random.randint(0, max_off), h - random.randint(0, max_off)],
+        [random.randint(0, max_off), h - random.randint(0, max_off)],
+    ])
     M = cv2.getPerspectiveTransform(src, dst)
     return cv2.warpPerspective(image, M, (w, h), borderMode=cv2.BORDER_REPLICATE)
 
@@ -188,27 +193,40 @@ def generate_occlusion_image(main_color, main_shape, brightness, angle,
 
 
 def degrade_shape(image, gt, color, shape, brightness, angle, sigma):
-    """Bo goc / lam khong deu bien vat bang blur + morphology tren mask."""
-    bg = np.full_like(image, 230)
+    """Bo goc / lam khong deu bien vat bang jitter dinh + ty le + blur."""
+    out = image.copy()
     col = _base_color(color, brightness)
-    c = tuple(gt['center_px'])
-    r = gt['radius']
+    cx, cy = gt['center_px']
+    r = int(gt['radius'] * random.uniform(0.92, 1.08))
+    jitter = random.randint(3, 5)
+    ang_rad = math.radians(angle)
+    R = np.array([[math.cos(ang_rad), -math.sin(ang_rad)],
+                  [math.sin(ang_rad), math.cos(ang_rad)]])
 
-    shape_canvas = bg.copy()
-    G.draw_shape(shape_canvas, shape, c, r, col, angle)
-    diff = cv2.absdiff(shape_canvas, bg)
-    mask = cv2.cvtColor(diff, cv2.COLOR_BGR2GRAY)
-    _, mask = cv2.threshold(mask, 20, 255, cv2.THRESH_BINARY)
+    if shape == 'tron':
+        n = 24
+        theta = np.linspace(0, 2 * math.pi, n, endpoint=False)
+        radii = r + np.random.randint(-jitter, jitter + 1, n)
+        pts = np.stack([radii * np.cos(theta), radii * np.sin(theta)], axis=1)
+    elif shape == 'vuong':
+        pts = np.array([[-r, -r], [r, -r], [r, r], [-r, r]], dtype=np.float32)
+        pts += np.random.randint(-jitter, jitter + 1, pts.shape)
+    else:  # tam_giac
+        h = r * math.sqrt(3)
+        pts = np.array([[0, -2 * h / 3],
+                        [-r, h / 3],
+                        [r, h / 3]], dtype=np.float32)
+        pts += np.random.randint(-jitter, jitter + 1, pts.shape)
 
-    # Lam muot mask
-    mask = cv2.GaussianBlur(mask, (7, 7), 0)
-    _, mask = cv2.threshold(mask, 60, 255, cv2.THRESH_BINARY)
-    kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (5, 5))
-    mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, kernel, iterations=1)
-    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE, kernel, iterations=2)
+    pts = (pts @ R.T) + np.array([cx, cy])
+    pts = pts.astype(np.int32).reshape(-1, 1, 2)
 
-    out = cv2.GaussianBlur(image, (3, 3), 0)
-    out[mask > 0] = col
+    # Ve hinh khong ly tuong len anh goc (pixel bien thay doi)
+    cv2.fillPoly(out, [pts], col.tolist())
+    # Lam mo manh toan anh de duong bien mem hon va them nhieu nhe
+    out = cv2.GaussianBlur(out, (9, 9), 0)
+    noise = np.random.normal(0, 10, out.shape).astype(np.float32)
+    out = np.clip(out.astype(np.float32) + noise, 0, 255).astype(np.uint8)
     out = G.add_noise_blur(out, sigma, 0)
     return out
 
@@ -263,8 +281,20 @@ def run_condition(name, n_images, seed_offset):
             gts = clean_gts
 
         # Tu kiem tra: phai co su khac biet ro ret so voi anh goc
-        diff = float(np.mean(np.abs(img.astype(np.float32) -
-                                  clean.astype(np.float32))))
+        def _diff(a, b):
+            return float(np.mean(np.abs(a.astype(np.float32) -
+                                      b.astype(np.float32))))
+
+        diff = _diff(img, clean)
+        # Voi mot so phep ngau nhien (perspective), co the gap mau bien gioi
+        # nen thu lai toi da 5 lan de dam bao suy giam du manh.
+        attempts = 0
+        while name not in ('baseline', 'occlusion', 'shape_imperfect') and diff < 1.0 and attempts < 5:
+            img = degrador(clean, clean_gts[0])
+            gts = clean_gts
+            diff = _diff(img, clean)
+            attempts += 1
+
         diffs.append(diff)
         if name != 'baseline' and diff < 1.0:
             raise ValueError(

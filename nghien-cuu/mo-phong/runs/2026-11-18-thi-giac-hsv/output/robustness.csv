@@ -1,9 +1,9 @@
 condition,label,n_gt,n_matched,correct_both,accuracy_color,accuracy_shape,accuracy_overall,recall,precision,mean_abs_diff,max_abs_diff
-baseline,Khong suy giam,36,36,36,100.00,100.00,100.00,100.00,100.00,17.30,35.36
-gradient_light,Anh sang khong deu,36,36,36,100.00,100.00,100.00,100.00,100.00,61.26,88.36
-shadow,Bong do,36,36,36,100.00,100.00,100.00,100.00,100.00,17.65,29.72
-jpeg_noise,Nhieu + JPEG,36,36,36,100.00,100.00,100.00,100.00,100.00,18.10,34.83
-perspective,Phoi canh nghieng,36,35,35,100.00,100.00,97.22,97.22,97.22,16.66,26.44
-combined,Ket hop cac yeu to,36,35,31,100.00,88.57,86.11,97.22,79.55,64.82,86.85
+baseline,Khong suy giam,36,36,36,100.00,100.00,100.00,100.00,100.00,0.00,0.00
+gradient_light,Anh sang khong deu,36,36,36,100.00,100.00,100.00,100.00,100.00,57.78,73.43
+shadow,Bong do,36,33,32,100.00,96.97,88.89,91.67,78.57,3.48,6.23
+jpeg_noise,Nhieu + JPEG,36,36,36,100.00,100.00,100.00,100.00,100.00,9.41,14.03
+perspective,Phoi canh nghieng,36,36,36,100.00,100.00,100.00,100.00,100.00,6.43,15.56
+combined,Ket hop cac yeu to,36,30,22,100.00,73.33,61.11,83.33,78.95,63.89,79.39
 occlusion,Che khuat mot phan,72,72,56,100.00,77.78,77.78,100.00,97.30,16.77,30.94
-shape_imperfect,Hinh dang khong ly tuong,36,36,36,100.00,100.00,100.00,100.00,100.00,18.45,27.88
+shape_imperfect,Hinh dang khong ly tuong,36,36,33,100.00,91.67,91.67,100.00,100.00,10.78,17.99

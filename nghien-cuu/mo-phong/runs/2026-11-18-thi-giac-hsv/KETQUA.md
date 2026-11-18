@@ -90,33 +90,35 @@ Trên tập train (seed 42): **không còn ca sai nào**.
 
 ## 5.5. Độ bền vững với điều kiện thực tế
 
-Để tránh đánh giá quá lạc quan từ ảnh tổng hợp sạch, chạy `robustness-test.py` với **cùng pipeline đã cố định** (không chỉnh tham số sau khi thấy kết quả). Mỗi điều kiện 36 ảnh (72 object đối với che khuất).
+Để tránh đánh giá quá lạc quan từ ảnh tổng hợp sạch, chạy `robustness-test.py` với **cùng pipeline đã cố định** (không chỉnh tham số sau khi thấy kết quả). Mỗi điều kiện 36 ảnh (72 object đối với che khuất). Sau khi kiểm tra bằng `check-degradations.py`, phát hiện lỗi ở phép thử bóng đổ (đang làm sáng thay vì làm tối) nên đã sửa lại và chạy lại toàn bộ — số liệu dưới đây là bản đã sửa.
 
-| Điều kiện | Overall | Màu | Hình | Recall |
-| --- | --- | --- | --- | --- |
-| Không suy giảm | 100,0 % | 100,0 % | 100,0 % | 100,0 % |
-| Ánh sáng không đều (gradient 40–60 %) | 100,0 % | 100,0 % | 100,0 % | 100,0 % |
-| Bóng đổ (ellipse tối 30–50 %) | 100,0 % | 100,0 % | 100,0 % | 100,0 % |
-| Nhiễu cảm biến + JPEG (σ=15–25, Q=50–70) | 100,0 % | 100,0 % | 100,0 % | 100,0 % |
-| Phối cảnh nghiêng (10–15°) | 100,0 % | 100,0 % | 100,0 % | 100,0 % |
-| Hình dạng không lý tưởng (bo góc, jitter biên) | 100,0 % | 100,0 % | 100,0 % | 100,0 % |
-| **Che khuất một phần (15–25 %)** | **75,0 %** | **97,2 %** | **76,4 %** | **100,0 %** |
+| Điều kiện | Overall | Màu | Hình | Recall | mean\|diff\| |
+| --- | --- | --- | --- | --- | --- |
+| Không suy giảm | 100,0 % | 100,0 % | 100,0 % | 100,0 % | 0,0 |
+| Ánh sáng không đều (gradient 40–60 %) | 100,0 % | 100,0 % | 100,0 % | 100,0 % | 57,8 |
+| Bóng đổ (che 35–65 % vùng vật) | 88,9 % | 100,0 % | 97,0 % | 91,7 % | 3,5 |
+| Nhiễu cảm biến + JPEG (σ=15–25, Q=50–70) | 100,0 % | 100,0 % | 100,0 % | 100,0 % | 9,4 |
+| Phối cảnh nghiêng (dịch góc 8–12 %) | 100,0 % | 100,0 % | 100,0 % | 100,0 % | 6,4 |
+| Hình dạng không lý tưởng (jitter + blur) | 91,7 % | 100,0 % | 91,7 % | 100,0 % | 10,8 |
+| Che khuất một phần (15–25 %) | 77,8 % | 100,0 % | 77,8 % | 100,0 % | 16,8 |
+| **Kết hợp (gradient + shadow + JPEG + perspective)** | **61,1 %** | **100,0 %** | **73,3 %** | **83,3 %** | **63,9** |
 
 ![Biểu đồ so sánh độ bền vững](figures/robustness-bar.png)
 
 ![Ví dụ từng điều kiện](figures/robustness-examples.png)
 
-**Các ca sai điển hình (chủ yếu ở che khuất):**
-- Tam giác xanh bị che một phần góc được nhận thành hình vuông.
-- Tròn đỏ bị che mép được nhận thành tam giác hoặc vuông.
-- Có ca màu xanh bị gán nhầm thành đỏ do phần nhìn thấy thuộc vật che (occluder) gần tâm ground truth.
+**Các ca sai điển hình:**
+- *Bóng đổ:* tam giác xanh/vuông bị bóng che một phần không được phát hiện; tròn bị bóng che mép nhận nhầm thành vuông.
+- *Che khuất:* tròn bị che mép nhận thành vuông/tam giác; tam giác bị che góc nhận thành vuông.
+- *Hình dạng không lý tưởng:* một số tròn bị jitter cạnh nhận nhầm thành vuông.
+- *Kết hợp:* tròn dễ bị nhận nhầm thành vuông hoặc tam giác; một số vật biến mất hoàn toàn do nhiễu + bóng + phối cảnh chồng chéo.
 
-**Nhận xét:** Pipeline chịu được ánh sáng không đều, bóng đổ, nhiễu, JPEG, phối cảnh nhẹ và biên không lý tưởng. Điểm yếu duy nhất trong các điều kiện thử là **che khuất một phần**, làm suy giảm accuracy hình xuống 76,4 %.
+**Nhận xét:** Pipeline chịu tốt ánh sáng không đều, nhiễu + JPEG và phối cảnh nhẹ riêng lẻ. Các nút thắt thật là **kết hợp nhiều yếu tố (61,1 % overall)**, **che khuất (77,8 %)** và **bóng đổ (88,9 %)**. Màu sắc vẫn giữ 100 % trong mọi điều kiện riêng lẻ, chứng tỏ ngưỡng HSV đủ rộng; hình dạng là yếu tố dễ gãy nhất.
 
 **Khuyến nghị cải tiến (chưa thực hiện):**
-1. **Tách vật che khuất:** dùng phân đoạn instance (watershed / GrabCut) hoặc yêu cầu vật không chồng nhau trong hộp chụp.
-2. **Tăng tính bền hình dạng:** khi contour bị vỡ, bổ sung đặc trưng Hu moments hoặc so sánh với template tròn/vuông/tam giác thay vì chỉ dựa vào contour liên tục.
-3. **Chuẩn hóa ánh sáng trước HSV:** áp dụng CLAHE trên kênh V hoặc chuyển sang không gian LAB để giảm nhạy với độ sáng tổng thể — đặc biệt hữu ích khi triển khai ngoài hộp chụp.
+1. **Tách vật che khuất / bóng:** dùng watershed/GrabCut hoặc thiết kế hộp chụp không cho vật chồng nhau; áp dụng CLAHE trên kênh V trước khi phân ngưỡng HSV để giảm tác động cục bộ của bóng.
+2. **Tăng tính bền hình dạng:** bổ sung đặc trưng Hu moments hoặc template matching tròn/vuông/tam giác để nhận diện ngay cả khi contour bị vỡ do bóng, che khuất hoặc biên nhiễu.
+3. **Chuẩn hóa ánh sáng toàn cục:** chuyển sang không gian màu LAB hoặc chuẩn hóa histogram nền trước khi phát hiện màu, đặc biệt khi camera không có hộp chụp cố định.
 
 ## 6. Đo trễ xử lý
 
