@@ -64,6 +64,32 @@ def _shape_confidence(score, floor=0.5):
     return float(min(1.0, max(floor, score)))
 
 
+def _polygon_angles(approx):
+    """
+    Tinh goc noi tiep (do) tai cac dinh cua da giac.
+    approx: ndarray Nx1x2.
+    """
+    pts = approx.reshape(-1, 2)
+    n = len(pts)
+    if n < 3:
+        return []
+    angles = []
+    for i in range(n):
+        p0 = pts[(i - 1) % n]
+        p1 = pts[i]
+        p2 = pts[(i + 1) % n]
+        v1 = p0 - p1
+        v2 = p2 - p1
+        nv1 = np.linalg.norm(v1)
+        nv2 = np.linalg.norm(v2)
+        if nv1 < 1e-6 or nv2 < 1e-6:
+            angles.append(180.0)
+            continue
+        cos_a = np.clip(np.dot(v1, v2) / (nv1 * nv2), -1.0, 1.0)
+        angles.append(np.degrees(np.arccos(cos_a)))
+    return angles
+
+
 def classify_shape(contour,
                    eps_ratio=0.025,
                    circ_tol=0.82,
@@ -73,13 +99,14 @@ def classify_shape(contour,
                    extent_sq=0.65,
                    extent_tr=0.60):
     """
-    Phan loai hinh dang dua tren bo dac trung hinh hoc.
+    Phan loai hinh dang dua tren bo dac trung hinh hoc chuan hoa.
 
     Cac dac trung:
-        - circularity = 4*pi*A / P^2  (tron ~1.0, vuong ~0.785, tam giac ~0.604)
-        - extent      = A / bbox_area (vuong ~1.0, tron ~0.785, tam giac ~0.5)
-        - solidity    = A / convex_hull_area (tat ca ~1.0 khi khong bi che)
+        - circularity = 4*pi*A / P^2
+        - extent      = A / bbox_area
+        - solidity    = A / convex_hull_area
         - n_sides     = so dinh cua approxPolyDP(epsilon = eps_ratio * chu vi)
+        - phan bo goc tai cac dinh (vuong co goc ~90°, tam giac co 3 goc nhon)
 
     Tra ve (shape, confidence).
     """
@@ -105,33 +132,41 @@ def classify_shape(contour,
 
     circularity = 4.0 * np.pi * area / (peri ** 2)
 
-    # 1. Hinh tron: gan nhu hoan hao, khong phu thuoc vao so canh xap xi.
+    # Tinh goc cac dinh de phan biet vuong/tam giac ben hon
+    angles = _polygon_angles(approx)
+    n_right = sum(1 for a in angles if 70 <= a <= 110)
+    n_acute = sum(1 for a in angles if a < 60)
+
+    # 1. Hinh tron: gan nhu hoan hao.
     if circularity >= circ_tol and solidity >= solid_tol:
         conf = 0.80 + 0.20 * min(1.0, circularity * solidity)
         return 'tron', _shape_confidence(conf, 0.85)
 
-    # 2. Hinh vuong: dac trung chinh la circularity ~0.785 va aspect ratio gan 1,
-    #    ke ca khi xoay 45° lam extent giam. Neu approxPolyDP van ra 4-6 canh
-    #    va bbox gan vuong cung chap nhan.
+    # 2. Hinh vuong: circularity ~0.78, aspect ratio gan 1, hoac co goc vuong.
     square_aspect_ok = ar_lo <= aspect_ratio <= ar_hi
     square_solid_ok = solidity >= solid_tol - 0.05
     square_by_circ = (0.70 <= circularity < circ_tol and
                       square_aspect_ok and square_solid_ok)
+    # Vuong that thuong co 4 goc vuong; neu mo/nhieu lam mat dinh,
+    # van co the con 3 goc vuong hoac approx ra 5-6 canh nhung co >=3 goc vuong.
+    square_by_angles = (n_right >= 3 and square_aspect_ok and square_solid_ok)
     square_by_shape = (3 <= n_sides <= 6 and square_aspect_ok and
                        extent >= 0.55 and square_solid_ok)
-    if square_by_circ or square_by_shape:
+    if square_by_circ or square_by_angles or square_by_shape:
         conf = 0.50 + 0.25 * circularity + 0.25 * solidity
         return 'vuong', _shape_confidence(conf, 0.60)
 
-    # 3. Tam giac: 3 canh ro rang, hoac compact (extent nho) va khong tron.
-    triangle_sides_ok = n_sides == 3
+    # 3. Tam giac: 3 canh ro rang va 3 goc nhon (it nhat 2 goc < 60).
+    triangle_sides_ok = (n_sides == 3 and n_acute >= 2)
     triangle_compact = (circularity < 0.70 and extent < extent_tr and
-                        square_solid_ok)
+                        square_solid_ok and n_acute >= 1)
     if triangle_sides_ok or triangle_compact:
         conf = 0.50 + 0.25 * solidity + 0.25 * max(0.0, 1.0 - extent)
         return 'tam_giac', _shape_confidence(conf, 0.55)
 
-    # 4. Fallback: chon gan nhat dua tren circularity/extent.
+    # 4. Fallback: chon gan nhat dua tren circularity/extent/goc.
+    if n_right >= 2 and square_aspect_ok:
+        return 'vuong', _shape_confidence(0.5, 0.40)
     if circularity >= 0.68:
         return 'tron', _shape_confidence(circularity, 0.40)
     if extent >= 0.50:
