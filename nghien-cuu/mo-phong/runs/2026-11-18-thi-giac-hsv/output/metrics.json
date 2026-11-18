@@ -24,114 +24,33 @@
     ],
     [
       0,
-      83,
-      10
+      93,
+      0
     ],
     [
       0,
-      0,
-      95
+      1,
+      94
     ]
   ],
   "accuracy_color": 1.0,
-  "accuracy_shape": 0.9649,
-  "accuracy_overall": 0.9649,
+  "accuracy_shape": 0.9965,
+  "accuracy_overall": 0.9965,
   "recall_overall": 1.0,
   "precision_overall": 1.0,
   "total_gt_objects": 285,
   "total_valid_matches": 285,
   "total_predictions": 285,
-  "correct_both": 275,
+  "correct_both": 284,
   "all_errors": [
     {
       "type": "MISMATCH",
-      "gt_color": "do",
-      "gt_shape": "vuong",
-      "pred_color": "do",
-      "pred_shape": "tam_giac",
-      "distance_px": 1.4142135623730951,
-      "reason": "Du doan do-tam_giac thay vi do-vuong"
-    },
-    {
-      "type": "MISMATCH",
-      "gt_color": "do",
-      "gt_shape": "vuong",
-      "pred_color": "do",
-      "pred_shape": "tam_giac",
-      "distance_px": 1.4142135623730951,
-      "reason": "Du doan do-tam_giac thay vi do-vuong"
-    },
-    {
-      "type": "MISMATCH",
-      "gt_color": "do",
-      "gt_shape": "vuong",
-      "pred_color": "do",
-      "pred_shape": "tam_giac",
-      "distance_px": 1.4142135623730951,
-      "reason": "Du doan do-tam_giac thay vi do-vuong"
-    },
-    {
-      "type": "MISMATCH",
-      "gt_color": "do",
-      "gt_shape": "vuong",
-      "pred_color": "do",
-      "pred_shape": "tam_giac",
-      "distance_px": 1.4142135623730951,
-      "reason": "Du doan do-tam_giac thay vi do-vuong"
-    },
-    {
-      "type": "MISMATCH",
-      "gt_color": "do",
-      "gt_shape": "vuong",
-      "pred_color": "do",
-      "pred_shape": "tam_giac",
-      "distance_px": 1.4142135623730951,
-      "reason": "Du doan do-tam_giac thay vi do-vuong"
-    },
-    {
-      "type": "MISMATCH",
       "gt_color": "vang",
-      "gt_shape": "vuong",
+      "gt_shape": "tam_giac",
       "pred_color": "vang",
-      "pred_shape": "tam_giac",
-      "distance_px": 1.4142135623730951,
-      "reason": "Du doan vang-tam_giac thay vi vang-vuong"
-    },
-    {
-      "type": "MISMATCH",
-      "gt_color": "xanh",
-      "gt_shape": "vuong",
-      "pred_color": "xanh",
-      "pred_shape": "tam_giac",
-      "distance_px": 1.4142135623730951,
-      "reason": "Du doan xanh-tam_giac thay vi xanh-vuong"
-    },
-    {
-      "type": "MISMATCH",
-      "gt_color": "xanh",
-      "gt_shape": "vuong",
-      "pred_color": "xanh",
-      "pred_shape": "tam_giac",
-      "distance_px": 1.4142135623730951,
-      "reason": "Du doan xanh-tam_giac thay vi xanh-vuong"
-    },
-    {
-      "type": "MISMATCH",
-      "gt_color": "xanh",
-      "gt_shape": "vuong",
-      "pred_color": "xanh",
-      "pred_shape": "tam_giac",
-      "distance_px": 1.4142135623730951,
-      "reason": "Du doan xanh-tam_giac thay vi xanh-vuong"
-    },
-    {
-      "type": "MISMATCH",
-      "gt_color": "vang",
-      "gt_shape": "vuong",
-      "pred_color": "vang",
-      "pred_shape": "tam_giac",
-      "distance_px": 1.4142135623730951,
-      "reason": "Du doan vang-tam_giac thay vi vang-vuong"
+      "pred_shape": "vuong",
+      "distance_px": 2.23606797749979,
+      "reason": "Du doan vang-vuong thay vi vang-tam_giac"
     }
   ],
   "per_class": {
@@ -167,27 +86,27 @@
         "recall": 1.0
       },
       "vuong": {
-        "TP": 83,
-        "FP": 0,
-        "FN": 10,
-        "precision": 1.0,
-        "recall": 0.8925
+        "TP": 93,
+        "FP": 1,
+        "FN": 0,
+        "precision": 0.9894,
+        "recall": 1.0
       },
       "tam_giac": {
-        "TP": 95,
-        "FP": 10,
-        "FN": 0,
-        "precision": 0.9048,
-        "recall": 1.0
+        "TP": 94,
+        "FP": 0,
+        "FN": 1,
+        "precision": 1.0,
+        "recall": 0.9895
       }
     }
   },
   "timing_ms": {
-    "mean": 3.35,
-    "std": 0.54,
-    "p50": 3.23,
-    "p95": 4.08,
-    "p99": 5.76,
+    "mean": 4.8,
+    "std": 1.13,
+    "p50": 4.6,
+    "p95": 6.7,
+    "p99": 7.93,
     "n_samples": 273
   }
 }

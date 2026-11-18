@@ -1,11 +1,2 @@
 type,gt_color,gt_shape,pred_color,pred_shape,distance_px,reason
-MISMATCH,do,vuong,do,tam_giac,1.4142135623730951,Du doan do-tam_giac thay vi do-vuong
-MISMATCH,do,vuong,do,tam_giac,1.4142135623730951,Du doan do-tam_giac thay vi do-vuong
-MISMATCH,do,vuong,do,tam_giac,1.4142135623730951,Du doan do-tam_giac thay vi do-vuong
-MISMATCH,do,vuong,do,tam_giac,1.4142135623730951,Du doan do-tam_giac thay vi do-vuong
-MISMATCH,do,vuong,do,tam_giac,1.4142135623730951,Du doan do-tam_giac thay vi do-vuong
-MISMATCH,vang,vuong,vang,tam_giac,1.4142135623730951,Du doan vang-tam_giac thay vi vang-vuong
-MISMATCH,xanh,vuong,xanh,tam_giac,1.4142135623730951,Du doan xanh-tam_giac thay vi xanh-vuong
-MISMATCH,xanh,vuong,xanh,tam_giac,1.4142135623730951,Du doan xanh-tam_giac thay vi xanh-vuong
-MISMATCH,xanh,vuong,xanh,tam_giac,1.4142135623730951,Du doan xanh-tam_giac thay vi xanh-vuong
-MISMATCH,vang,vuong,vang,tam_giac,1.4142135623730951,Du doan vang-tam_giac thay vi vang-vuong
+MISMATCH,vang,tam_giac,vang,vuong,2.23606797749979,Du doan vang-vuong thay vi vang-tam_giac

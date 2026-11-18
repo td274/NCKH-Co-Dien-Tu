@@ -13,6 +13,9 @@ import random
 import sys
 
 import numpy as np
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -22,6 +25,7 @@ from src.evaluate import evaluate_image, aggregate_metrics, COLORS, SHAPES  # no
 
 SEED = 777
 OUT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "ket-qua", "heldout")
+FIG_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "figures")
 
 
 def _jsonable(obj):
@@ -36,6 +40,30 @@ def _jsonable(obj):
     if isinstance(obj, (list, tuple)):
         return [_jsonable(v) for v in obj]
     return obj
+
+
+def plot_confusion(cm, labels, title, path):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    fig, ax = plt.subplots(figsize=(5, 4), dpi=300)
+    im = ax.imshow(cm, cmap='Blues', vmin=0)
+    ax.set_xticks(np.arange(len(labels)))
+    ax.set_yticks(np.arange(len(labels)))
+    ax.set_xticklabels(labels, fontsize=11)
+    ax.set_yticklabels(labels, fontsize=11)
+    ax.set_xlabel('Du doan', fontsize=12)
+    ax.set_ylabel('Ground truth', fontsize=12)
+    ax.set_title(title, fontsize=13)
+
+    for i in range(len(labels)):
+        for j in range(len(labels)):
+            text = ax.text(j, i, int(cm[i, j]), ha='center', va='center',
+                           color='white' if cm[i, j] > cm.max() / 2 else 'black',
+                           fontsize=11)
+
+    fig.colorbar(im, ax=ax)
+    fig.tight_layout()
+    fig.savefig(path, dpi=300)
+    plt.close(fig)
 
 
 def main():
@@ -95,6 +123,17 @@ def main():
         json.dump(_jsonable(metrics), f, ensure_ascii=False, indent=2)
 
     print(f"  da luu                : {os.path.join(OUT_DIR, 'metrics-heldout.json')}")
+
+    # Ve confusion matrix cho tap test
+    cm_color = np.array(metrics['cm_color'])
+    cm_shape = np.array(metrics['cm_shape'])
+    plot_confusion(cm_color, ['do', 'vang', 'xanh'],
+                   'Ma tran nham lan mau - Test held-out (seed 777)',
+                   os.path.join(FIG_DIR, 'confusion_color_test.png'))
+    plot_confusion(cm_shape, ['tron', 'vuong', 'tam_giac'],
+                   'Ma tran nham lan hinh - Test held-out (seed 777)',
+                   os.path.join(FIG_DIR, 'confusion_shape_test.png'))
+    print(f"  da ve confusion matrix tai {FIG_DIR}")
 
 
 if __name__ == "__main__":

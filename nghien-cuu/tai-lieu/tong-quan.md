@@ -1,7 +1,7 @@
 # Tổng quan tài liệu nghiên cứu: Mô phỏng robot Delta phân loại sản phẩm bằng camera
 
 **Ngày tổng hợp:** 2026-11-18  
-**Đối chiếu với đề cương:** `nghien-cuu/de-tai.md` (Mục tiêu: sai số vị trí $\le 1\text{ mm}$ trên vùng làm việc $\varnothing 300 \times 150\text{ mm}$; chu kỳ gắp–thả (pick-and-place) $\le 1,5\text{ s}$, độ vọt lố (overshoot) $\le 5\,\%$; độ chính xác phân loại camera $\ge 90\,\%$ trên $\ge 100$ mẫu).
+**Đối chiếu với đề cương:** `nghien-cuu/de-tai.md` (Mục tiêu: sai số vị trí $\le 1\text{ mm}$ trên vùng làm việc $\varnothing 300 \times 150\text{ mm}$; chu kỳ gắp–thả (pick-and-place) $\le 1,5\text{ s}$, độ vọt lố (overshoot) $\le 5\,\%$; độ chính xác phân loại camera $\ge 90\,\%$ trên $\ge 120$ mẫu).
 
 ---
 
@@ -112,10 +112,10 @@ Dựa trên 8 tài liệu đã khảo sát, có **4 khoảng trống nghiên c�
   - *Điều chưa ai làm (trong các bài đã đọc):* Các bài điều khiển (`Castaneda2015Robust`, `Liu2020LADRC`) tập trung vào thuật toán phức tạp (ADRC thích nghi, LADRC) trên quỹ đạo toán học (như đường số 8 xoắn ốc), còn các bài ứng dụng (`Vo2023DeltaPhanLoai`, `Elassal2024LowCost`) lại bỏ qua phân tích đáp ứng quá độ (độ vọt lố, thời gian xác lập, sai số bám).  
   - *Vì sao đáng làm:* Trước khi dùng các bộ điều khiển phức tạp hoặc chế tạo mạch thực, người thiết kế cần biết một bộ điều khiển đơn giản (PID hoặc PID + feed-forward) đạt được độ vọt lố bao nhiêu phần trăm và chu kỳ bao nhiêu giây trên quỹ đạo pick-and-place thực tế (nhận định của người tổng hợp).  
   - *Đề tài này làm được tới đâu:* Thiết kế quỹ đạo gắp–thả mượt (ví dụ: đa thức bậc 3/bậc 5 hoặc vận tốc hình thang) trong MATLAB/Simulink và định lượng rõ thời gian chu kỳ, độ vọt lố ($\le 5\,\%$) và sai số xác lập ($\le 1\text{ mm}$) của bộ điều khiển PID và PID + bù tiến.
-- **Khoảng trống 3 — Thiếu báo cáo thống kê đầy đủ (ma trận nhầm lẫn, cỡ mẫu $\ge 100$, phân tích cả màu sắc lẫn hình dạng) trong bài toán thị giác cổ điển cho Delta:**  
+- **Khoảng trống 3 — Thiếu báo cáo thống kê đầy đủ (ma trận nhầm lẫn, cỡ mẫu $\ge 120$, phân tích cả màu sắc lẫn hình dạng) trong bài toán thị giác cổ điển cho Delta:**  
   - *Điều chưa ai làm (trong các bài đã đọc):* `Vo2023DeltaPhanLoai` chỉ phân loại 3 màu (chưa xét hình dạng) và trong abstract không nêu cỡ mẫu hay ma trận nhầm lẫn (confusion matrix); `Elassal2024LowCost` và `PhuongHoai2023LowCostDelta` hoàn toàn không có số liệu phần trăm chính xác hay sai số tọa độ trong abstract.  
   - *Vì sao đáng làm:* Độ chính xác $100\,\%$ hay $97,5\,\%$ nếu chỉ thử trên cỡ mẫu nhỏ sẽ thiếu ý nghĩa thống kê và không cho biết cặp màu/hình nào dễ bị nhầm lẫn nhất (nhận định của người tổng hợp).  
-  - *Đề tài này làm được tới đâu:* Đánh giá thuật toán phân ngưỡng HSV + hình học contour (OpenCV) trên tập dữ liệu $\ge 100$ mẫu (kết hợp cả màu sắc và hình dạng cơ bản như tròn, vuông, tam giác), xuất ma trận nhầm lẫn và sai số tâm vật quy đổi sang hệ tọa độ robot (mm).
+  - *Đề tài này làm được tới đâu:* Đánh giá thuật toán phân ngưỡng HSV + hình học contour (OpenCV) trên tập dữ liệu $\ge 120$ mẫu (kết hợp cả màu sắc và hình dạng cơ bản như tròn, vuông, tam giác), xuất ma trận nhầm lẫn và sai số tâm vật quy đổi sang hệ tọa độ robot (mm).
 - **Khoảng trống 4 — Thiếu một quy trình mô phỏng tích hợp đầu–cuối (End-to-End Simulation Pipeline) có khả năng tái lập cho bài toán phân loại bằng robot Delta:**  
   - *Điều chưa ai làm (trong các bài đã đọc):* Các bài báo hiện tách rời giữa mô phỏng động học/điều khiển (`Yang2024FKNumerical`, `Liu2020LADRC`) và lắp ráp phần cứng thử nghiệm trực tiếp (`Vo2023DeltaPhanLoai`, `Elassal2024LowCost`, `PhuongHoai2023LowCostDelta`).  
   - *Vì sao đáng làm:* Với điều kiện sinh viên năm 2 chưa có kinh phí chế tạo cơ khí chính xác, một pipeline mô phỏng nối liền từ đầu ra tọa độ/nhãn của OpenCV $\to$ quy hoạch quỹ đạo gắp–thả $\to$ động học nghịch $\to$ điều khiển khớp sẽ kiểm chứng trọn vẹn tính khả thi của toàn hệ thống trước khi ra bản vẽ CAD và danh mục linh kiện (BOM) (nhận định của người tổng hợp).  
@@ -135,7 +135,7 @@ Dựa trên 8 tài liệu đã khảo sát, có **4 khoảng trống nghiên c�
   - *Khuyến nghị cụ thể (nhận định của người tổng hợp):* Không nên xoá bỏ con số $1,5\text{ s}$ nếu đề cương đã duyệt, nhưng phải quy định minh bạch trong báo cáo:
     1. **Chỉ tiêu chuyển động cơ học thuần tuý (Pure Kinematic/Dynamic Motion Cycle):** $\le 1,5\text{ s}$ (gồm thời gian di chuyển gắp và thả trong mô phỏng với giới hạn vận tốc góc khớp phù hợp linh kiện trong BOM).
     2. **Chỉ tiêu toàn chu trình phân loại (Full Sorting Cycle — tính cả thời gian xử lý ảnh OpenCV $\approx 0,05\text{–}0,15\text{ s}$ và trễ đóng/nhả đầu hút/kẹp $\approx 0,2\text{–}0,3\text{ s}$):** nới thành **$\le 1,8\text{–}2,0\text{ s}$**, lấy đúng con số **$1,8\text{ s/vật}$ của `Vo2023DeltaPhanLoai` làm mốc chuẩn thực nghiệm (benchmark)** để chứng minh mô hình mô phỏng có tính thực tiễn sát với phần cứng chi phí thấp tại Việt Nam.
-- **Mục tiêu 3 (Phân loại bằng camera đạt độ chính xác $\ge 90\,\%$ trên $\ge 100$ mẫu):** **Hoàn toàn khả thi.** Bằng chứng là `Vo2023DeltaPhanLoai` dùng ngưỡng màu HSV trên Raspberry Pi 4 đã đạt **97,5 % – 100 %** trên 3 màu. Với mô phỏng/thí nghiệm ảo trên tập $\ge 100$ ảnh mẫu (có thêm biến thiên độ sáng/nhiễu nhẹ và phân biệt 2–3 hình dạng bằng contour như `Elassal2024LowCost`), ngưỡng $\ge 90\,\%$ là vừa sức và có tính thuyết phục cao.
+- **Mục tiêu 3 (Phân loại bằng camera đạt độ chính xác $\ge 90\,\%$ trên $\ge 120$ mẫu):** **Hoàn toàn khả thi.** Bằng chứng là `Vo2023DeltaPhanLoai` dùng ngưỡng màu HSV trên Raspberry Pi 4 đã đạt **97,5 % – 100 %** trên 3 màu. Với mô phỏng/thí nghiệm ảo trên tập $\ge 120$ ảnh mẫu (có thêm biến thiên độ sáng/nhiễu nhẹ và phân biệt 2–3 hình dạng bằng contour như `Elassal2024LowCost`), ngưỡng $\ge 90\,\%$ là vừa sức và có tính thuyết phục cao.
 
 #### (2) Chọn cách tiếp cận động học: Giải tích (Geometric/Vector Loop) so với Phương pháp số (Newton–Raphson)
 - **So sánh hai hướng tiếp cận cho Động học nghịch (IK) và Động học thuận (FK):**

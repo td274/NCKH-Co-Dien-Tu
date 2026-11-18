@@ -145,20 +145,21 @@ def classify_shape(contour,
     # 2. Hinh vuong: circularity ~0.78, aspect ratio gan 1, hoac co goc vuong.
     square_aspect_ok = ar_lo <= aspect_ratio <= ar_hi
     square_solid_ok = solidity >= solid_tol - 0.05
-    square_by_circ = (0.70 <= circularity < circ_tol and
+    square_by_circ = (0.68 <= circularity < circ_tol and
                       square_aspect_ok and square_solid_ok)
     # Vuong that thuong co 4 goc vuong; neu mo/nhieu lam mat dinh,
     # van co the con 3 goc vuong hoac approx ra 5-6 canh nhung co >=3 goc vuong.
     square_by_angles = (n_right >= 3 and square_aspect_ok and square_solid_ok)
-    square_by_shape = (3 <= n_sides <= 6 and square_aspect_ok and
-                       extent >= 0.55 and square_solid_ok)
+    # Vuong xoay 30° co extent ~0.54; chap nhan n_sides 4-6 va extent >= 0.50.
+    square_by_shape = (4 <= n_sides <= 6 and square_aspect_ok and
+                       extent >= 0.50 and square_solid_ok)
     if square_by_circ or square_by_angles or square_by_shape:
         conf = 0.50 + 0.25 * circularity + 0.25 * solidity
         return 'vuong', _shape_confidence(conf, 0.60)
 
     # 3. Tam giac: 3 canh ro rang va 3 goc nhon (it nhat 2 goc < 60).
     triangle_sides_ok = (n_sides == 3 and n_acute >= 2)
-    triangle_compact = (circularity < 0.70 and extent < extent_tr and
+    triangle_compact = (circularity < 0.68 and extent < extent_tr and
                         square_solid_ok and n_acute >= 1)
     if triangle_sides_ok or triangle_compact:
         conf = 0.50 + 0.25 * solidity + 0.25 * max(0.0, 1.0 - extent)
@@ -167,9 +168,9 @@ def classify_shape(contour,
     # 4. Fallback: chon gan nhat dua tren circularity/extent/goc.
     if n_right >= 2 and square_aspect_ok:
         return 'vuong', _shape_confidence(0.5, 0.40)
-    if circularity >= 0.68:
+    if circularity >= 0.65:
         return 'tron', _shape_confidence(circularity, 0.40)
-    if extent >= 0.50:
+    if extent >= 0.48:
         return 'vuong', _shape_confidence(extent, 0.35)
     return 'tam_giac', _shape_confidence(solidity, 0.30)
 
