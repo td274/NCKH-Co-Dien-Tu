@@ -62,7 +62,8 @@ def test_webcam():
         print(f"Frame time mean: {info['frame_time_ms']['mean']} ms, P95: {info['frame_time_ms']['p95']} ms, FPS: {info['fps']}")
 
     if last_frame is not None:
-        dets, _ = detect_objects(last_frame, min_area=500)
+        dets, _ = detect_objects(last_frame, min_area_ratio=0.0002,
+                                  max_area_ratio=0.70)
         annotated = draw_detections(last_frame, dets)
         path = os.path.join(FIG_DIR, 'webcam_sample.png')
         cv2.imwrite(path, annotated)

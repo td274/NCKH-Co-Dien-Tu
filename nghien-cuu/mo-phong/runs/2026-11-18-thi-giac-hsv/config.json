@@ -10,16 +10,11 @@
   },
   "dataset": {
     "path": "nghien-cuu/du-lieu/anh-mau/synthetic",
-    "so_anh": 180,
+    "train": {"seed": 42, "images": 273, "objects": 285},
+    "validation": {"seed": 555, "images": 60, "objects": 75},
+    "test": {"seed": 777, "images": 60, "objects": 75},
     "so_mau": 3,
-    "so_hinh": 3,
-    " bien_thien": {
-      "do_sang": [0.7, 1.0, 1.3],
-      "xoay": [0, 15, 30],
-      "nhieu_gauss": [0, 5, 10],
-      "mo": [0, 1],
-      "multi_object": 12
-    }
+    "so_hinh": 3
   },
   "mau_hsv": {
     "do": {"h_min": 0, "h_max": 10, "s_min": 100, "v_min": 50},
@@ -32,10 +27,16 @@
     "image_points_px": [[100, 100], [500, 100], [500, 400], [100, 400]],
     "world_points_mm": [[0, 0], [300, 0], [300, 200], [0, 200]]
   },
+  "detection": {
+    "min_area_ratio": 0.0002,
+    "max_area_ratio": 0.70,
+    "border_policy": "keep_and_flag",
+    "morphology_kernel": "auto = max(3, int(min(H,W)/80) | 1)"
+  },
   "shape_rules": {
-    "tron": "aspect_ratio trong [0.85, 1.15] va solidity > 0.85",
-    "vuong": "approxPolyDP 4 canh va aspect_ratio trong [0.8, 1.25]",
-    "tam_giac": "approxPolyDP 3 canh"
+    "tron": "circularity >= 0.82 va solidity >= 0.80",
+    "vuong": "(0.68 <= circularity < 0.82) HOAC (4 <= n_sides <= 6, n_right >= 2, extent >= 0.50)",
+    "tam_giac": "n_sides == 3 va >=2 goc nhon, HOAC (circularity < 0.68, extent < 0.60, co goc nhon/min < 70)"
   },
   "seed": 42
 }

@@ -1,2 +1,1 @@
 type,gt_color,gt_shape,pred_color,pred_shape,distance_px,reason
-MISMATCH,vang,tam_giac,vang,vuong,2.23606797749979,Du doan vang-vuong thay vi vang-tam_giac

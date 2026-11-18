@@ -29,14 +29,16 @@ def main():
     # Dam bao dataset duoc sinh
     run_script('generate_dataset.py')
 
-    # Danh gia tren tap tong hop
-    run_script('evaluate_only.py')
+    # Danh gia tren cac tap train/validation/test doc lap
+    run_script('evaluate_only.py')      # train seed 42
+    run_script('validation.py')         # validation seed 555
+    run_script('heldout-test.py')       # test held-out seed 777 (chi chay mot lan)
 
     # Thu webcam
     run_script('webcam_test.py')
 
     print("\n===== HOAN THANH =====")
-    print("Ket qua chi tiet xem KETQUA.md, output/metrics.json va figures/")
+    print("Ket qua chi tiet xem KETQUA.md, output/metrics.json va ket-qua/")
 
 
 if __name__ == '__main__':

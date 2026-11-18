@@ -129,7 +129,10 @@ def generate_image(index, color, shape, brightness, angle, sigma, blur,
 
 
 def main():
-    out_dir = "nghien-cuu/du-lieu/anh-mau/synthetic"
+    # Ghi vao du-lieu chung cua repo, khong phai trong thu muc run.
+    repo_root = os.path.normpath(os.path.join(os.path.dirname(__file__),
+                                              '..', '..', '..', '..'))
+    out_dir = os.path.join(repo_root, 'nghien-cuu', 'du-lieu', 'anh-mau', 'synthetic')
     os.makedirs(out_dir, exist_ok=True)
 
     random.seed(42)
