@@ -6,7 +6,7 @@ Nghien cuu do ben vung cua pipeline thi giac voi cac dieu kien thuc te.
 KHONG dung de tinh chinh tham so — chi de bao cao trung thuc.
 
 Chay:
-    D:\Python312\python.exe robustness-test.py
+    D:\\Python312\\python.exe robustness-test.py
 """
 
 import json

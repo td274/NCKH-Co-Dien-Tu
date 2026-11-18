@@ -88,6 +88,36 @@ Trên tập test held-out (seed 777): **không còn ca sai nào**.
 
 Trên tập train (seed 42): **không còn ca sai nào**.
 
+## 5.5. Độ bền vững với điều kiện thực tế
+
+Để tránh đánh giá quá lạc quan từ ảnh tổng hợp sạch, chạy `robustness-test.py` với **cùng pipeline đã cố định** (không chỉnh tham số sau khi thấy kết quả). Mỗi điều kiện 36 ảnh (72 object đối với che khuất).
+
+| Điều kiện | Overall | Màu | Hình | Recall |
+| --- | --- | --- | --- | --- |
+| Không suy giảm | 100,0 % | 100,0 % | 100,0 % | 100,0 % |
+| Ánh sáng không đều (gradient 40–60 %) | 100,0 % | 100,0 % | 100,0 % | 100,0 % |
+| Bóng đổ (ellipse tối 30–50 %) | 100,0 % | 100,0 % | 100,0 % | 100,0 % |
+| Nhiễu cảm biến + JPEG (σ=15–25, Q=50–70) | 100,0 % | 100,0 % | 100,0 % | 100,0 % |
+| Phối cảnh nghiêng (10–15°) | 100,0 % | 100,0 % | 100,0 % | 100,0 % |
+| Hình dạng không lý tưởng (bo góc, jitter biên) | 100,0 % | 100,0 % | 100,0 % | 100,0 % |
+| **Che khuất một phần (15–25 %)** | **75,0 %** | **97,2 %** | **76,4 %** | **100,0 %** |
+
+![Biểu đồ so sánh độ bền vững](figures/robustness-bar.png)
+
+![Ví dụ từng điều kiện](figures/robustness-examples.png)
+
+**Các ca sai điển hình (chủ yếu ở che khuất):**
+- Tam giác xanh bị che một phần góc được nhận thành hình vuông.
+- Tròn đỏ bị che mép được nhận thành tam giác hoặc vuông.
+- Có ca màu xanh bị gán nhầm thành đỏ do phần nhìn thấy thuộc vật che (occluder) gần tâm ground truth.
+
+**Nhận xét:** Pipeline chịu được ánh sáng không đều, bóng đổ, nhiễu, JPEG, phối cảnh nhẹ và biên không lý tưởng. Điểm yếu duy nhất trong các điều kiện thử là **che khuất một phần**, làm suy giảm accuracy hình xuống 76,4 %.
+
+**Khuyến nghị cải tiến (chưa thực hiện):**
+1. **Tách vật che khuất:** dùng phân đoạn instance (watershed / GrabCut) hoặc yêu cầu vật không chồng nhau trong hộp chụp.
+2. **Tăng tính bền hình dạng:** khi contour bị vỡ, bổ sung đặc trưng Hu moments hoặc so sánh với template tròn/vuông/tam giác thay vì chỉ dựa vào contour liên tục.
+3. **Chuẩn hóa ánh sáng trước HSV:** áp dụng CLAHE trên kênh V hoặc chuyển sang không gian LAB để giảm nhạy với độ sáng tổng thể — đặc biệt hữu ích khi triển khai ngoài hộp chụp.
+
 ## 6. Đo trễ xử lý
 
 | Chỉ tiêu | Giá trị (tập train) |
@@ -125,4 +155,6 @@ Trên tập train (seed 42): **không còn ca sai nào**.
 - `output/error_cases.csv`: danh sách ca sai (hiện rỗng).
 - `output/timing_ms.csv`: thờ gian xử lý từng ảnh.
 - `output/webcam_info.json`: thông tin webcam.
+- `output/robustness.csv`, `output/robustness_errors.txt`: kết quả độ bền vững.
+- `figures/robustness-bar.png`, `figures/robustness-examples.png`: biểu đồ và ví dụ độ bền vững (300 dpi).
 - `figures/*.png`: ma trận nhầm lẫn, ảnh mẫu, ảnh webcam (300 dpi).
