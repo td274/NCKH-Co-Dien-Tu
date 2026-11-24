@@ -142,7 +142,7 @@ Chu kỳ toàn hệ thống được cộng từ các thành phần trong Bảng
 | Chờ khung hình camera (trung bình / P95) | 41,05 ms / 79,06 ms | Đo trên webcam thật, 24,4 fps |
 | Truyền Serial và phản hồi | ~2,0 ms | Dry-run, **chưa đo** |
 | **Tổng danh định** | **1,506 s** | Dư 0,29 s so với 1,8 s |
-| **Tổng theo P95 thị giác** | **1,545 s** | Dư 0,25 s so với 1,8 s |
+| **Tổng theo P95 thị giác** | **1,545 s** | Dư 0,26 s so với 1,8 s |
 
 *Nguồn: `mo-phong/runs/2026-11-24-pid-v2-dung-nghi/KETQUA.md` mục 4; `mo-phong/runs/2026-11-18-thi-giac-hsv/output/metrics.json` (`timing_ms`); `output/webcam_info.json`. Dòng tổng là tính lại từ các dòng trên.*
 

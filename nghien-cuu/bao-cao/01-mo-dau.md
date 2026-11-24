@@ -21,7 +21,7 @@ Mục tiêu tổng quát là xây dựng mô hình toán, mô phỏng và một 
 Đề tài đặt ba mục tiêu đo được:
 
 1. Dẫn giải và kiểm chứng chéo động học nghịch (inverse kinematics — IK) và động học thuận (forward kinematics — FK) của robot Delta ba bậc tự do. Sai số vòng kín cực đại không vượt 1 mm trên không gian làm việc tham chiếu Ø300 × 150 mm.
-2. Thiết kế quỹ đạo gắp–thả bậc 5 kết hợp bộ điều khiển tỉ lệ–tích phân–vi phân (PID). Chu kỳ chuyển động thuần không vượt 1,5 s, độ vọt lố (overshoot) không vượt 5 %. Chu kỳ toàn hệ thống không vượt 1,8 s khi cộng trễ thực đo được.
+2. Thiết kế quỹ đạo gắp–thả bậc 5 kết hợp bộ điều khiển tỉ lệ–tích phân–vi phân (PID) và bù tiến (feed-forward). Chu kỳ chuyển động 3 đoạn 0,96 s (T = 0,32 s) cộng hai pha dừng 0,25 s, độ vọt lố (overshoot) không vượt 5 %. Chu kỳ toàn hệ thống không vượt 1,8 s khi cộng trễ thực đo được.
 3. Xây dựng module phân loại trên vật thật bằng webcam. Độ chính xác đạt ít nhất 90 % trên ít nhất 120 vật mẫu gồm 3 màu và 3 hình dạng. Kết quả có ma trận nhầm lẫn và trễ xử lý ảnh đo thực tế.
 
 ## 1.3 Câu hỏi nghiên cứu

@@ -104,7 +104,7 @@ Ghi chú: $\Delta\tau_g$ là phép cộng bảo thủ, không mô phỏng trong 
 | Phương án | Tỷ số | $\tau_{\text{ra}}$ (N·m) | $k_\tau = \tau_{\text{ra}}/\tau_{\text{yc}}$ | $e_{\text{backlash}}$ (mm) | $e_{\text{enc}}$ (mm) | Kết luận |
 | --- | :---: | :---: | :---: | :---: | :---: | --- |
 | T1: hộp số hành tinh ≤ 5 arcmin | 5:1 | 2,48 | 2,18 | 0,291 | 0,063 | Đạt $k_\tau$ và đạt 0,803 mm sau hiệu chuẩn; không chọn vì chi phí 4,8–7,2 triệu VNĐ cho ba bộ |
-| **T2: đai răng GT2 10 mm, căng đai** | **5:1** | **2,53** | **2,22** | ≈ 0 hình học; **0,100 giả thiết** | 0,063 | **Chọn** |
+| **T2: đai răng GT2 10 mm, căng đai** | **5:1** | **2,53** | **2,23** | ≈ 0 hình học; **0,100 giả thiết** | 0,063 | **Chọn** |
 | T3: truyền trực tiếp, stepper vòng kín | 1:1 | 1,50 | 1,32 | 0,020 | 0,314 | Loại: $k_\tau < 2{,}0$; bước encoder quá thô |
 
 Nguồn: `BOM.md`, mục 1.2. Hiệu suất đai (0,92) và hộp số (0,90), mô-men giữ động cơ (0,55 N·m) là giả định `[CẦN KIỂM CHỨNG]`.
