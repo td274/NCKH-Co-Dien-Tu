@@ -17,6 +17,7 @@ sinh viên năm 2 (Trường Đại học Điện lực) và mọi đề tài sa
 | `nghien-cuu/du-lieu/` | Dữ liệu đo thực nghiệm (CSV), calibration | `simulation` |
 | `nghien-cuu/bao-cao/` | Báo cáo, slide, hình vẽ xuất bản | `writer` |
 | `nghien-cuu/nhat-ky/` | Nhật ký theo ngày `YYYY-MM-DD.md` | `nckh` |
+| `nghien-cuu/cong-cu/` | Script tiện ích (kiểm tra hạn mức API, ...) | `nckh` |
 
 ## Môi trường máy (quan trọng — đừng đoán đường dẫn)
 
@@ -75,6 +76,7 @@ trả về một bản tóm tắt ngắn. Agent sau đọc file, không cần đ
 | `/phan-bien <file/mục>` | Phản biện trước khi nộp |
 | `/bao-cao <mục>` | Viết một mục báo cáo |
 | `/nhat-ky <việc đã làm>` | Ghi nhật ký hôm nay |
+| `/han-muc` | Kiểm tra hạn mức các API đã kết nối (Go, Mistral, Google) |
 | `/nap-tai-lieu` | Nạp tài liệu từ `tai-lieu/inbox/` (Gemini web) + kiểm chứng DOI |
 
 ## Dùng model mạnh (Argon/Gemini) để tổng hợp tài liệu
