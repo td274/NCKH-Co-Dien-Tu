@@ -8,11 +8,11 @@ Chương này tổng hợp tám công trình trong giai đoạn 1988–2024. B�
 
 ## 2.2 Động học, hiệu chuẩn và giải số động học
 
-Robot Delta là cơ cấu song song ba bậc tự do tịnh tiến. Ba khớp quay chủ động đặt trên đế cố định. Cơ cấu hình bình hành giữ bàn công tác chỉ tịnh tiến theo x, y, z [1]. Bài toán nền tảng gồm hai chiều. Động học nghịch (inverse kinematics — IK) ánh xạ tọa độ điểm cuối sang góc khớp. Động học thuận (forward kinematics — FK) ánh xạ ngược lại. Với IK, mỗi nhánh đưa về phương trình lượng giác và có nghiệm giải tích tường minh [1]. Với FK, hệ phương trình phi tuyến có nhiều nghiệm và khó rút gọn [4].
+Robot Delta là cơ cấu song song ba bậc tự do tịnh tiến. Ba khớp quay chủ động đặt trên đế cố định. Cơ cấu hình bình hành giữ bàn công tác chỉ tịnh tiến theo x, y, z [1]. Bài toán nền tảng gồm hai chiều. Động học nghịch (inverse kinematics — IK) ánh xạ tọa độ điểm cuối sang góc khớp. Động học thuận (forward kinematics — FK) ánh xạ ngược lại. Với IK, mỗi nhánh đưa về phương trình lượng giác và có nghiệm giải tích tường minh [1]. Với FK, hệ phương trình phi tuyến có nhiều nghiệm và khó rút gọn [3].
 
-Hiệu chuẩn động học xử lý sai số hình học do chế tạo và lắp ráp, như chiều dài khâu và vị trí khớp đế. Vischer và Clavel (1998) xây dựng mô hình hiệu chuẩn cho robot Delta thực [3]. Tóm tắt của công trình này không nêu sai số vị trí trước và sau hiệu chuẩn tính bằng mm. [CẦN BỔ SUNG: sai số điểm cuối trước và sau hiệu chuẩn (mm) từ toàn văn [3]].
+Hiệu chuẩn động học xử lý sai số hình học do chế tạo và lắp ráp, như chiều dài khâu và vị trí khớp đế. Vischer và Clavel (1998) xây dựng mô hình hiệu chuẩn cho robot Delta thực [4]. Tóm tắt của công trình này không nêu sai số vị trí trước và sau hiệu chuẩn tính bằng mm. [CẦN BỔ SUNG: sai số điểm cuối trước và sau hiệu chuẩn (mm) từ toàn văn [4]].
 
-Yang và Xiao (2024) giải FK bằng phương pháp số kết hợp ràng buộc nghiệm. Nhóm tác giả dùng mô phỏng Monte Carlo để ước lượng vùng làm việc trên MATLAB [4]. Công trình không công bố sai số định lượng giữa nghiệm FK và IK. Nghiệm FK cũng không được kiểm chứng vòng kín trên toàn vùng làm việc.
+Yang và Xiao (2024) giải FK bằng phương pháp số kết hợp ràng buộc nghiệm. Nhóm tác giả dùng mô phỏng Monte Carlo để ước lượng vùng làm việc trên MATLAB [3]. Công trình không công bố sai số định lượng giữa nghiệm FK và IK. Nghiệm FK cũng không được kiểm chứng vòng kín trên toàn vùng làm việc.
 
 ## 2.3 Điều khiển bám quỹ đạo
 
@@ -39,8 +39,8 @@ Hoai và cộng sự (2023) xác định đồng thời tọa độ 3D và kích
 | Công trình | Phương pháp chính | Phần cứng / mô phỏng | Chỉ tiêu định lượng (theo tóm tắt) | Điểm còn thiếu |
 | --- | --- | --- | --- | --- |
 | [2] Vo & Le, 2023 | Ngưỡng HSV, 3 màu | 3 servo DC, Arduino, Raspberry Pi 4 | 100 %; 97,5 %; 1,8 s/vật | Cỡ mẫu, điều kiện sáng, định nghĩa chu kỳ |
-| [3] Vischer & Clavel, 1998 | Hiệu chuẩn sai số hình học | Robot Delta thực | Không nêu | Sai số điểm cuối (mm) |
-| [4] Yang & Xiao, 2024 | FK số + Monte Carlo | Mô phỏng MATLAB | Không nêu | Sai số IK↔FK; thông số hình học |
+| [4] Vischer & Clavel, 1998 | Hiệu chuẩn sai số hình học | Robot Delta thực | Không nêu | Sai số điểm cuối (mm) |
+| [3] Yang & Xiao, 2024 | FK số + Monte Carlo | Mô phỏng MATLAB | Không nêu | Sai số IK↔FK; thông số hình học |
 | [5] Castañeda, 2015 | ADRC thích nghi đầu ra + LMS | Delta thực + mô phỏng 5× | Định tính: tốt hơn PID + bù tiến | Sai số bám (mm), vọt lố (%) |
 | [6] Liu, 2020 | LADRC giải ghép 3 khớp | Chỉ mô phỏng | Định tính: "nhanh và chính xác" | Sai số bám; thông số quỹ đạo |
 | [7] Elassal, 2024 | Lọc màu + contour; IK trên Arduino | Raspberry Pi, Arduino, giác hút | Định tính: "hiệu quả và chính xác" | Độ chính xác gắp (%), sai số (mm) |
@@ -52,7 +52,7 @@ Từ tám công trình, có thể rút ra bốn xu hướng sau. Các nhận đ�
 
 1. **Chuyển sang nguyên mẫu chi phí thấp.** Ba công trình thực nghiệm gần nhất [2], [7], [8] dùng in 3D, cắt laser, động cơ bước hoặc servo DC phổ thông. Các hệ thống này kết hợp Raspberry Pi xử lý ảnh với Arduino điều khiển khớp.
 2. **Ưu tiên thị giác cổ điển cho phân loại đơn giản.** Với sản phẩm có màu và hình dạng rõ, các nhóm [2], [7] chọn ngưỡng HSV và contour thay vì học sâu. Cách này chạy được trên Raspberry Pi mà không cần GPU.
-3. **Giải số và mô phỏng Monte Carlo cho động học thuận.** [4] dùng nghiệm số và quét đám mây điểm để trực quan hóa vùng làm việc.
+3. **Giải số và mô phỏng Monte Carlo cho động học thuận.** [3] dùng nghiệm số và quét đám mây điểm để trực quan hóa vùng làm việc.
 4. **ADRC cho bám quỹ đạo tốc độ cao.** Khi tốc độ hoặc độ phức tạp của quỹ đạo tăng, các nhóm [5], [6] chuyển sang ESO để bù nhiễu thay cho PID cố định hệ số.
 
 ## 2.6 Mâu thuẫn giữa các nhóm
@@ -69,13 +69,13 @@ Có ba điểm chưa thống nhất giữa các công trình.
 
 Phân tích tám công trình cho bốn khoảng trống. Mỗi khoảng trống dẫn đến một phần của đề tài.
 
-**Khoảng trống 1: thiếu kiểm chứng chéo định lượng IK↔FK.** [4] giải FK và vẽ vùng làm việc nhưng không báo cáo sai số. Chưa có công trình nào trong tám bài đối chiếu vòng kín IK–FK trên toàn vùng làm việc. Robot song song nhạy với kỳ dị và đa nghiệm. Nếu sai số công thức hoặc chọn nhầm nhánh không được kiểm tra, mọi khâu điều khiển phía sau đều chịu ảnh hưởng. Đề tài đáp ứng khoảng trống này bằng đóng góp 1: nghiệm IK giải tích được đối chiếu với FK Newton–Raphson trên lưới điểm dày.
+**Khoảng trống 1: thiếu kiểm chứng chéo định lượng IK↔FK.** [3] giải FK và vẽ vùng làm việc nhưng không báo cáo sai số. Chưa có công trình nào trong tám bài đối chiếu vòng kín IK–FK trên toàn vùng làm việc. Robot song song nhạy với kỳ dị và đa nghiệm. Nếu sai số công thức hoặc chọn nhầm nhánh không được kiểm tra, mọi khâu điều khiển phía sau đều chịu ảnh hưởng. Đề tài đáp ứng khoảng trống này bằng đóng góp 1: nghiệm IK giải tích được đối chiếu với FK Newton–Raphson trên lưới điểm dày.
 
-**Khoảng trống 2: thiếu chỉ tiêu dung sai chế tạo gắn với sai số điểm cuối.** [3] mô tả hiệu chuẩn sai số hình học nhưng tóm tắt không nêu mm. Tóm tắt của [4] không nêu sai số chế tạo. Người viết nhận định rằng cần một khảo sát độ nhạy để biết sai lệch chiều dài khâu cỡ bao nhiêu thì vượt ngưỡng 1 mm. Đề tài đáp ứng bằng đóng góp 2, dựa trên sai lệch ±0,2 mm.
+**Khoảng trống 2: thiếu chỉ tiêu dung sai chế tạo gắn với sai số điểm cuối.** [4] mô tả hiệu chuẩn sai số hình học nhưng tóm tắt không nêu mm. Tóm tắt của [3] không nêu sai số chế tạo. Người viết nhận định rằng cần một khảo sát độ nhạy để biết sai lệch chiều dài khâu cỡ bao nhiêu thì vượt ngưỡng 1 mm. Đề tài đáp ứng bằng đóng góp 2, dựa trên sai lệch ±0,2 mm.
 
 **Khoảng trống 3: thiếu baseline PID trên quỹ đạo gắp–thả.** [5], [6] so sánh với ADRC và không công bố số liệu PID theo chỉ tiêu thống nhất. [2], [7] bỏ qua đáp ứng quá độ. Đề tài đáp ứng bằng PID và PID + bù tiến trên quỹ đạo bậc 5, đo chu kỳ và độ vọt lố theo định nghĩa rõ ràng. Chỉ tiêu overshoot ≤ 5 % và chu kỳ ≤ 1,5 s thuộc mục tiêu 2.
 
-**Khoảng trống 4: thiếu thống kê phân loại và pipeline tái lập.** [2] chỉ phân loại ba màu và không nêu cỡ mẫu hoặc ma trận nhầm lẫn. [7], [8] không có số liệu phần trăm chính xác. Các công trình mô phỏng [4], [6] tách rời phần cứng thử nghiệm. Chưa có công trình nào nối liền tọa độ từ OpenCV, quỹ đạo, IK và điều khiển khớp trong cùng một bộ chỉ tiêu. Đề tài đáp ứng bằng mục tiêu 3 (≥ 120 vật, có ma trận nhầm lẫn) và đóng góp 3 (pipeline tái lập).
+**Khoảng trống 4: thiếu thống kê phân loại và pipeline tái lập.** [2] chỉ phân loại ba màu và không nêu cỡ mẫu hoặc ma trận nhầm lẫn. [7], [8] không có số liệu phần trăm chính xác. Các công trình mô phỏng [3], [6] tách rời phần cứng thử nghiệm. Chưa có công trình nào nối liền tọa độ từ OpenCV, quỹ đạo, IK và điều khiển khớp trong cùng một bộ chỉ tiêu. Đề tài đáp ứng bằng mục tiêu 3 (≥ 120 vật, có ma trận nhầm lẫn) và đóng góp 3 (pipeline tái lập).
 
 Bốn khoảng trống trên định hướng ba đóng góp của đề tài trong Chương 1. Đề tài không nhằm vượt trội về điều khiển nâng cao. Mục tiêu là làm cho từng bước của chuỗi gắp–phân loại có số đo kiểm chứng được.
 
@@ -87,9 +87,9 @@ Danh mục dưới đây đánh số theo thứ tự xuất hiện trong báo c�
 
 [2] D. C. Vo and H. P. Le, "Design and development of a delta robot system to classify objects using image processing," *Int. J. Electr. Comput. Eng. (IJECE)*, vol. 13, no. 3, pp. 2669–2676, 2023, doi: 10.11591/ijece.v13i3.pp2669-2676.
 
-[3] P. Vischer and R. Clavel, "Kinematic calibration of the parallel Delta robot," *Robotica*, vol. 16, no. 2, pp. 207–218, 1998, doi: 10.1017/S0263574798000538.
+[3] H. Yang and B. Xiao, "Kinematics analysis of Delta parallel robot based on numerical solutions method," in *Proc. Int. Conf. Artificial Intelligence and Digital Technology (ICAIDT)*, 2024, pp. 294–297, doi: 10.1109/ICAIDT62617.2024.00070.
 
-[4] H. Yang and B. Xiao, "Kinematics analysis of Delta parallel robot based on numerical solutions method," in *Proc. Int. Conf. Artificial Intelligence and Digital Technology (ICAIDT)*, 2024, pp. 294–297, doi: 10.1109/ICAIDT62617.2024.00070.
+[4] P. Vischer and R. Clavel, "Kinematic calibration of the parallel Delta robot," *Robotica*, vol. 16, no. 2, pp. 207–218, 1998, doi: 10.1017/S0263574798000538.
 
 [5] L. A. Castañeda, A. Luviano-Juárez, and I. Chairez, "Robust trajectory tracking of a Delta robot through adaptive active disturbance rejection control," *IEEE Trans. Control Syst. Technol.*, vol. 23, no. 4, pp. 1387–1398, 2015, doi: 10.1109/TCST.2014.2367313.
 
