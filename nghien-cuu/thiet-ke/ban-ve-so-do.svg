@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1400 920" width="100%" height="100%" style="background-color: #ffffff; font-family: Arial, 'Segoe UI', 'DejaVu Sans', sans-serif;">
+  <style>
+    text { paint-order: stroke; stroke: #ffffff; stroke-width: 3px;
+           stroke-linejoin: round; }
+  </style>
   <defs>
     <!-- Mũi tên ghi kích thước -->
     <marker id="arrow-end" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
@@ -57,8 +61,8 @@
   <text x="340" y="96" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">
     A. HÌNH CHIẾU BẰNG (MẶT PHẲNG NGANG Oxy — NHÌN TỪ TRÊN XUỐNG)
   </text>
-  <text x="340" y="114" text-anchor="middle" font-size="11.5" fill="#475569">
-    Thể hiện tam giác đế cố định (f = 346 mm), 3 tay quay (rf), 6 thanh cẳng song song (re), bàn di động (e = 115 mm) và biên Ø300 mm
+  <text x="340" y="114" text-anchor="middle" font-size="10.5" fill="#475569">
+    Sơ đồ: tam giác đế f = 346 mm, 3 tay quay, 6 thanh cẳng re = 400 mm, bàn di động e = 115 mm
   </text>
 
   <!-- Vòng tròn ngoại tiếp đế cố định Rb = 199.8 mm (140 px) -->
@@ -210,8 +214,8 @@
   <text x="1035" y="96" text-anchor="middle" font-size="15" font-weight="bold" fill="#0f172a">
     B. HÌNH CHIẾU ĐỨNG (MẶT CẮT ĐỨNG Oxz — KẾT CẤU &amp; VÙNG LÀM VIỆC)
   </text>
-  <text x="1035" y="114" text-anchor="middle" font-size="11.5" fill="#475569">
-    Thể hiện chiều cao trụ đế (550 mm), hành trình góc khớp [-30°, +80°], chiều dài re = 400 mm và khoảng hở làm việc
+  <text x="1035" y="114" text-anchor="middle" font-size="10.5" fill="#475569">
+    Mặt cắt: chiều cao trụ đế 550 mm, hành trình góc khớp [−30° ; +80°]
   </text>
 
   <!-- Mặt bàn thí nghiệm tại z = -550 mm (y_svg = 652.5) -->
@@ -250,13 +254,13 @@
     VÙNG LÀM VIỆC THAM CHIẾU Ø300,0 × 150,0 mm
   </text>
   <text x="980" y="480" text-anchor="middle" font-size="10" fill="#166534">
-    z ∈ [-425,0 ; -275,0] mm (100% đạt sai số ≤ 1,0 mm khi dung sai ≤ ±0,2 mm)
+    z ∈ [−425 ; −275] mm — đạt ≤ 1,0 mm (dung sai ±0,2 mm)
   </text>
 
   <!-- Khớp chủ động Nhánh 1 (A1): x_A1 = +199.8 mm -> 980 + 149.8 = 1129.8, y_A1 = 240 -->
   <rect x="1115" y="220" width="30" height="28" rx="3" fill="#334155" stroke="#0f172a" stroke-width="1.5"/>
   <circle cx="1129.8" cy="240" r="5" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
-  <text x="1129.8" y="212" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#b91c1c">
+  <text x="1129.8" y="196" text-anchor="middle" font-size="9.5" font-weight="bold" fill="#b91c1c">
     Khớp A₁ (2 ổ bi 688ZZ)
   </text>
 
@@ -267,7 +271,7 @@
   <line x1="1129.8" y1="240" x2="1259.7" y2="165.0" stroke="#f87171" stroke-width="2.2" stroke-dasharray="5,4"/>
   <line x1="1129.8" y1="240" x2="1155.8" y2="387.7" stroke="#f87171" stroke-width="2.2" stroke-dasharray="5,4"/>
   <text x="1264" y="172" font-size="9.5" fill="#b91c1c">θ_min = -30,0° (config.h)</text>
-  <text x="1162" y="395" font-size="9.5" fill="#b91c1c">θ_max = +80,0°</text>
+  <text x="1095" y="404" font-size="9.5" fill="#b91c1c">θ_max = +80,0°</text>
 
   <!-- Tay quay chủ động Nhánh 1 tại vị trí tâm vùng làm việc P0(0, 0, -350 mm):
        θ₁ = +20,66° -> B1 = (1129.8 + 150*cos20.66°, 240 + 150*sin20.66°) = (1129.8 + 140.3, 240 + 52.9) = (1270.1, 292.9) -->
@@ -286,10 +290,10 @@
   <circle cx="1029.8" cy="502.5" r="4.5" fill="#ffffff" stroke="#0369a1" stroke-width="2"/>
 
   <!-- Nhãn kích thước trên thanh cẳng re = 400,0 ± 0,10 mm -->
-  <g transform="translate(1162, 412) rotate(-41.2)">
-    <rect x="-112" y="-15" width="224" height="32" rx="3" fill="#f0f9ff" stroke="#bae6fd"/>
-    <text x="0" y="-1" text-anchor="middle" font-size="10.2" font-weight="bold" fill="#0369a1">re = 400,0 ± 0,10 mm (chênh cặp ≤ 0,05)</text>
-    <text x="0" y="12" text-anchor="middle" font-size="9.2" fill="#0c4a6e">(Nhạy #2: 2,52 mm/mm — Đồ gá Jig ±0,05 mm)</text>
+  <g transform="translate(1190, 363) rotate(-41.2)">
+    <rect x="-86" y="-14" width="172" height="28" rx="3" fill="#f0f9ff" stroke="#bae6fd"/>
+    <text x="0" y="-1" text-anchor="middle" font-size="9.8" font-weight="bold" fill="#0369a1">re = 400,0 ± 0,10 mm</text>
+    <text x="0" y="10" text-anchor="middle" font-size="8.4" fill="#0c4a6e">chênh cặp ≤ 0,05 mm; Jig ±0,05</text>
   </g>
 
   <!-- Nhánh đối diện (hình chiếu của Nhánh 2 & 3 tại x = -Rb/2 = -99.9 mm -> 980 - 74.9 = 905.1) để hình cân đối -->
@@ -298,7 +302,7 @@
   <line x1="834.9" y1="292.9" x2="955.1" y2="502.5" stroke="#0284c7" stroke-width="3.2" stroke-opacity="0.75"/>
   <circle cx="834.9" cy="292.9" r="4.5" fill="#ffffff" stroke="#0369a1" stroke-width="1.8"/>
   <circle cx="955.1" cy="502.5" r="4.5" fill="#ffffff" stroke="#0369a1" stroke-width="1.8"/>
-  <text x="832" y="282" text-anchor="end" font-size="10" fill="#475569">Hình chiếu nhánh 2, 3</text>
+  <text x="832" y="292" text-anchor="end" font-size="10" fill="#475569">Hình chiếu nhánh 2, 3</text>
 
   <!-- Bàn di động (Moving platform) tại P0(0, 0, -350 mm -> y_svg = 502.5) -->
   <rect x="945" y="497.5" width="85" height="10" rx="2" fill="#fde047" stroke="#b45309" stroke-width="2"/>
@@ -341,34 +345,36 @@
   <!-- ===================================================================== -->
   <!-- KHUNG TÊN & BẢNG TỔNG HỢP DUNG SAI TRỌNG YẾU (PHÍA DƯỚI CÙNG)         -->
   <!-- ===================================================================== -->
+  <!-- ===== KHUNG TEN & BANG TONG HOP (cap nhat theo diem van hanh T = 0,32 s) ===== -->
   <rect x="18" y="755" width="1364" height="147" fill="#f8fafc" stroke="#334155" stroke-width="1.5"/>
   <line x1="520" y1="755" x2="520" y2="902" stroke="#334155" stroke-width="1.2"/>
   <line x1="1020" y1="755" x2="1020" y2="902" stroke="#334155" stroke-width="1.2"/>
 
-  <!-- Cột 1: Bảng thông số hình học & truyền động chốt -->
-  <text x="32" y="777" font-size="12.5" font-weight="bold" fill="#0f172a">1. THÔNG SỐ ĐỘNG HỌC &amp; TRUYỀN ĐỘNG CHỐT</text>
-  <text x="32" y="797" font-size="11" fill="#1e293b">• Đế cố định: f = 346,0 mm (Rb = 199,76 mm) — Nhôm 6061-T6 dày 10 mm</text>
-  <text x="32" y="815" font-size="11" fill="#1e293b">• Bàn di động: e = 115,0 mm (rp = 66,40 mm) — Nhựa PLA+ in 3D (m ≈ 45 g)</text>
-  <text x="32" y="833" font-size="11" fill="#1e293b">• Tay quay chủ động: rf = 200,0 mm (Nhôm 6061 dày 6 mm) | Cẳng tay: re = 400,0 mm (6 ống Carbon Ø8)</text>
-  <text x="32" y="851" font-size="11" fill="#1e293b">• Vùng làm việc: Trụ Ø300,0 × 150,0 mm tại z ∈ [-425,0 ; -275,0] mm (γ_min = 39,0° ≥ 25°)</text>
-  <text x="32" y="869" font-size="11" fill="#1e293b">• Mô-men đỉnh mô phỏng (chu kỳ 1,5 s): τ_max = 0,457 N·m; ω_max = 4,66 rad/s (44,5 rpm)</text>
-  <text x="32" y="887" font-size="11" font-weight="bold" fill="#0369a1">• Truyền động: Stepper vòng kín + Đai GT2 5:1 căng đai (τ_ra ≈ 2,53 N·m, k_sf = 5,54, backlash ≈ 0)</text>
+  <text x="32" y="776" font-size="12" font-weight="bold" fill="#0f172a">1. THÔNG SỐ ĐỘNG HỌC &amp; TRUYỀN ĐỘNG CHỐT</text>
+  <text x="32" y="794" font-size="9.5" fill="#1e293b">• Đế: f = 346,0 mm (Rb = 199,76 mm) — nhôm 6061-T6 dày 10 mm</text>
+  <text x="32" y="808" font-size="9.5" fill="#1e293b">• Bàn di động: e = 115,0 mm (rp = 66,40 mm) — PLA+ in 3D (≈ 45 g)</text>
+  <text x="32" y="822" font-size="9.5" fill="#1e293b">• Tay quay rf = 200,0 mm (nhôm 6 mm); cẳng re = 400,0 mm (6 thanh carbon Ø8)</text>
+  <text x="32" y="836" font-size="9.5" fill="#1e293b">• Vùng làm việc: Ø300,0 × 150,0 mm; z ∈ [−425,0 ; −275,0] mm</text>
+  <text x="32" y="850" font-size="9.5" fill="#1e293b">• Điểm vận hành: T = 0,32 s; τ = 1,14 N·m; ω = 7,25 rad/s</text>
+  <text x="32" y="864" font-size="9.5" font-weight="bold" fill="#0369a1">• Truyền động: stepper vòng kín + đai GT2 5:1</text>
+  <text x="32" y="878" font-size="9.5" fill="#0369a1">  τ_ra = 2,53 N·m; k = 2,23; backlash ≈ 0</text>
 
-  <!-- Cột 2: Bảng dung sai chế tạo dẫn từ khảo sát độ nhạy Monte Carlo -->
-  <text x="534" y="777" font-size="12.5" font-weight="bold" fill="#b91c1c">2. BẢNG DUNG SAI QUAN TRỌNG NHẤT (TỪ KHẢO SÁT ĐỘ NHẠY)</text>
-  <text x="534" y="797" font-size="11" fill="#1e293b">• [Ưu tiên #1] Vị trí 3 ổ trục khớp đế (Rb, zA): <tspan font-weight="bold" fill="#b91c1c">±0,05 mm</tspan> (Hệ số khuếch đại 3,40 mm/mm)</text>
-  <text x="534" y="815" font-size="11" fill="#1e293b">  → Phải phay CNC tấm đế liền khối trong 1 lần gá, tuyệt đối không khoan lắp tay rời rạc.</text>
-  <text x="534" y="833" font-size="11" fill="#1e293b">• [Ưu tiên #2] Thanh cẳng re (chi tiết): <tspan font-weight="bold" fill="#b91c1c">400,00 ± 0,10 mm</tspan>, chênh trong cặp ≤ 0,05 mm</text>
-  <text x="534" y="851" font-size="11" fill="#1e293b">  → Hệ số khuếch đại 2,52 mm/mm; định vị bằng đồ gá (Jig) 2 chốt Ø5g6 chính xác ±0,05 mm.</text>
-  <text x="534" y="869" font-size="11" fill="#1e293b">• [Ưu tiên #3] Tay quay rf: <tspan font-weight="bold">200,00 ± 0,10 mm</tspan> (1,16 mm/mm) | Bàn di động e: <tspan font-weight="bold">115,00 ± 0,15 mm</tspan></text>
-  <text x="534" y="887" font-size="11" font-weight="bold" fill="#15803d">• Ngân sách sai số tổng (cơ khí + đai GT2 + encoder + gốc): RSS = 0,545 mm; Tuyến tính = 0,957 mm ≤ 1,0 mm.</text>
+  <text x="532" y="776" font-size="12" font-weight="bold" fill="#b91c1c">2. DUNG SAI CHẾ TẠO CHỐT (TỪ KHẢO SÁT ĐỘ NHẠY)</text>
+  <text x="532" y="794" font-size="9.5" fill="#1e293b">• Vị trí 3 ổ trục khớp đế (Rb, zA): ±0,05 mm — khuếch đại 3,40 mm/mm</text>
+  <text x="532" y="808" font-size="9.5" fill="#475569">  → phay CNC đế liền khối 1 lần gá, không khoan lắp rời</text>
+  <text x="532" y="822" font-size="9.5" fill="#1e293b">• Cẳng tay re: 400,00 ± 0,10 mm; chênh trong cặp ≤ 0,05 mm</text>
+  <text x="532" y="836" font-size="9.5" fill="#475569">  → khuếch đại 2,52 mm/mm; đồ gá 2 chốt Ø5g6 ±0,05 mm</text>
+  <text x="532" y="850" font-size="9.5" fill="#1e293b">• Tay quay rf: 200,00 ± 0,10 mm (1,16 mm/mm); cạnh e: ±0,15 mm</text>
+  <text x="532" y="864" font-size="9.5" font-weight="bold" fill="#15803d">• Ngân sách sai số: P95 0,612 mm; worst-case 1,048 mm</text>
+  <text x="532" y="878" font-size="9.5" fill="#15803d">  → đạt ≤ 1,0 mm theo thống kê, không đạt theo worst-case</text>
 
-  <!-- Cột 3: Khung tên bản vẽ -->
-  <text x="1034" y="777" font-size="12.5" font-weight="bold" fill="#0f172a">3. KHUNG TÊN KỸ THUẬT</text>
-  <text x="1034" y="799" font-size="11" fill="#1e293b"><tspan font-weight="bold">Đề tài:</tspan> Robot Delta phân loại sản phẩm bằng Camera</text>
-  <text x="1034" y="818" font-size="11" fill="#1e293b"><tspan font-weight="bold">Đơn vị:</tspan> Khoa Cơ điện tử — Trường ĐH Điện lực</text>
-  <text x="1034" y="837" font-size="11" fill="#1e293b"><tspan font-weight="bold">Ký hiệu bản vẽ:</tspan> DELTA-3DOF-MECH-01</text>
-  <text x="1034" y="856" font-size="11" fill="#1e293b"><tspan font-weight="bold">Đơn vị đo:</tspan> Milimét (mm) | <tspan font-weight="bold">Góc:</tspan> Độ (deg)</text>
-  <text x="1034" y="875" font-size="11" fill="#1e293b"><tspan font-weight="bold">Tệp nguồn:</tspan> nghien-cuu/thiet-ke/ban-ve-so-do.svg</text>
-  <text x="1034" y="892" font-size="10.5" fill="#64748b">Trạng thái: Bản vẽ thiết kế phục vụ chế tạo &amp; lắp ráp</text>
+  <text x="1032" y="776" font-size="12" font-weight="bold" fill="#0f172a">3. KHUNG TÊN KỸ THUẬT</text>
+  <text x="1032" y="794" font-size="9.5" fill="#1e293b"><tspan font-weight="bold">Đề tài:</tspan> Robot Delta phân loại</text>
+  <text x="1032" y="807" font-size="9.5" fill="#1e293b">sản phẩm bằng camera</text>
+  <text x="1032" y="821" font-size="9.5" fill="#1e293b"><tspan font-weight="bold">Đơn vị:</tspan> Khoa Cơ điện tử</text>
+  <text x="1032" y="834" font-size="9.5" fill="#1e293b">Trường ĐH Điện lực</text>
+  <text x="1032" y="848" font-size="9.5" fill="#1e293b"><tspan font-weight="bold">Ký hiệu:</tspan> DELTA-3DOF-MECH-01</text>
+  <text x="1032" y="862" font-size="9.5" fill="#1e293b"><tspan font-weight="bold">Đơn vị đo:</tspan> mm | Góc: độ</text>
+  <text x="1032" y="876" font-size="9.5" fill="#1e293b"><tspan font-weight="bold">Tệp:</tspan> thiet-ke/ban-ve-so-do.svg</text>
+  <text x="1032" y="890" font-size="9" fill="#64748b">Trạng thái: bản vẽ chế tạo</text>
 </svg>

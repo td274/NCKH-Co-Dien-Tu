@@ -178,6 +178,19 @@ Mục tiêu tổng quát là xây dựng mô hình toán, mô phỏng và một 
 - Không hiệu chuẩn động học trên robot thật.
 - Không điều khiển bám quỹ đạo tốc độ cao.
 
+**Tình trạng thực hiện tại thời điểm báo cáo.** Nhóm chưa hoàn thành hai hạng mục phụ thuộc
+phần cứng vì hạn chế ngân sách, không phải vì thiếu phương pháp. Cụ thể:
+
+- **Đã hoàn thành:** động học và kiểm chứng chéo IK↔FK trên 1.859 điểm; khảo sát độ nhạy
+  dung sai bằng Monte Carlo; mô phỏng quỹ đạo bậc 5 với PID và bù tiến; phần mềm điều khiển
+  nhúng (biên dịch đạt, chưa nạp bo mạch); pipeline thị giác HSV trên ảnh tổng hợp; bản vẽ
+  chế tạo 2D và danh mục vật tư.
+- **Chưa thực hiện:** đo trễ truyền thông Serial trên phần cứng thật (hiện chỉ có dry-run);
+  thu và phân loại ≥ 120 vật mẫu thật; hiệu chuẩn động học trên khung thật.
+- **Thay thế tạm thời:** bản vẽ chế tạo 2D kèm dung sai và BOM thay cho mô hình CAD 3D.
+  Bản vẽ này đủ để đặt gia công và lắp ráp; mô hình 3D là bước bổ sung, không làm thay đổi
+  kết luận của báo cáo.
+
 Giả thiết tách khớp (decoupled joints) được áp dụng khi dùng PID đơn biến cho từng khớp. Giả thiết này làm bỏ qua tương tác động lực học giữa các nhánh song song. Báo cáo nêu rõ giả thiết này khi kết luận.
 
 ## 1.5 Đóng góp dự kiến
@@ -727,7 +740,7 @@ Các thông số chưa có datasheet: mô-men giữ động cơ, độ cứng đ
 
 Hình 4.1 là bản vẽ sơ đồ kết cấu của robot Delta. Các kích thước trên bản vẽ cần được đối chiếu với Bảng 4.1 trước khi nộp (xem ghi chú cho sinh viên).
 
-![Hình 4.1. Bản vẽ sơ đồ kết cấu](../thiet-ke/ban-ve-so-do.svg)
+![Hình 4.1. Bản vẽ sơ đồ kết cấu và dung sai chế tạo](../thiet-ke/ban-ve-so-do.png)
 
 *Hình 4.1. Bản vẽ sơ đồ kết cấu robot Delta 3 bậc tự do. Nguồn: `nghien-cuu/thiet-ke/ban-ve-so-do.svg`.*
 
@@ -1033,7 +1046,7 @@ Các việc tiếp theo được sắp theo mức ảnh hưởng đến kết lu
 
 Danh mục đánh số theo thứ tự xuất hiện trong toàn báo cáo, theo chuẩn IEEE. Các mục khớp với `references.bib`.
 
-[1] R. Clavel, "Delta, a fast robot with parallel geometry," in *Proc. 18th Int. Symp. Industrial Robots*, 1988, pp. 91–100. [CẦN KIỂM CHỨNG: chưa có DOI trên Crossref; đối chiếu kỷ yếu gốc.]
+[1] R. Clavel, "Delta, a fast robot with parallel geometry," in *Proc. 18th Int. Symp. Industrial Robots*, Lausanne, Switzerland, 1988, pp. 91–100.
 
 [2] D. C. Vo and H. P. Le, "Design and development of a delta robot system to classify objects using image processing," *Int. J. Electr. Comput. Eng. (IJECE)*, vol. 13, no. 3, pp. 2669–2676, 2023, doi: 10.11591/ijece.v13i3.pp2669-2676.
 
@@ -1047,7 +1060,7 @@ Danh mục đánh số theo thứ tự xuất hiện trong toàn báo cáo, theo
 
 [7] A. Elassal, M. Abdelaal, M. Osama, and H. Elhnidy, "Low-cost parallel delta robot for a pick-and-place application with the support of the vision system," *e-Prime – Adv. Electr. Eng., Electron. Energy*, vol. 8, Art. no. 100518, 2024, doi: 10.1016/j.prime.2024.100518.
 
-[8] P. Hoai, V. Cong, and T. Hiep, "Design a low-cost delta robot arm for pick and place applications based on computer vision," *FME Transactions*, vol. 51, no. 1, pp. 99–108, 2023, doi: 10.5937/fme2301099p. [CẦN KIỂM CHỨNG: thứ tự và tên tác giả theo Crossref chưa khớp tên Việt; đối chiếu trang bìa.]
+[8] Le Phuong Hoai, Vo Cong Duy, and Thai Hiep Thanh, "Design a low-cost delta robot arm for pick and place applications based on computer vision," *FME Transactions*, vol. 51, no. 1, pp. 99–108, 2023, doi: 10.5937/fme2301099p.
 
 ---
 

@@ -83,7 +83,7 @@ Bốn khoảng trống trên định hướng ba đóng góp của đề tài tr
 
 Danh mục dưới đây đánh số theo thứ tự xuất hiện trong báo cáo, theo chuẩn IEEE. Các mục khớp với `references.bib`.
 
-[1] R. Clavel, "Delta, a fast robot with parallel geometry," in *Proc. 18th Int. Symp. Industrial Robots*, 1988, pp. 91–100. [CẦN KIỂM CHỨNG: chưa có DOI trên Crossref; đối chiếu kỷ yếu gốc.]
+[1] R. Clavel, "Delta, a fast robot with parallel geometry," in *Proc. 18th Int. Symp. Industrial Robots*, Lausanne, Switzerland, 1988, pp. 91–100.
 
 [2] D. C. Vo and H. P. Le, "Design and development of a delta robot system to classify objects using image processing," *Int. J. Electr. Comput. Eng. (IJECE)*, vol. 13, no. 3, pp. 2669–2676, 2023, doi: 10.11591/ijece.v13i3.pp2669-2676.
 

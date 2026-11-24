@@ -49,6 +49,19 @@ Mục tiêu tổng quát là xây dựng mô hình toán, mô phỏng và một 
 - Không hiệu chuẩn động học trên robot thật.
 - Không điều khiển bám quỹ đạo tốc độ cao.
 
+**Tình trạng thực hiện tại thời điểm báo cáo.** Nhóm chưa hoàn thành hai hạng mục phụ thuộc
+phần cứng vì hạn chế ngân sách, không phải vì thiếu phương pháp. Cụ thể:
+
+- **Đã hoàn thành:** động học và kiểm chứng chéo IK↔FK trên 1.859 điểm; khảo sát độ nhạy
+  dung sai bằng Monte Carlo; mô phỏng quỹ đạo bậc 5 với PID và bù tiến; phần mềm điều khiển
+  nhúng (biên dịch đạt, chưa nạp bo mạch); pipeline thị giác HSV trên ảnh tổng hợp; bản vẽ
+  chế tạo 2D và danh mục vật tư.
+- **Chưa thực hiện:** đo trễ truyền thông Serial trên phần cứng thật (hiện chỉ có dry-run);
+  thu và phân loại ≥ 120 vật mẫu thật; hiệu chuẩn động học trên khung thật.
+- **Thay thế tạm thời:** bản vẽ chế tạo 2D kèm dung sai và BOM thay cho mô hình CAD 3D.
+  Bản vẽ này đủ để đặt gia công và lắp ráp; mô hình 3D là bước bổ sung, không làm thay đổi
+  kết luận của báo cáo.
+
 Giả thiết tách khớp (decoupled joints) được áp dụng khi dùng PID đơn biến cho từng khớp. Giả thiết này làm bỏ qua tương tác động lực học giữa các nhánh song song. Báo cáo nêu rõ giả thiết này khi kết luận.
 
 ## 1.5 Đóng góp dự kiến
