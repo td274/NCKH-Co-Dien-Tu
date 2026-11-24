@@ -69,11 +69,13 @@ Cận trên giải tích là tổng |gᵢ|·δᵢ trên hộp dung sai. Đây l�
 | Tổng tuyến tính, e_mech = Max mẫu MC | 1,201 | 0,957 |
 | Tổng tuyến tính, e_mech = cận trên giải tích | 1,635 | 1,391 |
 | Tổng tuyến tính, e_mech = dung sai phân cấp | 1,292 | 1,048 |
+| Tách nhóm: hệ thống + RSS ngẫu nhiên (P95) | 0,856 | 0,612 |
+| Tách nhóm: hệ thống + RSS ngẫu nhiên (Max mẫu MC) | 1,141 | 0,897 |
 | RSS, chỉ để tham chiếu (e_mech = P95 0,402) | 0,545 | 0,432 |
 
 *Nguồn: `thiet-ke/thong-so-co-khi.md` mục 5.1 và Bảng 5.2a; số học được tính lại trong `bao-cao/phan-bien-01.md` mục 2. Giá trị e_backlash = 0,100 mm là giả thiết chưa đo, `[CẦN KIỂM CHỨNG BẰNG ĐO]` độ giãn đai.*
 
-Bảng 5.3 cho kết luận khác nhau tùy cách cộng. Theo thống kê, P95 của e_mech là 0,402 mm, và tổng dùng cực đại mẫu Monte Carlo đạt 0,957 mm sau hiệu chuẩn. Theo worst-case tuyến tính, tổng đạt 1,391 mm sau hiệu chuẩn với dung sai ±0,2 mm, và vẫn vượt 1,0 mm với 1,048 mm khi dùng dung sai phân cấp. Vì vậy, chỉ tiêu 1 mm **đạt theo thống kê và không đạt theo worst-case**. Cột "tách nhóm hệ thống + ngẫu nhiên" trong `thong-so-co-khi.md` không được đưa vào bảng vì công thức ghi trong file không tái lập được các số của cột đó. [CẦN BỔ SUNG: kiểm lại cột "tách nhóm" trong `thong-so-co-khi.md` mục 5.2 bằng script, rồi mới trích.]
+Bảng 5.3 cho kết luận khác nhau tùy cách cộng. Theo thống kê, P95 của e_mech là 0,402 mm, và tổng dùng cực đại mẫu Monte Carlo đạt 0,957 mm sau hiệu chuẩn. Theo worst-case tuyến tính, tổng đạt 1,391 mm sau hiệu chuẩn với dung sai ±0,2 mm, và vẫn vượt 1,0 mm với 1,048 mm khi dùng dung sai phân cấp. Vì vậy, chỉ tiêu 1 mm **đạt theo thống kê và không đạt theo worst-case**. Cách tách nhóm cho kết quả trung gian: cộng tuyến tính phần hệ thống với RSS phần ngẫu nhiên, được 0,612 mm (P95) và 0,897 mm (max mẫu) sau hiệu chuẩn — khớp Bảng 4.6 và bảng nguồn `thong-so-co-khi.md` mục 5.2b.
 
 ## 5.3 Quỹ đạo và điều khiển
 
@@ -112,7 +114,7 @@ Bảng 5.5 trình bày quét chu kỳ và điểm vận hành được chốt.
 | **0,32** | **1,46** | **1,51** | **7,25** | **0,940** | **1,14** | **2,23** | **Chọn** |
 | 0,50 | 2,00 | 2,05 | 4,64 | 0,450 | 0,65 | 3,92 | Loại: tổng > 1,8 s |
 
-*Nguồn: `mo-phong/runs/2026-11-24-pid-v2-dung-nghi/KETQUA.md` mục 3 và 7; `output/quet-chu-ky.csv`. Tổng hệ thống được tính lại theo mục 5.4; file KETQUA ghi 1,26 / 1,50 / 2,04 s do làm tròn bỏ phần thị giác và truyền thông. Dòng T = 0,22 s lấy từ bảng quét mục 3; k_τ không tính ở dòng này vì chưa thuộc danh sách chọn.*
+*Nguồn: `mo-phong/runs/2026-11-24-pid-v2-dung-nghi/KETQUA.md` mục 3 và 7; `output/quet-chu-ky.csv`. Tổng hệ thống được tính lại theo mục 5.4; file KETQUA ghi 1,26 / 1,50 / 2,04 s (đã gồm đủ overhead 0,046 s), khác biệt chỉ do làm tròn. Dòng T = 0,22 s lấy từ bảng quét mục 3; k_τ không tính ở dòng này vì chưa thuộc danh sách chọn.*
 
 Với k_τ ≥ 2,0 là ngưỡng hệ số an toàn đặt cho đai GT2 5:1 (τ_ra = 2,53 N·m). Tại T = 0,32 s, k_τ = 2,23 đạt ngưỡng. Quét mịn hơn quanh 0,22–0,24 s chưa thực hiện. Hình 5.3 cho thấy sai số bám và vùng pha dừng, còn Hình 5.4 cho thấy quét chu kỳ.
 
@@ -208,7 +210,7 @@ Bảng 5.9 đặt kết quả cạnh các công trình đã đọc ở chương 
 | Công trình | Chỉ tiêu có số | Kết quả đề tài | Ghi chú so sánh |
 | --- | --- | --- | --- |
 | Vo & Le, 2023 [2] | 1,8 s/vật; 100 % đỏ và vàng, 97,5 % xanh | Chu kỳ 1,506 s danh định; màu 100 % (75 vật) | Không rõ cỡ mẫu và định nghĩa chu kỳ trong tóm tắt; đề tài có 3 màu × 3 hình |
-| Elassal, 2024 [7] | Định tính: "effective and accurate" | Độ chính xác 97,33 % trên 75 vật | Không có số để so sánh trực tiếp |
+| Elassal, 2024 [7] | Định tính: "proved the effectiveness and accuracy" | Độ chính xác 97,33 % trên 75 vật | Không có số để so sánh trực tiếp |
 | Hoai, 2023 [8] | Định tính: "small error" | Sai số vị trí chưa đo trên vật thật | Không có số mm để đối chiếu |
 | Vischer & Clavel, 1998 [4] | Hiệu chuẩn sai số hình học | Ngân sách sai số 0,957 mm (Max MC, sau hiệu chuẩn) | [CẦN BỔ SUNG: sai số trước và sau hiệu chuẩn trong toàn văn [4]] |
 | Castañeda, 2015 [5]; Liu, 2020 [6] | ADRC; định tính | PID + FF đạt 0,186 mm sai số bám cực đại tại T = 0,50 s | Chưa so sánh với ADRC; không suy ra đề tài tốt hơn |
@@ -239,6 +241,6 @@ Các giới hạn sau ảnh hưởng trực tiếp đến cách đọc kết qu�
 *Ghi chú biên tập (xoá trước khi nộp):*
 
 - *Nhãn nguồn `[2]` trong `mo-hinh/dong-hoc-delta.md` mục 6.5 và trong script `do-nhay-hinh-hoc.py` ứng với Vischer & Clavel, tức `[4]` trong chương 2. Đã dùng số `[4]` ở đây.*
-- *Chu kỳ 1,50 s trong các file ghi làm tròn bỏ phần thị giác; tổng tính lại là 1,506 s. Khoảng dư là 0,29 s, không phải 0,30 s.*
+- *Chu kỳ 1,50 s trong các file là số làm tròn; tổng tính lại là 1,506 s. Khoảng dư là 0,29 s, không phải 0,30 s.*
 - *Số P95 của thị giác: `metrics.json` ghi 4,12 ms, `KETQUA.md` cũ ghi 4,27 ms. Bản này dùng 4,12 ms.*
 - *Mục tiêu 3 chưa đạt; không được viết "đạt ≥ 90 % trên ≥ 120 vật".*

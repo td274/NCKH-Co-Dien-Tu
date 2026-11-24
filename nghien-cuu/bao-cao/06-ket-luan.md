@@ -8,7 +8,7 @@
 
 | Mục tiêu | Chỉ tiêu trong đề cương | Kết quả | Trạng thái |
 | --- | --- | --- | --- |
-| 1. Động học và độ nhạy | Sai số vòng kín IK↔FK ≤ 1 mm trên ≥ 1.000 điểm; khảo sát ±0,2 mm báo cáo max và P95 | 1.859 điểm; sai số cực đại 1,583 × 10⁻¹³ mm; ±0,2 mm cho P95 0,402 mm (4 khâu) và max 0,689 mm | **Đạt** theo định nghĩa đo của đề cương; ngân sách worst-case của phương án chọn (GT2) là 1,048 mm, vượt 1 mm |
+| 1. Động học và độ nhạy | Sai số vòng kín IK↔FK ≤ 1 mm trên ≥ 1.000 điểm; khảo sát ±0,2 mm báo cáo max và P95 | 1.859 điểm; sai số cực đại 1,583 × 10⁻¹³ mm; ±0,2 mm cho P95 0,402 mm (4 khâu) và max 0,689 mm | **Đạt** theo định nghĩa đo của đề cương; worst-case của phương án chọn (GT2) là 1,048 mm (dung sai phân cấp) và 1,391 mm (mọi khâu ±0,2 mm) — cả hai vượt 1 mm |
 | 2. Quỹ đạo, chu kỳ | Chu kỳ 3 đoạn 0,96 s; overshoot ≤ 5 %; chu kỳ toàn hệ thống ≤ 1,8 s | T = 0,32 s, 3T = 0,96 s; overshoot 0,134 % (PID) và 0 % (PID+FF); tổng danh định 1,506 s | **Đạt trong mô phỏng**; chưa xác nhận trên phần cứng (trễ Serial và servo chưa đo) |
 | 3. Phân loại trên vật thật | ≥ 90 % trên ≥ 120 vật thật, có ma trận nhầm lẫn, đo trễ xử lý ảnh | 97,33 % trên 75 vật tổng hợp (seed 999); 0 vật thật; trễ xử lý 3,41 ms trung bình | **Chưa đạt** (chưa có vật thật) |
 

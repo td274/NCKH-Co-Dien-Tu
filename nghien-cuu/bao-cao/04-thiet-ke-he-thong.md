@@ -45,7 +45,7 @@ Nguồn: `dong-hoc-delta.md` (mục 5.1, 6.6), `thong-so-co-khi.md` (mục 1.2),
 
 | Chi tiết | Vật liệu | Khối lượng ước tính | Lý do chính |
 | --- | --- | :---: | --- |
-| Tấm đế cố định ($f = 346$ mm) | Nhôm 6061-T6 dày 10 mm (hoặc thép dày 8 mm) | ≈ 2,8 kg (nhôm) | Đứng yên nên khối lượng không tăng $\tau$; cần mô-đun đàn hồi cao để giữ ba ổ trục |
+| Tấm đế cố định ($f = 346$ mm) | Nhôm 6061-T6 dày 10 mm (hoặc thép dày 8 mm) | ≈ 2,5–3 kg sau phay (phôi 480 × 480 × 10 mm ≈ 6,2 kg trước khi cắt góc) | Đứng yên nên khối lượng không tăng $\tau$; cần mô-đun đàn hồi cao để giữ ba ổ trục |
 | Khung trụ và giằng | Nhôm định hình 40 × 40 mm | ≈ 4,5 kg | Hạ trọng tâm, giảm rung khi đảo chiều |
 | Tay quay ($r_f$) | Nhôm 6061-T6 dày 6 mm, phay giảm tải | ≈ 110 g/tay | Chịu mô-men uốn; nhựa PLA bị từ biến nên không dùng |
 | Cẳng tay ($r_e$) | Ống sợi carbon $\varnothing 8 \times \varnothing 6$ mm, dài 350 mm | ≈ 18 g/thanh | Chỉ chịu kéo–nén dọc trục; khối lượng nhỏ |
@@ -53,7 +53,7 @@ Nguồn: `dong-hoc-delta.md` (mục 5.1, 6.6), `thong-so-co-khi.md` (mục 1.2),
 
 Mỗi khớp chủ động dùng trục thép tôi mài $\varnothing 8\,\text{g6}$, đỡ ở hai đầu bằng hai ổ bi 688ZZ (hoặc 608ZZ) cách nhau $L = 36\,\text{mm}$. Cách lắp hai đầu nhằm giảm độ đảo của mặt phẳng quay so với lắp công-xôn. Mười hai khớp cầu M5 (SI5T/K) gắn ở hai đầu sáu thanh song song. Trục bu-lông đặt song song với $Oy_i$, kèm đệm vát và lò xo kéo khử rơ ở mỗi cặp thanh [`thong-so-co-khi.md`, mục 3].
 
-**Quán tính.** Từ khối lượng ước tính, $J_{\text{mech}} = 0{,}00483\,\text{kg·m}^2$. Khi cộng quán tính rotor và puly, $J_{\text{eq,thực}} \approx 0{,}0066$–$0{,}0075\,\text{kg·m}^2$. Mô phỏng dùng $J = 0{,}01\,\text{kg·m}^2$, cao hơn khoảng 25–35 %. Mô phỏng là cận trên bảo thủ cho mô-men. Hai con số chưa được thống nhất [`thong-so-co-khi.md`, mục 2].
+**Quán tính.** Từ khối lượng ước tính, $J_{\text{mech}} = 0{,}00483\,\text{kg·m}^2$. Khi cộng quán tính rotor và puly, $J_{\text{eq,thực}} \approx 0{,}0066$–$0{,}0075\,\text{kg·m}^2$. Mô phỏng dùng $J = 0{,}01\,\text{kg·m}^2$, tức cao hơn $J_{\text{eq}}$ khoảng **33–52 %** (và gấp đôi $J_{\text{mech}}$). Mô phỏng vì vậy là cận trên bảo thủ cho mô-men. Hai con số chưa được thống nhất [`thong-so-co-khi.md`, mục 2].
 
 **Dung sai chế tạo.** Bảng 4.3 là bảng dung sai đề xuất, suy từ độ nhạy của sai số điểm cuối. Cột "đóng góp" là tích của hệ số khuếch đại xấu nhất (`tom-tat-do-nhay.json`, phương pháp OAT trong `dong-hoc-delta.md`, mục 6.5c) với dung sai đề xuất. Tổng các đóng góp là cận trên tuyến tính của năm nhóm: đế và bốn khâu hình học.
 
@@ -115,7 +115,7 @@ Nguồn: `BOM.md`, mục 1.2. Hiệu suất đai (0,92) và hộp số (0,90), m
 
 Đây là **giả thiết**, không phải số đo. Mô-đun $EA$ chưa có datasheet của đai cụ thể. `[CẦN KIỂM CHỨNG BẰNG ĐO: độ giãn đai dưới tải tĩnh]`. Đây là đầu vào then chốt của kết luận ở mục 4.4.
 
-**Mô-men động cơ và tốc độ.** Mô-men phía động cơ xấp xỉ $\tau_{\text{yc}}/(i\eta) = 1{,}14/(5 \times 0{,}92) \approx 0{,}25\,\text{N·m}$; tốc độ đỉnh phía động cơ $5 \times 69{,}2 \approx 346$ vòng/phút. Do đó cần động cơ có mô-men giữ $\ge 0{,}55\,\text{N·m}$ và tốc độ định mức $\ge 350$ vòng/phút; **hai thông số này chưa có datasheet** nên đánh dấu `[CẦN KIỂM CHỨNG]`. Dư tốc độ tại trục khớp là $1{,}38\times$ so với giới hạn mô hình $10\,\text{rad/s}$, không phải $2\times$.
+**Mô-men động cơ và tốc độ.** Mô-men phía động cơ xấp xỉ $\tau_{\text{yc}}/(i\eta) = 1{,}14/(5 \times 0{,}92) \approx 0{,}25\,\text{N·m}$. Tốc độ: giới hạn mô hình $10\,\text{rad/s}$ tại khớp tương đương $95{,}5$ vòng/phút, qua tỷ số $5{:}1$ cần động cơ định mức $\ge 480$ vòng/phút; điểm vận hành thực chỉ cần $5 \times 69{,}2 \approx 346$ vòng/phút (giá trị đỉnh, không phải định mức). Cần động cơ có mô-men giữ $\ge 0{,}55\,\text{N·m}$ và tốc độ định mức $\ge 480$ vòng/phút; **hai thông số này chưa có datasheet** nên đánh dấu `[CẦN KIỂM CHỨNG]`. Dư tốc độ tại trục khớp là $1{,}38\times$ so với giới hạn mô hình, không phải $2\times$.
 
 **Encoder.** Encoder 1 000 PPR, giải mã $4\times$, cho 4 000 cpr; qua tỷ số 5:1 đạt 20 000 xung/vòng tại khớp. Bước lượng tử điểm cuối $e_{\text{enc}} = 200 \times 2\pi/20\,000 = 0{,}063\,\text{mm}$, dùng trọn 1 count làm biên trên bảo thủ. Mô phỏng dùng 4 096 cpr, khác BOM nhưng chênh lệch sai số chỉ $0{,}0015\,\text{mm}$. `[CẦN BỔ SUNG: xác nhận 4 096 cpr trong mô phỏng là đặt ở trục khớp hay trục động cơ]`.
 

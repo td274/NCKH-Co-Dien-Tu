@@ -156,7 +156,7 @@ Số cạnh được xác định bằng `cv2.approxPolyDP` với $\varepsilon =
 
 **Chuyển đổi pixel sang mm.** Ma trận homography được xác định từ bốn điểm mốc, giả định vùng làm việc $300 \times 200\,\text{mm}$. Đây là giả định của mô phỏng, chưa phải hiệu chuẩn trên bàn thật. `[CẦN BỔ SUNG: hiệu chuẩn homography trên bàn thí nghiệm, kèm sai số đo]`.
 
-**Hạn chế của chuỗi thị giác.** Mọi số liệu thị giác hiện có là ảnh tổng hợp do nhóm tạo bằng OpenCV/NumPy. Repo chưa có vật mẫu thật. Ngưỡng cụ thể của các đặc trưng hình học (circularity, solidity, góc đỉnh) nằm trong mã, không được ghi trong tài liệu tóm tắt. `[CẦN BỔ SUNG: ngưỡng quyết định cho từng đặc trưng, lấy từ mã nguồn]`.
+**Hạn chế của chuỗi thị giác.** Mọi số liệu thị giác hiện có là ảnh tổng hợp do nhóm tạo bằng OpenCV/NumPy. Repo chưa có vật mẫu thật. Quy tắc góc đỉnh đã được ghi trong `KETQUA.md` của lần chạy thị giác: một hình được nhận là vuông nếu có ít nhất ba góc trong khoảng $70^\circ$–$110^\circ$. Ngưỡng của circularity và solidity thì chỉ có trong mã, không có trong tài liệu tóm tắt. `[CẦN BỔ SUNG: bảng ngưỡng quyết định cho circularity và solidity, lấy từ mã nguồn]`.
 
 ## 3.7 Giả thiết và hạn chế của chương 3
 
