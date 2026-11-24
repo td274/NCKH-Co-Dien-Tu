@@ -1,7 +1,7 @@
 ---
 description: Phản biện đề tài, báo cáo và kết quả — soi lỗi logic, số liệu, trích dẫn ảo
 mode: subagent
-model: opencode-go/qwen3.8-max
+model: opencode-go/glm-5.3-flash
 color: "#64748b"
 permissions:
   - action: edit

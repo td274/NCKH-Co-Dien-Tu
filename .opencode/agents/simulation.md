@@ -1,7 +1,7 @@
 ---
 description: Viết và chạy mô phỏng cơ điện tử, xử lý số liệu thực nghiệm, vẽ đồ thị xuất bản
 mode: subagent
-model: opencode-go/kimi-k2.7-code
+model: opencode-go/deepseek-v4.1-flash
 color: "#f59e0b"
 permissions:
   - action: edit

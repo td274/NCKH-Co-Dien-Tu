@@ -105,5 +105,41 @@ Google AI Studio (hạn mức miễn phí riêng, tính tiền riêng), rồi `/
   dùng model rẻ — đã cấu hình sẵn theo từng agent.
 - Không chạy 5 subagent song song cho một việc nhỏ.
 - Tóm tắt paper **một lần** rồi lưu file; đừng bắt agent đọc lại PDF gốc nhiều lần.
-- Muốn giảm chi phí: đổi `model` của `modeling` trong `.opencode/agents/modeling.md`
-  từ `gemini-4-argon` sang `qwen3.8-max` hoặc `deepseek-v4-pro`.
+
+### Gói Go tính bằng tiền, không phải token
+
+Hạn mức là một khoản **đô-la** dùng chung: 5 giờ = 20 %, tuần = 50 % (reset 07:00 thứ Hai),
+tháng = 100 %. Mỗi model có hạn mức tháng riêng nhưng quy đổi theo *phần trăm*, nên đổi
+model chỉ đổi tốc độ tiêu, không "thoát" hạn mức. Kiểm tra bằng `/han-muc`.
+
+Chi phí thật bị chi phối bởi **token cache đọc** (mỗi lượt gửi lại toàn bộ ngữ cảnh), nên
+model có cache đọc rẻ quan trọng hơn model có giá token thấp:
+
+| Model | Hạn mức/tháng | Cache đọc $/1M | Token cache / 1 % hạn mức |
+| --- | --- | --- | --- |
+| `deepseek-v4.1-flash` | $100 | 0,003 | **333 M** |
+| `glm-5.3-flash` | $60 | 0,03 | 20 M |
+| `claude-haiku-5-5` | $15 | 0,01 | 15 M |
+| `deepseek-v4-pro` | $15 | 0,022 | 7 M |
+| `gemini-4-argon` | $30 | 0,10 | 3 M |
+| `kimi-k2.7-code` | $60 | 0,19 | 3 M |
+| `qwen3.8-max` | $15 | 0,25 | 1 M |
+
+Phân công hiện tại (đã tối ưu, tiết kiệm ~68 % so với cấu hình đầu):
+
+| Agent | Model | Lý do |
+| --- | --- | --- |
+| `simulation` | `deepseek-v4.1-flash` | chạy nhiều lượt → cache đọc rẻ nhất |
+| `firmware` | `deepseek-v4.1-flash` | việc code, không cần model đắt |
+| `reviewer` | `glm-5.3-flash` | cần phán đoán, hạn mức $60 |
+| `modeling`, `tong-hop`, `co-khi` | `gemini-4-argon` | phần khó nhất, giữ chất lượng |
+| `literature`, `writer` | `claude-haiku-5-5` | đọc/tóm tắt/format |
+| `nckh` | `deepseek-v4-pro` | điều phối, ngữ cảnh ngắn |
+
+Quy tắc vận hành để không đốt hạn mức:
+
+- Phiên quá ~50 lượt thì mở phiên mới; ghi kết quả ra file, phiên sau đọc file tóm tắt.
+- Không `read` nguyên file lớn (`dong-hoc-delta.md` 56 KB, `tong-quan.md` 45 KB,
+  `sai-so-ik-fk.csv` 682 KB) — dùng `grep`, `offset`/`limit`, hoặc in 10 dòng cuối.
+- Đừng dán log dài vào ngữ cảnh.
+- Việc nặng nên chạy ngay sau khi tháng reset, không chạy sát trần hạn mức.

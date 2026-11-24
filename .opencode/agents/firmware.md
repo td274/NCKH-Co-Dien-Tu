@@ -1,7 +1,7 @@
 ---
 description: Viết và build code nhúng cho Arduino, ESP32, STM32 trong đề tài cơ điện tử
 mode: subagent
-model: opencode-go/deepseek-v4-pro
+model: opencode-go/deepseek-v4.1-flash
 color: "#ef4444"
 permissions:
   - action: edit
