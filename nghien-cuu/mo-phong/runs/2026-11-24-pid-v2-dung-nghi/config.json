@@ -1,0 +1,93 @@
+{
+  "run_name": "2026-11-24-pid-v2-dung-nghi",
+  "muc_tieu": "Sua dinh nghia overshoot/thoi gian xac lap bang cach them pha dung (dwell) tai diem moc, do chi trong cua so dwell; quet T tim chu ky ngan nhat dat sai so cuoi dwell <= 1 mm va overshoot <= 5 %.",
+  "ngay_chay": "2026-11-24",
+  "seed": 42,
+  "python": "D:\\Python312\\python.exe",
+  "requirements": {
+    "numpy": "2.5.5",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2"
+  },
+  "robot_geometry_mm": {
+    "f": 346.0,
+    "e": 115.0,
+    "rf": 200.0,
+    "re": 400.0,
+    "R_b": 199.763202571,
+    "r_p": 66.395277856,
+    "R": 133.367924715
+  },
+  "workspace_constraints_mm": {
+    "z_min": -425.0,
+    "z_max": -275.0,
+    "r_max": 150.0
+  },
+  "waypoints_mm": {
+    "home": [0.0, 0.0, -350.0],
+    "pick": [100.0, -100.0, -400.0],
+    "place": [-100.0, 100.0, -350.0]
+  },
+  "trajectory": {
+    "polynomial_order": 5,
+    "boundary_conditions": "dung han tai moi diem: v=0, a=0",
+    "segments": ["home->pick", "pick->place", "place->home"],
+    "dwell_after": ["pick", "place"],
+    "dwell_s": 0.25,
+    "dwell_source": "tai-lieu/tong-quan.md muc 7.1: tre dong/nha dau kep 0,2-0,3 s, chon danh dinh 0,25 s",
+    "T_default_s": 0.5,
+    "T_scan_min_s": 0.2,
+    "T_scan_max_s": 0.6,
+    "T_scan_step_s": 0.02
+  },
+  "joint_model": {
+    "J_kg_m2": 0.01,
+    "b_Nm_s_rad": 0.05,
+    "tau_max_Nm": 2.0,
+    "omega_max_rad_s": 10.0,
+    "encoder_counts_per_rev": 4096,
+    "quantize_feedback": true,
+    "cross_coupling": "bo qua tuong tac cheo giua 3 khop (giai thiet tach khop)"
+  },
+  "pid_gains": {
+    "Kp": 80.0,
+    "Ki": 5.0,
+    "Kd": 4.0,
+    "tau_d_filter_s": 0.005
+  },
+  "simulation": {
+    "dt_s": 0.001,
+    "solver": "scipy.integrate.solve_ivp (RK45)",
+    "atol": 1e-06,
+    "rtol": 1e-04,
+    "max_step_s": 0.005
+  },
+  "criteria": {
+    "overshoot_max_percent": 5.0,
+    "settling_error_mm": 1.0,
+    "cycle_time_target_s": 1.5,
+    "total_cycle_target_s": 1.8
+  },
+  "budget_ngoai_mo_phong": {
+    "xu_ly_anh_trung_binh_ms": 3.41,
+    "xu_ly_anh_p95_ms": 4.12,
+    "xu_ly_anh_source": "runs/2026-11-18-thi-giac-hsv/output/metrics.json -> timing_ms",
+    "cho_khung_hinh_camera_ms": 41.05,
+    "cho_khung_hinh_camera_p95_ms": 79.06,
+    "camera_source": "runs/2026-11-18-thi-giac-hsv/output/webcam_info.json -> frame_time_ms (FPS 24,4)",
+    "serial_ms": 2.0,
+    "serial_status": "dry-run, CHUA DO THAT",
+    "dong_bo_gia_cong_ms": null
+  },
+  "giathieu": [
+    "Khop quay duoc mo hinh hoa nhu 3 he quan tinh-nhot doc lap, bo qua trong luc va tuong tac dong hoc cheo.",
+    "Quy dao thao tac: 3 doan bac 5 noi tiep, giua cac doan co pha dung dwell_s tai diem moc (kep/nha vat).",
+    "Feed-forward = J*theta_ddot_ref + b*theta_dot_ref.",
+    "Sai so bam quy doi ve khong gian thao tac bang FK voi goc khop thuc te.",
+    "Chu ky toan he thong = 3T + 2*dwell + xu ly anh + cho khung hinh + Serial (dry-run)."
+  ],
+  "notes": [
+    "Run nay thay the metric cua run 2026-11-18: overshoot/thoi gian xac lap chi do trong cua so dwell, khong doan sang doan ke tiep.",
+    "Khong sua bat ky file nao trong runs/2026-11-18-pid-quy-dao-bac5/."
+  ]
+}
