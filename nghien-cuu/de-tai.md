@@ -39,9 +39,11 @@ camera, làm cơ sở thiết kế phần cứng hoàn chỉnh.
    báo cáo max error và RMSE trên ≥ 1000 điểm lưới. **Bổ sung khảo sát độ nhạy:** khi
    chiều dài khâu sai lệch ±0,2 mm (sai số chế tạo), báo cáo phân bố sai số điểm cuối
    (max, phân vị 95 %) và đối chiếu với ngưỡng 1 mm.
-2. Thiết kế quỹ đạo gắp–thả (đa thức bậc 5) + PID; mô phỏng đạt **chu kỳ chuyển động
-   thuần ≤ 1,5 s**, overshoot ≤ 5 %; **chu kỳ toàn hệ thống ≤ 1,8 s** khi cộng trễ thực
-   đo được của camera + truyền thông (mốc đối chiếu: 1,8 s/vật của Vo & Le 2023).
+2. Thiết kế quỹ đạo gắp–thả (đa thức bậc 5) + PID/feed-forward; mô phỏng đạt **chu kỳ
+   chuyển động 3 đoạn 0,96 s** (T = 0,32 s, kèm 2 pha dừng 0,25 s để kẹp/thả → chu kỳ
+   1,46 s), overshoot ≤ 5 %; **chu kỳ toàn hệ thống ≤ 1,8 s** khi cộng trễ camera +
+   truyền thông (mốc đối chiếu: 1,8 s/vật của Vo & Le 2023). Điểm vận hành chốt:
+   τ = 1,14 N·m (đã gồm trọng lực), ω = 7,25 rad/s, hệ số an toàn mô-men 2,23.
 3. Xây dựng module phân loại trên **vật thật** (webcam, 3 màu × 3 hình dạng) đạt độ
    chính xác ≥ 90 % trên ≥ 120 vật mẫu, có ma trận nhầm lẫn; đo và báo cáo trễ xử lý
    ảnh thực tế.
@@ -73,7 +75,7 @@ camera, làm cơ sở thiết kế phần cứng hoàn chỉnh.
 | --- | --- | --- | --- |
 | 1 | Động học nghịch giải tích (vector loop) | giấy + Python (sympy) | Công thức θᵢ(x,y,z) + kiểm tra đơn vị |
 | 2 | Động học thuận + kiểm chứng chéo Newton–Raphson, quét Monte Carlo | Python/MATLAB | Bảng sai số vòng kín IK↔FK (max, RMSE) |
-| 3 | Quỹ đạo gắp–thả bậc 5 + PID, mô phỏng | MATLAB/Simulink | Đồ thị sai số bám, overshoot, chu kỳ |
+| 3 | Quỹ đạo gắp–thả bậc 5 + PID/feed-forward, mô phỏng có pha dừng | Python (scipy) | Đồ thị sai số bám, overshoot thật, bảng quét chu kỳ |
 | 4 | Thị giác trên vật thật: HSV + contour | Python/OpenCV + webcam | Ma trận nhầm lẫn, độ chính xác %, trễ xử lý |
 | 5 | Truyền góc khớp qua Serial, đo trễ vòng | Python ↔ Arduino | Số đo trễ (ms) theo từng công đoạn |
 | 6 | Ghép chu kỳ tổng + thiết kế CAD/BOM | Python (pandas) + CAD | Bảng phân rã chu kỳ, bản vẽ, BOM |

@@ -126,7 +126,29 @@ Tiêu chí đạt: **sai số cuối dwell ≤ 1 mm** ở cả Pick và Place, *
 7. Mô hình vẫn bỏ qua tương tác chéo 3 khớp, trọng lực và ma sát Coulomb; τ_max/ω_max là tham số giả định, chưa chốt theo BOM. Bước quét 0,02 s chưa đủ mịn để chốt biên T; nên quét 0,005 s quanh 0,22–0,24 s.
 8. `t_eval` bước 1 ms nên thời gian xác lập chỉ phân giải tới 1 ms; các giá trị 0 s là giới hạn của lưới, không phải số đo liên tục.
 
-## 7. Tệp đầu ra
+## 7. Điểm vận hành chốt: T = 0,32 s
+
+Bảng quét ở mục 3 chỉ xét chất lượng bám (≤ 1 mm, ≤ 5 %) và giới hạn của **mô hình khớp**
+(τ ≤ 2 N·m, ω ≤ 10 rad/s), chưa xét **hệ số an toàn của động cơ đã chọn**. Với đai GT2 5:1
+(τ_ra = 2,53 N·m) và cộng thêm trọng lực 0,196 N·m:
+
+| T (s) | Chu kỳ có dwell | Tổng hệ thống | τ (N·m) | τ + trọng lực | k_τ | Đạt cả hai? |
+| --- | --- | --- | --- | --- | --- | --- |
+| 0,24 | 1,22 s | 1,26 s | 1,54 | 1,74 | 1,46 | ❌ k < 2 |
+| 0,26 | 1,28 s | 1,32 s | 1,36 | 1,55 | 1,63 | ❌ |
+| 0,28 | 1,34 s | 1,38 s | 1,18 | 1,38 | 1,83 | ❌ |
+| **0,32** | **1,46 s** | **1,50 s** | **0,94** | **1,14** | **2,23** | ✅ |
+| 0,50 | 2,00 s | 2,04 s | 0,45 | 0,65 | 3,92 | ❌ tổng > 1,8 s |
+
+**Chốt T = 0,32 s**: chu kỳ chuyển động 0,96 s, chu kỳ có kẹp/thả 1,46 s, tổng hệ thống
+1,50 s (dư 0,30 s so với mốc 1,8 s), ω_max 7,25 rad/s, k_τ = 2,23.
+
+**Feed-forward là bắt buộc, không phải tùy chọn.** Ở T = 0,50 s, PID thuần có
+`max_err = 1,137 mm` — đã vượt chỉ tiêu 1 mm. Toàn bộ các điểm "đạt" trong bảng quét là
+**PID + feed-forward**. Vì vậy kết luận đúng là: chỉ tiêu 1 mm chỉ đạt được khi có khâu
+bù mô-men, không phải "FF giúp giảm RMSE".
+
+## 8. Tệp đầu ra
 
 - `output/metrics.json`: metric tại T mặc định (PID vs PID+FF) + toàn bộ quét.
 - `output/quet-chu-ky.csv`: bảng quét T (đơn vị ghi trong header).
