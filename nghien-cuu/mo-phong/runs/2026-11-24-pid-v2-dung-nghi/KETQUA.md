@@ -125,6 +125,7 @@ Tiêu chí đạt: **sai số cuối dwell ≤ 1 mm** ở cả Pick và Place, *
 6. Không có số đo thực nghiệm cho dwell; 0,25 s là giá trị danh định giữa dải 0,2–0,3 s. Nếu xy-lanh khí nén chậm hơn, toàn bộ kết luận chu kỳ dịch tương ứng.
 7. Mô hình vẫn bỏ qua tương tác chéo 3 khớp, trọng lực và ma sát Coulomb; τ_max/ω_max là tham số giả định, chưa chốt theo BOM. Bước quét 0,02 s chưa đủ mịn để chốt biên T; nên quét 0,005 s quanh 0,22–0,24 s.
 8. `t_eval` bước 1 ms nên thời gian xác lập chỉ phân giải tới 1 ms; các giá trị 0 s là giới hạn của lưới, không phải số đo liên tục.
+9. **Lượng tử encoder khác giữa mô phỏng và BOM:** mô phỏng dùng `encoder_counts_per_rev = 4096`, còn BOM chọn 1.000 PPR × 4 = 4.000 cpr (× 5:1 = 20.000 xung/vòng). Sai số quy đổi tương ứng 0,0613 mm và 0,0628 mm — chênh 0,0015 mm, không ảnh hưởng kết luận. Khi lắp thật phải dùng đúng thông số BOM.
 
 ## 7. Điểm vận hành chốt: T = 0,32 s
 

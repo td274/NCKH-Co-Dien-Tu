@@ -409,13 +409,17 @@ Script `do-nhay-hinh-hoc.py` thực hiện $N_{\text{MC}} = 300$ lần rút mẫ
 ### 6.6. Các điểm cần lưu ý / chưa chắc chắn cần kiểm chứng tiếp
 
 1. **`[CẦN KIỂM CHỨNG]` Sai số động học do độ phân giải góc khớp và khe hở khớp cầu (Backlash):** Mô phỏng Monte Carlo ở mục 6.5 đã giải quyết định lượng bài toán dung sai kích thước tĩnh, nhưng chưa cộng độ rơ dọc trục của khớp cầu (ball-joint clearance) và bước lượng tử hóa PWM của servo/stepper. Cần cộng thêm thành phần này trong mô phỏng điều khiển ở bước tiếp theo.
-2. **Giới hạn trần vùng làm việc ($z > -265\text{ mm}$):** Như thể hiện trên Hình 2b (`mat-cat-vung-lam-viec.png`), nếu đẩy cao độ bàn di động lên quá cao ($z > -250\text{ mm}$), góc khớp $\theta_i$ sẽ vượt quá $-40^\circ$ (tay quay hướng lên trên quá cao, dễ va chạm khung đế) làm bán kính khả dụng $R_{\max,\text{safe}}(z)$ thu hẹp nhanh chóng từ $245\text{ mm}$ xuống dưới $150\text{ mm}$. Do đó, khi lắp đặt băng tải và bàn gắp, mặt phẳng gắp–thả bắt buộc phải đặt trong dải $z \in [-425, -275]\text{ mm}$.
+2. **Giới hạn trần vùng làm việc ($z > -250\text{ mm}$):** Như thể hiện trên Hình 2b (`mat-cat-vung-lam-viec.png`), nếu đẩy cao độ bàn di động lên quá cao ($z > -250\text{ mm}$), góc khớp $\theta_i$ sẽ vượt quá $-40^\circ$ (tay quay hướng lên trên quá cao, dễ va chạm khung đế) làm bán kính khả dụng $R_{\max,\text{safe}}(z)$ thu hẹp nhanh chóng từ $245\text{ mm}$ xuống dưới $150\text{ mm}$. Do đó, khi lắp đặt băng tải và bàn gắp, mặt phẳng gắp–thả bắt buộc phải đặt trong dải $z \in [-425, -275]\text{ mm}$.
 
 ---
 
 ## 7. Thiết kế điều khiển
 
-*(Để trống theo đúng yêu cầu phân công của nhiệm vụ — Phần quy hoạch quỹ đạo đa thức bậc 5 và thiết kế bộ điều khiển PID / PID + Feed-forward kèm chỉ tiêu thời gian xác lập, độ vọt lố $\le 5\,\%$, và chu kỳ chuyển động $\le 1,5\text{ s}$ sẽ được thực hiện ở bước tiếp theo sau khi chốt mô hình động học này).*
+Đã thực hiện ở lần chạy riêng: `nghien-cuu/mo-phong/runs/2026-11-24-pid-v2-dung-nghi/`
+(quỹ đạo đa thức bậc 5 có pha dừng 0,25 s, PID và PID + feed-forward). Điểm vận hành chốt:
+T = 0,32 s → chuyển động 0,96 s, chu kỳ có kẹp/thả 1,46 s, tổng hệ thống 1,50 s;
+τ = 1,14 N·m (đã gồm trọng lực), ω = 7,25 rad/s. Overshoot thật 0,13 % (PID thuần) và
+0 % (PID + FF); feed-forward là **bắt buộc** vì PID thuần vượt 1 mm.
 
 ---
 
