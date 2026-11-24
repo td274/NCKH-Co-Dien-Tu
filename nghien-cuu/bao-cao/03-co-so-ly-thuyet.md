@@ -92,7 +92,7 @@ Mỗi đoạn chuyển động dùng đa thức bậc 5 chuẩn hóa theo thời
 
 $$s(\tau) = 10\tau^3 - 15\tau^4 + 6\tau^5 \tag{3.8}$$
 
-Đa thức (3.8) thỏa $s(0) = 0$, $s(1) = 1$, $\dot s(0) = \dot s(1) = 0$ (vận tốc bằng 0 tại hai đầu) và $\ddot s(0) = \ddot s(1) = 0$ (gia tốc bằng 0 tại hai đầu). Hai điều kiện sau bảo đảm robot dừng êm ở mỗi điểm mốc. Đỉnh vận tốc và gia tốc của đa thức chuẩn bằng $1{,}875\,\Delta/T$ và $10\sqrt{3}\,\Delta/T^2 \approx 17{,}32\,\Delta/T^2$, với $\Delta$ là quãng đường đoạn.
+Đa thức (3.8) thỏa $s(0) = 0$, $s(1) = 1$, $\dot s(0) = \dot s(1) = 0$ (vận tốc bằng 0 tại hai đầu) và $\ddot s(0) = \ddot s(1) = 0$ (gia tốc bằng 0 tại hai đầu). Hai điều kiện sau bảo đảm robot dừng êm ở mỗi điểm mốc. Đỉnh vận tốc và gia tốc của đa thức chuẩn bằng $1{,}875\,\Delta/T$ và $10/\sqrt{3}\,\Delta/T^2 \approx 5{,}77\,\Delta/T^2$, với $\Delta$ là quãng đường đoạn.
 
 Chu trình gồm ba đoạn `home → pick`, `pick → place`, `place → home`, tổng thời gian chuyển động $3T$. Quỹ đạo được nội suy trong không gian thao tác, sau đó mỗi mẫu được đổi sang góc khớp bằng động học nghịch (3.6) [`run.py`, lớp `JointReferenceInterpolator`]. Tại `pick` và `place` robot dừng một pha $t_{\text{dwell}} = 0{,}25\,\text{s}$ để kẹp và thả vật. Giá trị này là danh định, chọn trong dải $0{,}2$–$0{,}3\,\text{s}$ từ `tai-lieu/tong-quan.md`, mục 7.1; chưa có số đo thực nghiệm.
 
