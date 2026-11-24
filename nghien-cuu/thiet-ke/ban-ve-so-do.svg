@@ -287,9 +287,9 @@
 
   <!-- Nhãn kích thước trên thanh cẳng re = 400,0 ± 0,10 mm -->
   <g transform="translate(1162, 412) rotate(-41.2)">
-    <rect x="-105" y="-15" width="210" height="32" rx="3" fill="#f0f9ff" stroke="#bae6fd"/>
-    <text x="0" y="-1" text-anchor="middle" font-size="10.5" font-weight="bold" fill="#0369a1">re = 400,0 ± 0,10 mm (6 thanh đồng đều)</text>
-    <text x="0" y="12" text-anchor="middle" font-size="9.5" fill="#0c4a6e">(Nhạy #2: 2,52 mm/mm — Lắp bằng đồ gá Jig)</text>
+    <rect x="-112" y="-15" width="224" height="32" rx="3" fill="#f0f9ff" stroke="#bae6fd"/>
+    <text x="0" y="-1" text-anchor="middle" font-size="10.2" font-weight="bold" fill="#0369a1">re = 400,0 ± 0,10 mm (chênh cặp ≤ 0,05)</text>
+    <text x="0" y="12" text-anchor="middle" font-size="9.2" fill="#0c4a6e">(Nhạy #2: 2,52 mm/mm — Đồ gá Jig ±0,05 mm)</text>
   </g>
 
   <!-- Nhánh đối diện (hình chiếu của Nhánh 2 & 3 tại x = -Rb/2 = -99.9 mm -> 980 - 74.9 = 905.1) để hình cân đối -->
@@ -358,8 +358,8 @@
   <text x="534" y="777" font-size="12.5" font-weight="bold" fill="#b91c1c">2. BẢNG DUNG SAI QUAN TRỌNG NHẤT (TỪ KHẢO SÁT ĐỘ NHẠY)</text>
   <text x="534" y="797" font-size="11" fill="#1e293b">• [Ưu tiên #1] Vị trí 3 ổ trục khớp đế (Rb, zA): <tspan font-weight="bold" fill="#b91c1c">±0,05 mm</tspan> (Hệ số khuếch đại 3,40 mm/mm)</text>
   <text x="534" y="815" font-size="11" fill="#1e293b">  → Phải phay CNC tấm đế liền khối trong 1 lần gá, tuyệt đối không khoan lắp tay rời rạc.</text>
-  <text x="534" y="833" font-size="11" fill="#1e293b">• [Ưu tiên #2] Chiều dài 6 thanh cẳng re: <tspan font-weight="bold" fill="#b91c1c">400,00 ± 0,10 mm</tspan>, lệch trong cặp ≤ 0,05 mm</text>
-  <text x="534" y="851" font-size="11" fill="#1e293b">  → Hệ số khuếch đại 2,52 mm/mm (nhạy gấp đôi rf); bắt buộc lắp trên đồ gá (Jig) 2 chốt Ø5g6.</text>
+  <text x="534" y="833" font-size="11" fill="#1e293b">• [Ưu tiên #2] Thanh cẳng re (chi tiết): <tspan font-weight="bold" fill="#b91c1c">400,00 ± 0,10 mm</tspan>, chênh trong cặp ≤ 0,05 mm</text>
+  <text x="534" y="851" font-size="11" fill="#1e293b">  → Hệ số khuếch đại 2,52 mm/mm; định vị bằng đồ gá (Jig) 2 chốt Ø5g6 chính xác ±0,05 mm.</text>
   <text x="534" y="869" font-size="11" fill="#1e293b">• [Ưu tiên #3] Tay quay rf: <tspan font-weight="bold">200,00 ± 0,10 mm</tspan> (1,16 mm/mm) | Bàn di động e: <tspan font-weight="bold">115,00 ± 0,15 mm</tspan></text>
   <text x="534" y="887" font-size="11" font-weight="bold" fill="#15803d">• Ngân sách sai số tổng (cơ khí + đai GT2 + encoder + gốc): RSS = 0,545 mm; Tuyến tính = 0,957 mm ≤ 1,0 mm.</text>
 
