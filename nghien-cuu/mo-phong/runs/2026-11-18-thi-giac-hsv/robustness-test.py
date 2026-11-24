@@ -66,31 +66,113 @@ def degrade_gradient(image, gt=None):
     return np.clip(out, 0, 255).astype(np.uint8)
 
 
-def degrade_shadow(image, gt):
-    """Ve bong toi mo len mot phan vat, do toi 45-65 %."""
-    out = image.astype(np.float32)
+# --- Tham so phep thu bong do (ban tang cuong) ---
+# Ban cu chi lam toi 50-70 % mot ellipse nho dat tren vat, dat mean|diff| ~ 3,5/255
+# (~1,4 %) -> khong chung minh duoc gi. Ban nay: bong do (cast shadow) lon, mo dan,
+# phu 20-40 % dien tich vat, alpha 0,45-0,60, va tu dong tang cuong cho toi khi
+# mean|diff| >= 20/255. Khong dat thi bao loi, khong am tham bo qua.
+SHADOW_ALPHA_RANGE = (0.45, 0.60)
+SHADOW_COVER_RANGE = (0.20, 0.40)   # ty le dien tich vat bi bong che
+SHADOW_MIN_DIFF = 20.0              # mean|diff| toi thieu tren toan anh (0-255)
+
+# Nhat ky ty le che phu thuc te, de bao cao trung thuc.
+SHADOW_COVERAGE_LOG = []
+
+
+def _object_mask(image, gt):
+    """Mask vat dua tren do bao hoa S (nen xam S~0, vat mau S cao).
+
+    Dung S thay vi so sanh voi nen vi S khong doi khi nhan ca anh voi gradient
+    hay khi vat bi bong lam toi (ca hai chi nhan kenh BGR voi cung he so).
+    """
+    hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
+    sat = hsv[:, :, 1]
+    val = hsv[:, :, 2]
+    mask = ((sat > 60) & (val > 25)).astype(np.uint8) * 255
+
     cx, cy = gt['center_px']
-    # Dat bong ngay tren vat, lech nho de bao dam che phan dang ke
-    offset = random.choice([-1, 1]) * random.randint(0, 10)
-    if random.random() < 0.5:
-        ex, ey = cx + offset, cy + random.randint(-8, 8)
-    else:
-        ex, ey = cx + random.randint(-8, 8), cy + offset
-    ax = int(gt['radius'] * random.uniform(1.2, 1.6))
-    ay = int(gt['radius'] * random.uniform(1.1, 1.4))
-    angle = random.randint(0, 180)
+    pad = int(gt['radius'] * 1.8)
+    roi = np.zeros_like(mask)
+    cv2.rectangle(roi, (cx - pad, cy - pad), (cx + pad, cy + pad), 255, -1)
+    mask = cv2.bitwise_and(mask, roi)
+    mask = cv2.morphologyEx(mask, cv2.MORPH_CLOSE,
+                            np.ones((5, 5), np.uint8))
+    return mask
 
-    # Mask trang/den, lam mo nhe de tao bong mo
-    mask = np.zeros(image.shape[:2], dtype=np.uint8)
-    cv2.ellipse(mask, (ex, ey), (ax, ay), angle, 0, 360, 255, -1)
-    mask = cv2.GaussianBlur(mask.astype(np.float32), (11, 11), 0) / 255.0
-    mask = np.clip(mask, 0, 1)
 
-    alpha = random.uniform(0.50, 0.70)
-    factor = 1.0 - alpha * mask
-    factor = factor[..., np.newaxis]
-    out = out * factor
-    return np.clip(out, 0, 255).astype(np.uint8)
+def degrade_shadow(image, gt, require_min=True):
+    """Bong do lon, mo dan: che 20-40 % dien tich vat, alpha 0,45-0,60.
+
+    require_min=True: tu kiem tra mean|diff| >= SHADOW_MIN_DIFF; neu chua dat thi
+    tang alpha va kich thuoc bong qua tung vong; khong dat sau 12 vong thi raise.
+    require_min=False (dung trong 'combined'): van giu rang buoc che phu va
+    alpha, nhung khong doi hoi mean|diff| >= 20 so voi anh trung gian —
+    do manh tong cua dieu kien combined do gradient quyet dinh.
+    """
+    obj = _object_mask(image, gt)
+    obj_area = cv2.countNonZero(obj)
+    if obj_area < 50:
+        raise ValueError(
+            f"Khong xac dinh duoc mask vat ({obj_area} px) -> khong dat duoc "
+            f"rang buoc che phu cua phep thu bong do"
+        )
+
+    h, w = image.shape[:2]
+    cx, cy = gt['center_px']
+    r = float(gt['radius'])
+    base = image.astype(np.float32)
+
+    last_cov, last_diff = None, None
+    n_rounds = 12 if require_min else 1
+    for escalation in range(n_rounds):
+        alpha = min(0.85, random.uniform(*SHADOW_ALPHA_RANGE) + 0.06 * escalation)
+        scale = min(3.4, 2.2 + 0.12 * escalation)
+        rx = int(r * scale * random.uniform(0.95, 1.15))
+        ry = int(r * scale * random.uniform(0.85, 1.05))
+
+        # Tim vi tri dat bong sao cho che dung 20-40 % dien tich vat.
+        # Bong lon hon vat nhieu nen phai day tam bong ra xa (toi ~1,15 lan
+        # ban kinh ellipse) moi chi phu mot phan vat; phan con lai roi tren nen.
+        placed = False
+        for _ in range(400):
+            ang = random.uniform(0, 2 * math.pi)
+            dist = random.uniform(0.8 * r, 1.15 * rx)
+            ex = int(cx + dist * math.cos(ang))
+            ey = int(cy + dist * math.sin(ang))
+            # Giu phan lon ellipse trong khung hinh (tranh bong bi cat cut
+            # lam giam gia tri do manh mot cach gia tao)
+            ex = min(max(ex, int(0.4 * rx)), w - int(0.4 * rx))
+            ey = min(max(ey, int(0.4 * ry)), h - int(0.4 * ry))
+            angle = random.randint(0, 180)
+            m = np.zeros((h, w), dtype=np.uint8)
+            cv2.ellipse(m, (ex, ey), (rx, ry), angle, 0, 360, 255, -1)
+            cov = cv2.countNonZero(cv2.bitwise_and(m, obj)) / obj_area
+            if SHADOW_COVER_RANGE[0] <= cov <= SHADOW_COVER_RANGE[1]:
+                placed = True
+                break
+        if not placed:
+            continue
+
+        # Bong mo dan: blur manh theo kich thuoc bong
+        ksize = int(max(rx, ry) * 0.45) | 1
+        sigma = max(rx, ry) * 0.28
+        soft = cv2.GaussianBlur(m.astype(np.float32) / 255.0,
+                                (ksize, ksize), sigma)
+        soft = np.clip(soft, 0.0, 1.0)
+        factor = (1.0 - alpha * soft)[..., np.newaxis]
+        out = np.clip(base * factor, 0, 255).astype(np.uint8)
+
+        diff = float(np.mean(np.abs(out.astype(np.float32) - base)))
+        last_cov, last_diff = cov, diff
+        if not require_min or diff >= SHADOW_MIN_DIFF:
+            SHADOW_COVERAGE_LOG.append(cov)
+            return out
+
+    raise ValueError(
+        f"Phep thu bong do khong du manh: mean|diff|={last_diff} < "
+        f"{SHADOW_MIN_DIFF} (che phu={last_cov}). Tang cuong them hoac sua "
+        f"gia thiet, khong duoc bo qua."
+    )
 
 
 def degrade_jpeg_noise(image, gt=None):
@@ -124,7 +206,7 @@ def degrade_perspective(image, gt=None):
 def degrade_combined(image, gt):
     """Ket hop gradient + shadow + jpeg_noise + perspective — dieu kien thuc te nhat."""
     img = degrade_gradient(image, gt)
-    img = degrade_shadow(img, gt)
+    img = degrade_shadow(img, gt, require_min=False)
     img = degrade_jpeg_noise(img, gt)
     img = degrade_perspective(img, gt)
     return img
@@ -242,6 +324,27 @@ CONDITIONS = {
     'shape_imperfect': ('Hinh dang khong ly tuong', None, 'shape'),
 }
 
+# Muc suy giam toi thieu bat buoc (mean|diff| tren toan anh, thang 0-255).
+# Chi dat nguong cho cac phep co the dat mot cach trung thuc: bong do va ket hop
+# deu phai >= 20. Cac phep hinh hoc (phoi canh) chi dich duong bien nen
+# mean|diff| khong the lon — van giu nguong toi thieu 1.0 de bat loi "khong tac dung".
+MIN_DIFF = {
+    'shadow': SHADOW_MIN_DIFF,
+    'combined': SHADOW_MIN_DIFF,
+}
+DEFAULT_MIN_DIFF = 1.0
+
+
+def wilson_ci(k, n, z=1.96):
+    """Khoang tin cay Wilson 95 % cho mot ty le k/n."""
+    if n <= 0:
+        return (0.0, 0.0)
+    p = k / n
+    denom = 1.0 + z * z / n
+    center = (p + z * z / (2.0 * n)) / denom
+    half = z * math.sqrt(p * (1.0 - p) / n + z * z / (4.0 * n * n)) / denom
+    return (max(0.0, center - half), min(1.0, center + half))
+
 
 def run_condition(name, n_images, seed_offset):
     per_image = []
@@ -251,6 +354,8 @@ def run_condition(name, n_images, seed_offset):
     np.random.seed(SEED_BASE + seed_offset)
 
     label, degrador, special = CONDITIONS[name]
+    SHADOW_COVERAGE_LOG.clear()
+    min_diff = MIN_DIFF.get(name, DEFAULT_MIN_DIFF)
 
     # Tao danh sach (mau, hinh) can bang
     pairs = []
@@ -289,17 +394,18 @@ def run_condition(name, n_images, seed_offset):
         # Voi mot so phep ngau nhien (perspective), co the gap mau bien gioi
         # nen thu lai toi da 5 lan de dam bao suy giam du manh.
         attempts = 0
-        while name not in ('baseline', 'occlusion', 'shape_imperfect') and diff < 1.0 and attempts < 5:
+        while (name not in ('baseline', 'occlusion', 'shape_imperfect', 'shadow')
+               and diff < DEFAULT_MIN_DIFF and attempts < 5):
             img = degrador(clean, clean_gts[0])
             gts = clean_gts
             diff = _diff(img, clean)
             attempts += 1
 
         diffs.append(diff)
-        if name != 'baseline' and diff < 1.0:
+        if name != 'baseline' and diff < min_diff:
             raise ValueError(
-                f"Degradation '{name}' khong co tac dung cho "
-                f"{color}-{shape}: mean|diff|={diff:.2f} < 1.0"
+                f"Degradation '{name}' khong du manh cho "
+                f"{color}-{shape}: mean|diff|={diff:.2f} < {min_diff:.1f}"
             )
 
         dets, _ = detect_objects(img)
@@ -311,6 +417,7 @@ def run_condition(name, n_images, seed_offset):
             'detections': dets,
             'ground_truths': gts,
             'condition': label,
+            'errors': res['errors'],
         })
 
     metrics = aggregate_metrics(per_image)
@@ -318,25 +425,68 @@ def run_condition(name, n_images, seed_offset):
     metrics['label'] = label
     metrics['mean_abs_diff'] = round(float(np.mean(diffs)), 2)
     metrics['max_abs_diff'] = round(float(np.max(diffs)), 2)
+
+    # Khoang tin cay Wilson 95 % cho tung ty le (n=36 thi CI rat rong)
+    cm_c = np.asarray(metrics['cm_color'])
+    cm_s = np.asarray(metrics['cm_shape'])
+    n_gt = metrics['total_gt_objects']
+    n_pred = metrics['total_predictions']
+    n_valid = metrics['total_valid_matches']
+    rates = {
+        'accuracy_color': (int(np.trace(cm_c)), int(cm_c.sum())),
+        'accuracy_shape': (int(np.trace(cm_s)), int(cm_s.sum())),
+        'accuracy_overall': (metrics['correct_both'], n_gt),
+        'recall': (n_valid, n_gt),
+        'precision': (n_valid, n_pred),
+    }
+    metrics['ci95'] = {
+        k: [round(v, 4) for v in wilson_ci(kk, nn)]
+        for k, (kk, nn) in rates.items()
+    }
+
+    # Ty le che phu bong thuc te (chi co y nghia voi shadow / combined)
+    if SHADOW_COVERAGE_LOG:
+        metrics['shadow_cover_pct'] = round(
+            100.0 * float(np.mean(SHADOW_COVERAGE_LOG)), 1)
+    else:
+        metrics['shadow_cover_pct'] = ''
     return metrics, samples
 
 
 def plot_bar(results):
     names = [r['label'] for r in results]
-    acc_color = [r['accuracy_color'] * 100 for r in results]
-    acc_shape = [r['accuracy_shape'] * 100 for r in results]
-    acc_overall = [r['accuracy_overall'] * 100 for r in results]
-    recall = [r['recall_overall'] * 100 for r in results]
+    acc_color = np.array([r['accuracy_color'] * 100 for r in results])
+    acc_shape = np.array([r['accuracy_shape'] * 100 for r in results])
+    acc_overall = np.array([r['accuracy_overall'] * 100 for r in results])
+    recall = np.array([r['recall_overall'] * 100 for r in results])
+
+    def _err(values, key):
+        lo = np.array([r['ci95'][key][0] for r in results]) * 100
+        hi = np.array([r['ci95'][key][1] for r in results]) * 100
+        return np.vstack([values - lo, hi - values])
+
+    errs = [_err(acc_color, 'accuracy_color'),
+            _err(acc_shape, 'accuracy_shape'),
+            _err(acc_overall, 'accuracy_overall'),
+            _err(recall, 'recall')]
 
     x = np.arange(len(names))
     width = 0.2
     fig, ax = plt.subplots(figsize=(12, 5), dpi=300)
-    ax.bar(x - 1.5 * width, acc_color, width, label='Mau')
-    ax.bar(x - 0.5 * width, acc_shape, width, label='Hinh')
-    ax.bar(x + 0.5 * width, acc_overall, width, label='Overall')
-    ax.bar(x + 1.5 * width, recall, width, label='Recall')
+    ebar = dict(ecolor='#333333', elinewidth=0.9, capsize=3)
+    ax.bar(x - 1.5 * width, acc_color, width, yerr=errs[0],
+           error_kw=ebar, label='Mau')
+    ax.bar(x - 0.5 * width, acc_shape, width, yerr=errs[1],
+           error_kw=ebar, label='Hinh')
+    ax.bar(x + 0.5 * width, acc_overall, width, yerr=errs[2],
+           error_kw=ebar, label='Overall')
+    ax.bar(x + 1.5 * width, recall, width, yerr=errs[3],
+           error_kw=ebar, label='Recall')
     ax.set_ylabel('Accuracy / Recall (%)', fontsize=12)
-    ax.set_title('Do ben vung pipeline voi cac dieu kien thuc te', fontsize=13)
+    ax.set_title('Do ben vung pipeline voi cac dieu kien thuc te\n'
+                 '(bong do tang cuong; thanh sai so = CI Wilson 95 %, '
+                 'n = 36 anh/dieu kien, che khuat 72 object)',
+                 fontsize=12)
     ax.set_xticks(x)
     ax.set_xticklabels(names, rotation=15, ha='right', fontsize=10)
     ax.set_ylim(0, 110)
@@ -350,15 +500,19 @@ def plot_bar(results):
 def plot_examples(samples_by_condition):
     conds = list(samples_by_condition.keys())
     n = len(conds)
-    fig, axes = plt.subplots(2, n, figsize=(3 * n, 6), dpi=300)
+    fig, axes = plt.subplots(2, n, figsize=(2.35 * n, 4.8), dpi=300)
     if n == 1:
         axes = np.array([[axes[0]], [axes[1]]])
     axes = axes.flatten()
     for k, cond in enumerate(conds):
-        sample = random.choice(samples_by_condition[cond])
+        # Uu tien chon ca sai de hinh vi du phan anh dung diem gay
+        bad = [s for s in samples_by_condition[cond] if s.get('errors')]
+        sample = random.choice(bad) if bad else random.choice(
+            samples_by_condition[cond])
+        tag = 'ca sai' if bad else 'ca dung'
         annotated = draw_detections(sample['image'], sample['detections'])
         axes[k].imshow(cv2.cvtColor(annotated, cv2.COLOR_BGR2RGB))
-        axes[k].set_title(f"{cond}\nDu doan", fontsize=9)
+        axes[k].set_title(f"{cond}\nDu doan ({tag})", fontsize=10)
         axes[k].axis('off')
 
         gt_img = sample['image'].copy()
@@ -369,7 +523,7 @@ def plot_examples(samples_by_condition):
                         (cx + 8, cy), cv2.FONT_HERSHEY_SIMPLEX, 0.4,
                         (0, 255, 0), 1)
         axes[k + n].imshow(cv2.cvtColor(gt_img, cv2.COLOR_BGR2RGB))
-        axes[k + n].set_title('Ground truth', fontsize=9)
+        axes[k + n].set_title('Ground truth', fontsize=10)
         axes[k + n].axis('off')
     for ax in axes[2 * n:]:
         ax.axis('off')
@@ -386,8 +540,15 @@ def save_csv(results):
         writer.writerow(['condition', 'label', 'n_gt', 'n_matched',
                          'correct_both', 'accuracy_color', 'accuracy_shape',
                          'accuracy_overall', 'recall', 'precision',
-                         'mean_abs_diff', 'max_abs_diff'])
+                         'mean_abs_diff', 'max_abs_diff',
+                         'accuracy_color_ci95_lo', 'accuracy_color_ci95_hi',
+                         'accuracy_shape_ci95_lo', 'accuracy_shape_ci95_hi',
+                         'accuracy_overall_ci95_lo', 'accuracy_overall_ci95_hi',
+                         'recall_ci95_lo', 'recall_ci95_hi',
+                         'precision_ci95_lo', 'precision_ci95_hi',
+                         'shadow_cover_pct'])
         for r in results:
+            ci = r['ci95']
             writer.writerow([
                 r['condition'], r['label'], r['total_gt_objects'],
                 r['total_valid_matches'], r['correct_both'],
@@ -398,6 +559,17 @@ def save_csv(results):
                 f"{r['precision_overall']*100:.2f}",
                 f"{r['mean_abs_diff']:.2f}",
                 f"{r['max_abs_diff']:.2f}",
+                f"{ci['accuracy_color'][0]*100:.2f}",
+                f"{ci['accuracy_color'][1]*100:.2f}",
+                f"{ci['accuracy_shape'][0]*100:.2f}",
+                f"{ci['accuracy_shape'][1]*100:.2f}",
+                f"{ci['accuracy_overall'][0]*100:.2f}",
+                f"{ci['accuracy_overall'][1]*100:.2f}",
+                f"{ci['recall'][0]*100:.2f}",
+                f"{ci['recall'][1]*100:.2f}",
+                f"{ci['precision'][0]*100:.2f}",
+                f"{ci['precision'][1]*100:.2f}",
+                r['shadow_cover_pct'],
             ])
 
 
@@ -477,16 +649,22 @@ def main():
                 f.write(line + '\n')
 
     print("\n===== BANG TOM TAT ROBUSTNESS =====")
-    print(f"{'Dieu kien':<26} {'Overall':>8} {'Mau':>8} {'Hinh':>8} "
-          f"{'Recall':>8} {'mean|diff|':>10} {'max|diff|':>10}")
+    print(f"{'Dieu kien':<24} {'Overall':>8} {'CI95 overall':>15} "
+          f"{'Mau':>7} {'Hinh':>7} {'Recall':>8} {'Prec':>7} "
+          f"{'mean|diff|':>10} {'cover':>7}")
     for r in results:
-        print(f"{r['label']:<26} "
+        ci = r['ci95']['accuracy_overall']
+        cover = (f"{r['shadow_cover_pct']:.1f}%"
+                 if r['shadow_cover_pct'] != '' else '-')
+        print(f"{r['label']:<24} "
               f"{r['accuracy_overall']*100:>7.1f}% "
-              f"{r['accuracy_color']*100:>7.1f}% "
-              f"{r['accuracy_shape']*100:>7.1f}% "
+              f"{ci[0]*100:>6.1f}-{ci[1]*100:<6.1f} "
+              f"{r['accuracy_color']*100:>6.1f}% "
+              f"{r['accuracy_shape']*100:>6.1f}% "
               f"{r['recall_overall']*100:>7.1f}% "
+              f"{r['precision_overall']*100:>6.1f}% "
               f"{r['mean_abs_diff']:>10.1f} "
-              f"{r['max_abs_diff']:>10.1f}")
+              f"{cover:>7}")
     print("===================================")
     print("Da luu:")
     print("  - output/robustness.csv")

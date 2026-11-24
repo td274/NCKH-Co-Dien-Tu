@@ -20,13 +20,14 @@
 - **Hiệu chuẩn px → mm:** Homography giả định vùng làm việc 300 × 200 mm từ 4 điểm mốc. **Cần hiệu chuẩn thật trên bàn thí nghiệm.**
 - **Môi trường:** `D:\Python312\python.exe`, OpenCV 5.1.0, NumPy 2.5.5, Matplotlib 3.11.2.
 
-## 2. Chia tập dữ liệu (3 tập tách biệt)
+## 2. Chia tập dữ liệu (4 tập tách biệt)
 
 | Tập | Seed | Số ảnh | Số object | Điều kiện | Mục đích |
 | --- | --- | --- | --- | --- | --- |
 | **Train / Tune** | 42 | 273 | 285 | Sáng 0,7–1,3; xoay ≤ 30°; nhiễu ≤ 15; mờ 0–1 | Huấn luyện/tinh chỉnh ngưỡng HSV và tham số hình học |
 | **Validation** | 555 | 60 | 75 | Sáng 0,7–1,3; xoay ≤ 30°; nhiễu ≤ 15; mờ 0–1 (trung bình-khó) | Chọn tham số, **không báo cáo** |
-| **Test (held-out)** | **777** | **60** | **75** | **Sáng 0,55–1,45; xoay ≤ 40°; nhiễu ≤ 25; mờ 0–2** | **Báo cáo cuối cùng** |
+| **Test cũ** | 777 | 60 | 75 | Sáng 0,55–1,45; xoay ≤ 40°; nhiễu ≤ 25; mờ 0–2 | Đã dùng để **chẩn đoán lỗi** → không còn là test không chệch |
+| **Test cuối** | **999** | **60** | **75** | **Sáng 0,55–1,45; xoay ≤ 40°; nhiễu ≤ 25; mờ 0–2** | **Báo cáo cuối cùng (chưa từng dùng để tinh chỉnh)** |
 
 ## 3. Phát hiện overfit và cách xử lý
 
@@ -37,83 +38,96 @@
 2. **Làm mượt xấp xỉ:** giảm `epsilon` của `approxPolyDP` xuống `0,025 × chu vi` để giảm đỉnh giả do nhiễu.
 3. **Ngưỡng HSV xanh:** giữ ngưỡng `[100, 140]` đã hiệu chỉnh trên tập train.
 
-Các tham số trên được chọn dựa trên tập **validation (seed 555)**, sau đó áp dụng một lần duy nhất lên tập **test (seed 777)**.
+Các tham số trên được chọn dựa trên tập **validation (seed 555)**. Tập **777** sau đó đã được dùng để *chẩn đoán* lỗi (chính nhờ nó mới phát hiện 12/25 hình vuông bị nhầm thành tam giác và thêm đặc trưng góc), rồi chạy lại cho tới 100 %. Vì vậy **777 đã bị "nhìn" một lần và không còn là ước lượng không chệch** — không được trích 100 % trên 777 như bằng chứng tổng quát hóa. Để có con số không chệch, sau khi đóng băng `src/detect.py` và `src/evaluate.py`, một tập test mới **seed 999** (chưa từng dùng để tinh chỉnh) được chạy **đúng một lần**; đó là con số báo cáo.
 
-## 4. Kết quả định lượng cuối cùng
+## 4. Kết quả định lượng cuối cùng — Test cuối (seed 999, chưa từng dùng để tinh chỉnh)
 
-**Con số dùng để báo cáo trong luận văn là kết quả trên tập test held-out (seed 777).**
+**Con số dùng để báo cáo là kết quả trên tập test cuối (seed 999), chạy một lần sau khi đóng băng pipeline.** Kết quả seed 777 được giữ lại chỉ để đối chiếu lịch sử.
 
-| Chỉ tiêu | Train (seed 42) | Validation (seed 555) | **Test (seed 777)** |
-| --- | --- | --- | --- |
-| Số ảnh | 273 | 60 | **60** |
-| Số object GT | 285 | 75 | **75** |
-| Object khớp được | 285 | 75 | **75** |
-| Accuracy màu | 100 % | 100 % | **100 %** |
-| Accuracy hình | 100 % | 100 % | **100 %** |
-| **Accuracy tổng** | **100 %** | **100 %** | **100 %** |
-| Recall tổng | 100 % | 100 % | **100 %** |
-| Precision tổng | 100 % | 100 % | **100 %** |
+| Chỉ tiêu | Train (seed 42) | Validation (seed 555) | Test cũ (seed 777, đã dùng chẩn đoán) | **Test cuối (seed 999)** |
+| --- | --- | --- | --- | --- |
+| Số ảnh | 273 | 60 | 60 | **60** |
+| Số object GT | 285 | 75 | 75 | **75** |
+| Object khớp được | 285 | 75 | 75 | **75** |
+| Accuracy màu | 100 % | 100 % | 100 % | **100 %** (CI95 95,1–100) |
+| Accuracy hình | 100 % | 100 % | 100 % | **97,33 %** (CI95 90,8–99,3) |
+| **Accuracy tổng** | **100 %** | **100 %** | **100 %** | **97,33 %** (CI95 90,8–99,3) |
+| Recall tổng | 100 % | 100 % | 100 % | **100 %** (CI95 95,1–100) |
+| Precision tổng | 100 % | 100 % | 100 % | **100 %** (CI95 95,1–100) |
 
-> **Kết luận:** pipeline đạt yêu cầu ≥ 90 % trên tập test độc lập, với điều kiện khó hơn tập tinh chỉnh.
+> **Kết luận:** trên tập test không chệch, pipeline đạt **97,33 % accuracy tổng** (73/75 object đúng cả màu và hình), vẫn vượt mục tiêu ≥ 90 %, nhưng **không phải 100 %**. Khoảng tin cậy Wilson 95 % của 73/75 là 90,8–99,3 %, tức với chỉ 75 object thì sai số lấy mẫu còn lớn; không nên tuyên bố "chính xác tuyệt đối".
 
-### Ma trận nhầm lẫn trên tập test
+### Ma trận nhầm lẫn trên tập test cuối (seed 999)
 
-Màu sắc:
+Màu sắc (hàng = ground truth, cột = dự đoán): toàn bộ nằm trên đường chéo.
 
 | GT \\ Pred | đỏ | vàng | xanh |
 | --- | --- | --- | --- |
-| đỏ | 26 | 0 | 0 |
-| vàng | 0 | 26 | 0 |
-| xanh | 0 | 0 | 23 |
+| đỏ | 29 | 0 | 0 |
+| vàng | 0 | 25 | 0 |
+| xanh | 0 | 0 | 21 |
 
-Hình dạng:
+Hình dạng — 2 ca sai đều là **tròn → vuông**:
 
 | GT \\ Pred | tròn | vuông | tam giác |
 | --- | --- | --- | --- |
-| tròn | 25 | 0 | 0 |
+| tròn | 26 | 2 | 0 |
 | vuông | 0 | 25 | 0 |
-| tam giác | 0 | 0 | 25 |
+| tam giác | 0 | 0 | 22 |
 
-Hình vẽ chi tiết:
+Hình vẽ chi tiết (sinh bởi `heldout-test.py --seed 999 --out-dir ket-qua/test-999`):
 
-![Ma trận nhầm lẫn màu - test](figures/confusion_color_test.png)
+![Ma trận nhầm lẫn màu - test seed 999](ket-qua/test-999/figures/confusion_color_test_999.png)
 
-![Ma trận nhầm lẫn hình - test](figures/confusion_shape_test.png)
+![Ma trận nhầm lẫn hình - test seed 999](ket-qua/test-999/figures/confusion_shape_test_999.png)
 
 ![Ảnh mẫu có annotation](figures/sample_detections.png)
 
 ## 5. Ca sai còn lại
 
-Trên tập test held-out (seed 777): **không còn ca sai nào**.
+Trên tập test cuối (seed 999): **2/75 object sai, đều là đỏ-tròn bị nhận thành đỏ-vuông** (khoảng cách tâm 0,0 px và 1,4 px, nên chắc chắn là cùng một vật chứ không phải ghép cặp nhầm). Màu luôn đúng; lỗi nằm hoàn toàn ở phân loại hình dạng — cùng họ với lỗi gốc trên tập 777 (vuông → tam giác, do contour bị méo bởi mờ/nhiễu), chỉ khác hướng nhầm. Danh sách đầy đủ: `ket-qua/test-999/error_cases.csv`.
 
-Trên tập train (seed 42): **không còn ca sai nào**.
+Trên tập test cũ (seed 777): không còn ca sai, nhưng tập này đã dùng để chẩn đoán nên **không dùng làm bằng chứng**.
+
+Trên tập train (seed 42): không còn ca sai.
+
+**Không chỉnh tham số sau khi thấy kết quả 999.** Nếu muốn cải thiện 2 ca tròn→vuông, phải đề xuất như một thay đổi mô hình mới và đánh giá lại trên một seed khác nữa (xem đề xuất ở mục 8).
 
 ## 5.5. Độ bền vững với điều kiện thực tế
 
-Để tránh đánh giá quá lạc quan từ ảnh tổng hợp sạch, chạy `robustness-test.py` với **cùng pipeline đã cố định** (không chỉnh tham số sau khi thấy kết quả). Mỗi điều kiện 36 ảnh (72 object đối với che khuất). Sau khi kiểm tra bằng `check-degradations.py`, phát hiện lỗi ở phép thử bóng đổ (đang làm sáng thay vì làm tối) nên đã sửa lại và chạy lại toàn bộ — số liệu dưới đây là bản đã sửa.
+Chạy `robustness-test.py` với **cùng pipeline đã cố định** (không chỉnh tham số sau khi thấy kết quả). Mỗi điều kiện 36 ảnh (riêng che khuất: 36 ảnh × 2 vật = 72 object).
 
-| Điều kiện | Overall | Màu | Hình | Recall | mean\|diff\| |
-| --- | --- | --- | --- | --- | --- |
-| Không suy giảm | 100,0 % | 100,0 % | 100,0 % | 100,0 % | 0,0 |
-| Ánh sáng không đều (gradient 40–60 %) | 100,0 % | 100,0 % | 100,0 % | 100,0 % | 57,8 |
-| Bóng đổ (che 35–65 % vùng vật) | 88,9 % | 100,0 % | 97,0 % | 91,7 % | 3,5 |
-| Nhiễu cảm biến + JPEG (σ=15–25, Q=50–70) | 100,0 % | 100,0 % | 100,0 % | 100,0 % | 9,4 |
-| Phối cảnh nghiêng (dịch góc 8–12 %) | 100,0 % | 100,0 % | 100,0 % | 100,0 % | 6,4 |
-| Hình dạng không lý tưởng (jitter + blur) | 91,7 % | 100,0 % | 91,7 % | 100,0 % | 10,8 |
-| Che khuất một phần (15–25 %) | 77,8 % | 100,0 % | 77,8 % | 100,0 % | 16,8 |
-| **Kết hợp (gradient + shadow + JPEG + perspective)** | **61,1 %** | **100,0 %** | **73,3 %** | **83,3 %** | **63,9** |
+**Cảnh báo về bảng cũ:** bảng công bố trước đây dùng phép thử bóng đổ quá nhẹ — chỉ làm tối một ellipse nhỏ, `mean|diff| = 3,48/255` (≈ 1,4 % ảnh), gần như không chứng minh được gì; bảng đó cũng **bỏ mất cột precision của bóng đổ (78,57 %)**, che đi một chỉ tiêu bất lợi. **Toàn bộ số liệu dưới đây là bản đã tăng cường và có đủ precision.** Phép thử bóng mới:
+
+- alpha làm tối **0,45–0,60** (tự tăng tới 0,85 nếu chưa đạt ngưỡng tự kiểm tra), bóng là **bóng đổ lớn** chồng lên **trung bình 29,4 % diện tích vật** (khoảng 20,6–39,4 %), thêm **GaussianBlur lớn** (σ ≈ 0,28 × bán kính bóng) cho vùng nửa tối;
+- script **tự kiểm tra `mean|diff| ≥ 20/255`** cho từng ảnh và **raise lỗi** nếu không đạt (không âm thầm bỏ qua) — thực tế đạt trung bình 23,0.
+
+Với n = 36 ảnh/điều kiện, một tỷ lệ 100 % vẫn chỉ có CI95 là 90,4–100 %, còn 77,8 % có CI95 66,9–85,8 (rộng gần 19 điểm phần trăm). Vì vậy mọi tỷ lệ dưới đây đều kèm khoảng tin cậy Wilson 95 %.
+
+| Điều kiện | n GT | Overall (CI95) | Màu | Hình (CI95) | Recall (CI95) | Precision (CI95) | mean\|diff\| | Bóng phủ |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Không suy giảm | 36 | 100,0 % (90,4–100) | 100,0 % | 100,0 % (90,4–100) | 100,0 % (90,4–100) | 100,0 % (90,4–100) | 0,0 | — |
+| Ánh sáng không đều (gradient 40–60 %) | 36 | 100,0 % (90,4–100) | 100,0 % | 100,0 % (90,4–100) | 100,0 % (90,4–100) | 100,0 % (90,4–100) | 57,8 | — |
+| **Bóng đổ (bản tăng cường)** | 36 | **94,4 % (81,9–98,5)** | 100,0 % | **94,4 % (81,9–98,5)** | 100,0 % (90,4–100) | 100,0 % (90,4–100) | **23,0** | **29,4 %** |
+| Nhiễu cảm biến + JPEG (σ=15–25, Q=50–70) | 36 | 100,0 % (90,4–100) | 100,0 % | 100,0 % (90,4–100) | 100,0 % (90,4–100) | 100,0 % (90,4–100) | 9,4 | — |
+| Phối cảnh nghiêng (dịch góc 8–12 %) | 36 | 100,0 % (90,4–100) | 100,0 % | 100,0 % (90,4–100) | 100,0 % (90,4–100) | 100,0 % (90,4–100) | 6,4 | — |
+| Hình dạng không lý tưởng (jitter + blur) | 36 | 91,7 % (78,2–97,1) | 100,0 % | 91,7 % (78,2–97,1) | 100,0 % (90,4–100) | 100,0 % (90,4–100) | 10,8 | — |
+| Che khuất một phần (15–25 %) | 72 | 77,8 % (66,9–85,8) | 100,0 % | 77,8 % (66,9–85,8) | 100,0 % (94,9–100) | 97,3 % (90,7–99,3) | 16,8 | — |
+| **Kết hợp (gradient + bóng + JPEG + phối cảnh)** | 36 | **80,6 % (65,0–90,2)** | 100,0 % | **80,6 % (65,0–90,2)** | 100,0 % (90,4–100) | 100,0 % (90,4–100) | **66,9** | **32,1 %** |
+
+Nguồn số liệu: `output/robustness.csv` (có đủ cột CI và `shadow_cover_pct`). Để so sánh: bản bóng nhẹ cũ báo 88,9 % overall / precision 78,57 % (3 false positive), nhưng với `mean|diff|` chỉ 3,48 — **hai bảng không so sánh trực tiếp được**, bảng mới khó hơn nhiều lần. Bản mới 0 false positive; giả thuyết (chưa kiểm chứng) là bóng nhẹ tạo mảng tối có viền tương đối sắc nên bị phát hiện như một vật, còn bóng lớn blur mạnh thành gradient mềm. Vì vậy accuracy bóng đổ *tăng* dù phép thử khó hơn: hai phép thử khác nhau, không phải cùng một điều kiện.
 
 ![Biểu đồ so sánh độ bền vững](figures/robustness-bar.png)
 
-![Ví dụ từng điều kiện](figures/robustness-examples.png)
+![Ví dụ từng điều kiện (ưu tiên hiển thị ca sai)](figures/robustness-examples.png)
 
-**Các ca sai điển hình:**
-- *Bóng đổ:* tam giác xanh/vuông bị bóng che một phần không được phát hiện; tròn bị bóng che mép nhận nhầm thành vuông.
-- *Che khuất:* tròn bị che mép nhận thành vuông/tam giác; tam giác bị che góc nhận thành vuông.
-- *Hình dạng không lý tưởng:* một số tròn bị jitter cạnh nhận nhầm thành vuông.
-- *Kết hợp:* tròn dễ bị nhận nhầm thành vuông hoặc tam giác; một số vật biến mất hoàn toàn do nhiễu + bóng + phối cảnh chồng chéo.
+**Các ca sai điển hình (từ `output/robustness_errors.txt`):**
+- *Bóng đổ (tăng cường):* 2 ca, cả hai là tròn → vuông (đỏ 1, xanh 1); không có false positive. Bóng đổ lớn không làm mất vật (recall 100 %) mà làm méo contour.
+- *Che khuất:* 16 mismatch + 2 FP (`robustness_errors.txt` chỉ in 10 ca đầu/điều kiện); chủ yếu tròn bị che mép → vuông/tam giác và tam giác bị che góc → vuông.
+- *Hình dạng không lý tưởng:* 3 ca, đều là tròn bị jitter → vuông.
+- *Kết hợp:* 7 ca; tròn → vuông là chủ đạo, cộng một số vuông → tam giác.
 
-**Nhận xét:** Pipeline chịu tốt ánh sáng không đều, nhiễu + JPEG và phối cảnh nhẹ riêng lẻ. Các nút thắt thật là **kết hợp nhiều yếu tố (61,1 % overall)**, **che khuất (77,8 %)** và **bóng đổ (88,9 %)**. Màu sắc vẫn giữ 100 % trong mọi điều kiện riêng lẻ, chứng tỏ ngưỡng HSV đủ rộng; hình dạng là yếu tố dễ gãy nhất.
+**Nhận xét (kèm số):** Pipeline chịu tốt ánh sáng không đều, nhiễu + JPEG và phối cảnh nhẹ (đều 100 %, CI95 90,4–100). Nút thắt thật là **che khuất (77,8 % overall — thấp nhất)**, **kết hợp nhiều yếu tố (80,6 %)** và **hình dạng không lý tưởng (91,7 %)**; **bóng đổ tăng cường mạnh vẫn giữ 94,4 %**. Màu sắc giữ 100 % ở mọi điều kiện riêng lẻ (CI95 90,4–100), chứng tỏ ngưỡng HSV đủ rộng; **hình dạng là yếu tố dễ gãy nhất, và kiểu sai phổ biến nhất là "tròn → vuông"** (xuất hiện ở cả test 999, bóng đổ, che khuất, hình dạng không lý tưởng, kết hợp).
 
 **Khuyến nghị cải tiến (chưa thực hiện):**
 1. **Tách vật che khuất / bóng:** dùng watershed/GrabCut hoặc thiết kế hộp chụp không cho vật chồng nhau; áp dụng CLAHE trên kênh V trước khi phân ngưỡng HSV để giảm tác động cục bộ của bóng.
@@ -122,14 +136,19 @@ Trên tập train (seed 42): **không còn ca sai nào**.
 
 ## 6. Đo trễ xử lý
 
+Nguồn: `output/metrics.json` → `timing_ms` (đo trên 273 ảnh tập train, cùng pipeline). File `output/timing_ms.csv` là dữ liệu thô từng ảnh.
+
 | Chỉ tiêu | Giá trị (tập train) |
 | --- | --- |
-| Trung bình / ảnh | **3,41 ms** |
-| P95 | **4,27 ms** |
-| P99 | 5,20 ms |
+| Trung bình / ảnh | **3,41 ms** (std 0,47) |
+| Trung vị (P50) | 3,31 ms |
+| **P95** | **4,12 ms** |
+| **P99** | **4,73 ms** |
 | Số mẫu | 273 |
 
 > Trễ xử lý thuật toán rất nhỏ so với chu kỳ phân loại 1,8 s/vật.
+>
+> *Đính chính:* bản `KETQUA.md` trước ghi P95 = 4,27 ms và P99 = 5,20 ms, không khớp `output/metrics.json` (4,12 / 4,73). Con số trong bảng này lấy theo `metrics.json` — file được sinh trực tiếp bởi `run.py` cùng lúc với dữ liệu thô `timing_ms.csv`; bản cũ là số chép tay sai.
 
 ## 7. Kiểm tra webcam
 
@@ -146,17 +165,21 @@ Trên tập train (seed 42): **không còn ca sai nào**.
 1. **Dữ liệu tổng hợp chưa đại diện thực tế:** cần chụp ảnh thật từ webcam với vật mẫu 3 màu × 3 hình, ánh sáng hộp chụp cố định.
 2. **Hiệu chuẩn px → mm là giả định:** cần 4 điểm mốc thật trên bàn làm việc để tính homography chính xác.
 3. **Nền phức tạp:** webcam sample có nhiều false positive do nền; nên thêm ROI cố định hoặc lọc màu nền trước khi phát hiện.
+4. **Lỗi hệ thống "tròn → vuông":** xuất hiện ở test 999 (2/75), bóng đổ (2/36), che khuất và hình dạng không lý tưởng. Đề xuất (chưa thực hiện): thêm Hu moments hoặc template matching, hoặc dùng tỷ lệ diện tích/chu vi ổn định hơn; nếu làm thì phải đánh giá lại trên **seed mới** (1000+) chứ không dùng lại 999.
 
 ## 9. Tệp đầu ra
 
 - `config.json`: tham số và giả thiết.
-- `output/metrics.json`: các chỉ số tổng hợp 3 tập.
+- `heldout-test.py`: `--seed` (mặc định 777) và `--out-dir`; báo cáo dùng `--seed 999 --out-dir ket-qua/test-999`.
+- `output/metrics.json`: các chỉ số tổng hợp 3 tập + `timing_ms` (nguồn chuẩn cho mục 6).
 - `ket-qua/validation/metrics-validation.json`: chỉ số validation.
-- `ket-qua/heldout/metrics-heldout.json`: chỉ số test held-out.
+- `ket-qua/heldout/metrics-heldout.json`: chỉ số test cũ (seed 777 — đã dùng để chẩn đoán).
+- `ket-qua/test-999/metrics-heldout.json`, `error_cases.csv`: **test cuối (seed 999)** và 2 ca sai.
+- `ket-qua/test-999/figures/confusion_color_test_999.png`, `..._shape_test_999.png`: ma trận nhầm lẫn test cuối (300 dpi).
 - `output/confusion_color.csv`, `output/confusion_shape.csv`: ma trận nhầm lẫn train.
-- `output/error_cases.csv`: danh sách ca sai (hiện rỗng).
-- `output/timing_ms.csv`: thờ gian xử lý từng ảnh.
+- `output/error_cases.csv`: danh sách ca sai trên tập train (hiện rỗng).
+- `output/timing_ms.csv`: thời gian xử lý từng ảnh.
 - `output/webcam_info.json`: thông tin webcam.
-- `output/robustness.csv`, `output/robustness_errors.txt`: kết quả độ bền vững.
-- `figures/robustness-bar.png`, `figures/robustness-examples.png`: biểu đồ và ví dụ độ bền vững (300 dpi).
+- `output/robustness.csv` (có cột CI Wilson 95 % và `shadow_cover_pct`), `output/robustness_errors.txt`: kết quả độ bền vững bản tăng cường.
+- `figures/robustness-bar.png`, `figures/robustness-examples.png`: biểu đồ (có thanh sai số CI95) và ví dụ từng điều kiện (300 dpi).
 - `figures/*.png`: ma trận nhầm lẫn, ảnh mẫu, ảnh webcam (300 dpi).

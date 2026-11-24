@@ -1,0 +1,3 @@
+type,gt_color,gt_shape,pred_color,pred_shape,distance_px,reason
+MISMATCH,do,tron,do,vuong,0.0,Du doan do-vuong thay vi do-tron
+MISMATCH,do,tron,do,vuong,1.4142135623730951,Du doan do-vuong thay vi do-tron

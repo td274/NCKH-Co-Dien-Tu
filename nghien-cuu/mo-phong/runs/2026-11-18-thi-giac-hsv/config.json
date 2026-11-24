@@ -13,6 +13,8 @@
     "train": {"seed": 42, "images": 273, "objects": 285},
     "validation": {"seed": 555, "images": 60, "objects": 75},
     "test": {"seed": 777, "images": 60, "objects": 75},
+    "test_final": {"seed": 999, "images": 60, "objects": 75,
+                   "note": "Test khong chech: chay mot lan sau khi dong bang detect.py/evaluate.py; 777 da dung de chan doan nen khong con khong chech."},
     "so_mau": 3,
     "so_hinh": 3
   },
@@ -37,6 +39,21 @@
     "tron": "circularity >= 0.82 va solidity >= 0.80",
     "vuong": "(0.68 <= circularity < 0.82) HOAC (4 <= n_sides <= 6, n_right >= 2, extent >= 0.50)",
     "tam_giac": "n_sides == 3 va >=2 goc nhon, HOAC (circularity < 0.68, extent < 0.60, co goc nhon/min < 70)"
+  },
+  "robustness": {
+    "seed_base": 2026,
+    "n_per_condition": 36,
+    "shadow": {
+      "alpha_range": [0.45, 0.60],
+      "alpha_max_escalation": 0.85,
+      "object_coverage_range": [0.20, 0.40],
+      "coverage_mean_pct": 29.4,
+      "blur_sigma_factor": 0.28,
+      "min_mean_abs_diff": 20.0,
+      "note": "Ban tang cuong: ban cu dat mean|diff| 3,48 (~1,4%), khong du chung minh."
+    },
+    "ci_method": "wilson_95",
+    "note": "Cac phep hinh hoc (perspective) chi dich duong bien nen mean|diff| khong the >= 20; nguong 1.0 chi de bat loi 'khong tac dung'."
   },
   "seed": 42
 }

@@ -1,9 +1,9 @@
-condition,label,n_gt,n_matched,correct_both,accuracy_color,accuracy_shape,accuracy_overall,recall,precision,mean_abs_diff,max_abs_diff
-baseline,Khong suy giam,36,36,36,100.00,100.00,100.00,100.00,100.00,0.00,0.00
-gradient_light,Anh sang khong deu,36,36,36,100.00,100.00,100.00,100.00,100.00,57.78,73.43
-shadow,Bong do,36,33,32,100.00,96.97,88.89,91.67,78.57,3.48,6.23
-jpeg_noise,Nhieu + JPEG,36,36,36,100.00,100.00,100.00,100.00,100.00,9.41,14.03
-perspective,Phoi canh nghieng,36,36,36,100.00,100.00,100.00,100.00,100.00,6.43,15.56
-combined,Ket hop cac yeu to,36,30,22,100.00,73.33,61.11,83.33,78.95,63.89,79.39
-occlusion,Che khuat mot phan,72,72,56,100.00,77.78,77.78,100.00,97.30,16.77,30.94
-shape_imperfect,Hinh dang khong ly tuong,36,36,33,100.00,91.67,91.67,100.00,100.00,10.78,17.99
+condition,label,n_gt,n_matched,correct_both,accuracy_color,accuracy_shape,accuracy_overall,recall,precision,mean_abs_diff,max_abs_diff,accuracy_color_ci95_lo,accuracy_color_ci95_hi,accuracy_shape_ci95_lo,accuracy_shape_ci95_hi,accuracy_overall_ci95_lo,accuracy_overall_ci95_hi,recall_ci95_lo,recall_ci95_hi,precision_ci95_lo,precision_ci95_hi,shadow_cover_pct
+baseline,Khong suy giam,36,36,36,100.00,100.00,100.00,100.00,100.00,0.00,0.00,90.36,100.00,90.36,100.00,90.36,100.00,90.36,100.00,90.36,100.00,
+gradient_light,Anh sang khong deu,36,36,36,100.00,100.00,100.00,100.00,100.00,57.78,73.43,90.36,100.00,90.36,100.00,90.36,100.00,90.36,100.00,90.36,100.00,
+shadow,Bong do,36,36,34,100.00,94.44,94.44,100.00,100.00,23.00,30.35,90.36,100.00,81.86,98.46,81.86,98.46,90.36,100.00,90.36,100.00,29.4
+jpeg_noise,Nhieu + JPEG,36,36,36,100.00,100.00,100.00,100.00,100.00,9.41,14.03,90.36,100.00,90.36,100.00,90.36,100.00,90.36,100.00,90.36,100.00,
+perspective,Phoi canh nghieng,36,36,36,100.00,100.00,100.00,100.00,100.00,6.43,15.56,90.36,100.00,90.36,100.00,90.36,100.00,90.36,100.00,90.36,100.00,
+combined,Ket hop cac yeu to,36,36,29,100.00,80.56,80.56,100.00,100.00,66.87,83.08,90.36,100.00,64.97,90.25,64.97,90.25,90.36,100.00,90.36,100.00,32.1
+occlusion,Che khuat mot phan,72,72,56,100.00,77.78,77.78,100.00,97.30,16.77,30.94,94.93,100.00,66.91,85.83,66.91,85.83,94.93,100.00,90.67,99.26,
+shape_imperfect,Hinh dang khong ly tuong,36,36,33,100.00,91.67,91.67,100.00,100.00,10.78,17.99,90.36,100.00,78.17,97.13,78.17,97.13,90.36,100.00,90.36,100.00,

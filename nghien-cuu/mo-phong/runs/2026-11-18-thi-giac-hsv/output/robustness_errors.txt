@@ -1,21 +1,16 @@
 
 === shadow ===
-shadow_005.png: xanh-tam_giac khong phat hien duoc
-shadow_007.png: vang-tron du doan thanh vang-vuong
-shadow_010.png: xanh-vuong khong phat hien duoc
-shadow_033.png: do-vuong khong phat hien duoc
+shadow_019.png: do-tron du doan thanh do-vuong
+shadow_023.png: xanh-tron du doan thanh xanh-vuong
 
 === combined ===
 combined_000.png: vang-tron du doan thanh vang-vuong
-combined_003.png: do-tron khong phat hien duoc
-combined_010.png: xanh-tron du doan thanh xanh-tam_giac
-combined_014.png: do-tron khong phat hien duoc
+combined_001.png: xanh-vuong du doan thanh xanh-tam_giac
+combined_003.png: do-tron du doan thanh do-vuong
+combined_010.png: xanh-tron du doan thanh xanh-vuong
 combined_016.png: do-tam_giac du doan thanh do-vuong
-combined_020.png: do-vuong khong phat hien duoc
-combined_021.png: vang-tam_giac khong phat hien duoc
 combined_024.png: vang-tron du doan thanh vang-vuong
-combined_025.png: do-tron du doan thanh do-vuong
-combined_026.png: xanh-tron du doan thanh xanh-vuong
+combined_031.png: do-tam_giac du doan thanh do-vuong
 
 === occlusion ===
 occlusion_000.png: xanh-tron du doan thanh xanh-vuong
